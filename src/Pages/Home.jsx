@@ -100,6 +100,7 @@ console.log(productsAPI)
             
             return (
               <div className='home_container_collection' key={collection.id}>
+                <p>texto</p>
                 <motion.div className="slider-container" ref={sliderContainerRef}>
                   <span className='home_name_collection'>Coleccion {categoryName}</span>
 
