@@ -40,35 +40,35 @@ console.log(productsAPI)
   const [widthSliderContainer, setWidthSliderContainer] = useState(0);
   const [widthSlider, setWidthSlider] = useState(0);
 
-  const sliderContainerRef = useRef(null);
-  const sliderRef = useRef(null);
-  console.log('pantalla', screenWidth);
-  console.log('containerSlider', widthSliderContainer);
-  console.log('Slider', widthSlider);
-  useLayoutEffect(() => {
-    if (sliderContainerRef.current && sliderContainerRef.current.offsetWidth && productsAPI) {
-      setWidthSlider(sliderRef.current.offsetWidth)
-      setWidthSliderContainer(sliderContainerRef.current.offsetWidth);
-    }
-  }, [screenWidth, productsAPI]);
+  // const sliderContainerRef = useRef(null);
+  // const sliderRef = useRef(null);
+  // console.log('pantalla', screenWidth);
+  // console.log('containerSlider', widthSliderContainer);
+  // console.log('Slider', widthSlider);
+  // useLayoutEffect(() => {
+  //   if (sliderContainerRef.current && sliderContainerRef.current.offsetWidth && productsAPI) {
+  //     setWidthSlider(sliderRef.current.offsetWidth)
+  //     setWidthSliderContainer(sliderContainerRef.current.offsetWidth);
+  //   }
+  // }, [screenWidth, productsAPI]);
 
 
-  // ***********************************ancho de pantalla
+  // // ***********************************ancho de pantalla
 
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setScreenWidth(window.innerWidth);
+  //   };
 
-    // Suscribirse al evento resize
-    window.addEventListener('resize', handleResize);
+  //   // Suscribirse al evento resize
+  //   window.addEventListener('resize', handleResize);
 
-    // Desuscribirse al desmontar el componente
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  //   // Desuscribirse al desmontar el componente
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
 
 
 
@@ -87,21 +87,21 @@ console.log(productsAPI)
           const productsInCategory = groupedProducts[categoryName];
 
           if (productsInCategory && productsInCategory.length > 0) {
-            // Calcular el ancho total del slider
-            const totalSliderWidth = ((productsInCategory.length) * 172) + 16; // Ancho de cada CardProduct (140 en este caso)
-            const leftDragLimit = widthSliderContainer < screenWidth
-              ? (widthSliderContainer > totalSliderWidth ? 0 : widthSliderContainer === 1024 ? -totalSliderWidth + 1024 : -totalSliderWidth + screenWidth)
-              : 0;
+            // // Calcular el ancho total del slider
+            // const totalSliderWidth = ((productsInCategory.length) * 172) + 16; // Ancho de cada CardProduct (140 en este caso)
+            // const leftDragLimit = widthSliderContainer < screenWidth
+            //   ? (widthSliderContainer > totalSliderWidth ? 0 : widthSliderContainer === 1024 ? -totalSliderWidth + 1024 : -totalSliderWidth + screenWidth)
+            //   : 0;
 
             const dragConstraints = {
               right: 0,
-              left: leftDragLimit,
+              left: 0,
             };
             
             return (
               <div className='home_container_collection' key={collection.id}>
                 <p>texto</p>
-                <motion.div className="slider-container" ref={sliderContainerRef}>
+                <motion.div className="slider-container" >
                   <span className='home_name_collection'>Coleccion {categoryName}</span>
 
                   <motion.div
@@ -110,8 +110,7 @@ console.log(productsAPI)
                     dragElastic={1}
                     dragMomentum={true}
                     dragConstraints={dragConstraints}
-                    ref={sliderRef}
-                    style={{ width: `${totalSliderWidth}px` }}
+   
                   >
                     {productsInCategory.map(product => (
                       <motion.div
