@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Jost:wght@300;400;500&display=swap');
+
+
+*{
+    font-family: 'Comic Neue', cursive;
+    font-family: 'Jost', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+    padding: 0;
+    
+}
+
+:root{
+    font-size: 1rem;
+    --colorButton: #78BF57;
+    --colorButtonHover: #80db56;
+    --colorTextCardPrice: #80db56;
+    --colorText: white;
+    --bgHomeColor:  rgb(224, 224, 224);
+    --bgHomeColorCardProduct:  rgb(255, 255, 255);
+}
+
+body{
+    font-size: 16px;
+    background-color: var(--bgHomeColor);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.banner{
+    background-color: rgb(219, 255, 127);
+}
+
+img{
+    width: 100%;
+    pointer-events: none;
+}
+
+.bx{
+    cursor: pointer;
+}
+button{
+    border: none;    
+}

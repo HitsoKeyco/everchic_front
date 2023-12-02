@@ -1,0 +1,52 @@
+.menu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    
+    justify-content: center;
+    
+}
+
+.menu_items_top{
+    position: fixed;
+    top: 0;
+    right: 0;    
+    padding: 1em;
+    
+    display: flex;
+    align-items: center;
+    
+    gap: 0.3em;
+    
+    
+}
+
+.menu_items_left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+
+.bx-x{
+    font-size: 2em;    
+}
+
+.menu_items_left{
+    line-height: 2;
+}
+.menu_item_products{
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.menu_item_products:hover{
+    color: blueviolet;
+    cursor: pointer;
+}
