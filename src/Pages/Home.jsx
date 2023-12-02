@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import gifImage from '../../public/images/banner.jpeg';
+import gifImage from '../img/banner.jpeg';
 import '../Pages/css/Home.css';
 import getApiProducts from '../hooks/getApiProducts';
 import CardProduct from '../components/CardProduct';
