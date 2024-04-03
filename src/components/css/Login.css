@@ -1,0 +1,100 @@
+
+.login_form {     
+    padding: 20px 20px 0 20px;
+    width: 250px;
+    max-width: 400px;
+    height: max-content;
+    margin: 10px;
+    border-radius: 10px;
+
+}
+
+.login_items_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login_items_container_pass {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Para controlar la vision del pass*/
+}
+
+.login_show_hidden_pass{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
+.login_input_pass{
+    padding-right: 40px;
+}
+
+.login_show_hidden_pass_icon{
+    font-size: 20px;
+    color: var(--colorText_a);
+}
+
+.login_title {    
+    font-size: 1.5em;    
+    font-weight: 400;
+    color: var(--colorText_a);
+}
+
+.login_input {
+    color: black;
+    padding: 0 10px;
+}
+
+.login_label {
+    margin-left: 0;
+    position: relative;
+    top: 10px;
+    left: 10px;
+    background-color: white;
+    padding: 0 5px;
+    color: var(--colorText_a);
+}
+.login_items_links_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.login_recover_pass_link, .login_register_link{        
+    font-size: 0.8em;
+    color: var(--colorText_a);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.login_button {
+    margin-top: 15px;
+    width: 150px;
+    padding:  0  15px;
+}
+
+
+
+.login_button_logout{
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_form_logout{
+    padding: 25px;
+    border-radius: 10px;
+}
+.login_form_info_user{
+    font-weight: 500;
+    text-align: center;
+    padding: 25px;
+    font-size: 2em;
+    color: var(--colorText_a);
+}

@@ -1,0 +1,20 @@
+.noMatch_container{
+    width: 100%;
+    height: 500px; /* Por el momento*/
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.noMatch_button{
+    margin-top: 25px;
+    padding: 0 15px;
+}
+.noMatch_title{
+    color: var(--colorText_a);
+    font-weight: 400;
+    font-size: 2em;
+}

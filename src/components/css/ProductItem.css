@@ -1,0 +1,128 @@
+.product_item {
+    width: 98%;
+    height: 125px;
+    background-color: var(--bgCardProduct);
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px 1px var(--colorBoxShadowCardproduct);
+    display: flex;
+    gap: 10px;
+
+}
+.product_item_container{
+    width: 100%;
+    height: 120px;
+    display: flex;
+    background-color: var(--bgCardProduct);
+    border-radius: 12px;
+}
+
+.product_img_item_container {
+    /* Estilos para el contenedor de la imagen */
+    width: 170px;
+    /* Ancho del contenedor */
+    height: 100%;
+    /* Altura del contenedor */
+    overflow: hidden;
+    /* Evita que la imagen se desborde del contenedor */
+}
+
+
+
+.product_img_item {   
+    height: 100%;
+    width: 100%;
+    border-radius: 10px 0 0 10px;
+    object-fit: cover;
+    object-position: center;
+
+}
+
+.product_details_item_container {
+    width: 100%;
+    padding: 10px;
+    position: relative;
+}
+
+.product_details_item_title {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--colorText_a);
+    padding-bottom: 5px;
+}
+
+.product_details_item {
+    font-weight: 400;
+    color: var(--colorText_a);
+}
+
+
+.span_item {
+    font-weight: 400;
+
+}
+
+.product_details_handle {
+    display: flex;
+    align-items: center;
+    width: 120px;
+    margin-left: 0;
+    padding-top: 5px;
+}
+
+.bx-minus,
+.bx-plus,
+.bxs-trash {
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+.bxs-trash {
+    color: var(--colorText_d);
+}
+
+.product_details_item_size {
+    background-color: var(--colorButton);
+    width: max-content;
+    margin-left: 0;
+    color: var(--colorText_b);
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 10px;
+
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.span_item_size {
+    font-size: 9px;
+}
+
+
+.free_product_span {
+    background-color: var(--bgPromo);
+    padding: 0 5px;
+    color: var(--colorText_b);
+    border-radius: 5px;
+}
+
+.trash_free {
+    padding-left: 25px;
+}
+
+.product_cart_button_item_plus,
+.product_cart_text_pair_info,
+.product_cart_button_item_minus {
+    color: var(--colorText_a);
+    font-weight: 500;
+}
+
+.input_quantity_cart {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

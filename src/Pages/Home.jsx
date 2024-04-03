@@ -1,137 +1,89 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import gifImage from '../img/banner.jpeg';
+import React, { useEffect, useRef, useState } from 'react';
 import '../Pages/css/Home.css';
-import getApiProducts from '../hooks/getApiProducts';
-import CardProduct from '../components/CardProduct';
-import getApiCollections from '../hooks/getApiCollections';
+import { Link } from 'react-router-dom';
+import SliderImg from '../components/SliderImg';
 import { motion } from 'framer-motion';
 
+
 const Home = () => {
-  const { productsAPI, getProductsAPI } = getApiProducts();
-  const { collectionAPI, getCollectionAPI } = getApiCollections();
-console.log(productsAPI)
-  useEffect(() => {
-    getProductsAPI();
-    getCollectionAPI();
-  }, []);
-
-  const [groupedProducts, setGroupedProducts] = useState({});
-
-  const groupProductsByCategory = () => {
-    const grouped = {};
-
-    productsAPI?.forEach(product => {
-      const categoryName = product.collection.collection;
-      if (!grouped[categoryName]) {
-        grouped[categoryName] = [];
-      }
-      grouped[categoryName].push(product);
-    });
-
-    setGroupedProducts(grouped);
-  };
-
-  useEffect(() => {
-    groupProductsByCategory();
-  }, [productsAPI]);
-
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [widthSliderContainer, setWidthSliderContainer] = useState(0);
-  const [widthSlider, setWidthSlider] = useState(0);
-
-  // const sliderContainerRef = useRef(null);
-  // const sliderRef = useRef(null);
-  // console.log('pantalla', screenWidth);
-  // console.log('containerSlider', widthSliderContainer);
-  // console.log('Slider', widthSlider);
-  // useLayoutEffect(() => {
-  //   if (sliderContainerRef.current && sliderContainerRef.current.offsetWidth && productsAPI) {
-  //     setWidthSlider(sliderRef.current.offsetWidth)
-  //     setWidthSliderContainer(sliderContainerRef.current.offsetWidth);
-  //   }
-  // }, [screenWidth, productsAPI]);
-
-
-  // // ***********************************ancho de pantalla
-
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setScreenWidth(window.innerWidth);
-  //   };
-
-  //   // Suscribirse al evento resize
-  //   window.addEventListener('resize', handleResize);
-
-  //   // Desuscribirse al desmontar el componente
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
-
-
-
 
   return (
     <>
-      <div className='home_banner_container'>
-        <img className='home_banner_img' src={gifImage} alt="Descripción" />
-      </div>
-      <div className="banner-info">
-        <span>3 Pares $13 | 6 Pares $20 | 12 Pares $36</span>
-      </div>
-      <div className='home_cards_products'>
-        {collectionAPI?.map(collection => {
-          const categoryName = collection.collection;
-          const productsInCategory = groupedProducts[categoryName];
+      <motion.div
+        className="product_filter_elements_container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="app">
+          <main className="home_main">
 
-          if (productsInCategory && productsInCategory.length > 0) {
-            // // Calcular el ancho total del slider
-            // const totalSliderWidth = ((productsInCategory.length) * 172) + 16; // Ancho de cada CardProduct (140 en este caso)
-            // const leftDragLimit = widthSliderContainer < screenWidth
-            //   ? (widthSliderContainer > totalSliderWidth ? 0 : widthSliderContainer === 1024 ? -totalSliderWidth + 1024 : -totalSliderWidth + screenWidth)
-            //   : 0;
+            <div className="home_container_img">
+              {
+                <SliderImg />
+              }
+            </div>
+            {/* Elementos que se muestran para desktop */}
+            <div className="home_elements_desktop">
+              <div className="home_images_container">
+                <h1 className='home_title'>
+                  Calcetines de <br />
+                  series animadas
+                </h1>
+                <h2 className='home_phrase_welcome'>
+                  Bienvenido a everchic, aqui podrás encontrar <br /> calcetines con personajes de series animadas tejidos o sublimados.
+                </h2>
+                <button className='home_btn_buy'>Comprar</button>
 
-            const dragConstraints = {
-              right: 0,
-              left: 0,
-            };
-            
-            return (
-              <div className='home_container_collection' key={collection.id}>
-                <p>texto</p>
-                <motion.div className="slider-container" >
-                  <span className='home_name_collection'>Coleccion {categoryName}</span>
+                <div className="home_models_info_">
+                  <img className='home_models_img' src="/models.png" alt="models" />
+                  <span className='home_quantity_model_'>+ de 600 Modelos</span>
+                </div>
 
-                  <motion.div
-                    className='slider'
-                    drag='x'
-                    dragElastic={1}
-                    dragMomentum={true}
-                    dragConstraints={dragConstraints}
-   
-                  >
-                    {productsInCategory.map(product => (
-                      <motion.div
-                        className='item'
-                        key={product.id}
-
-                      >
-                        <CardProduct product={product} />
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </motion.div>
+                {/* <div className="home_img_container">
+                <img className='home_img' src="/unsplash_1.png" alt="" />
               </div>
-            );
-          }
-
-          return null;
-        })}
-      </div>
-        <span>Esta es ua prueba de escritura</span>
+              <div className="home_img_container">
+                <img className='home_img' src="/unsplash_2.png" alt="" />
+              </div>
+              <div className="home_img_container">
+                <img className='home_img' src="/unsplash_3.png" alt="" />
+              </div> */}
+              </div>
+              <div className="home_box_img_container">
+                <div className="home_img_bottom_container">
+                  <img className='home_img_bottom' src="/unsplash_11.jpg" alt="" />
+                </div>
+                <div className="home_img_bottom_container">
+                  <img className='home_img_bottom' src="/unsplash_5.png" alt="" />
+                </div>
+                <div className="home_img_bottom_container">
+                  <img className='home_img_bottom' src="/unsplash_6.png" alt="" />
+                </div>
+                <div className="home_img_bottom_container">
+                  <img className='home_img_bottom' src="/unsplash_12.jpg" alt="" />
+                </div>
+                <div className="home_img_bottom_container">
+                  <img className='home_img_bottom' src="/unsplash_8.png" alt="" />
+                </div>
+              </div>
+            </div>
+            <div className="home_text_elements_container">
+              <h1 className='home_h1'>¡Descubre Nuestra Colección Única!</h1>
+              <h3 className='home_h3'>Calcetines Divertidos y Originales</h3>
+              <p className='home_p_'>Sumérgete en el mundo de la diversión con nuestra exclusiva colección de calcetines cartoon con materiales de alta calidad para alegrar tus pasos cada día.</p>
+              <button className='home_main_button'><Link to='/products'>Ir a productos</Link></button>
+              <div className="home_models_info">
+                <img className='home_models_img' src="/models.png" alt="models" />
+                <span className='home_quantity_model'>+ de 600 Modelos</span>
+              </div>
+            </div>
+          </main>
+        </div>
+      </motion.div>
     </>
+
   );
 };
 

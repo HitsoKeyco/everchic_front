@@ -1,0 +1,25 @@
+.verify_email_container{
+    height: calc(100vh - 150px - 170px);
+    width: 100%;
+    background-color: bisque;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.verify_email_info{
+    width: max-content;
+    height: max-content;
+    padding: 10px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--bgModalProduct);
+    border: 2px solid var(--borderContainer);
+}

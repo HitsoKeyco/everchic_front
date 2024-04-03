@@ -50,3 +50,9 @@
     color: blueviolet;
     cursor: pointer;
 }
+
+@media (min-width: 1024px) {
+    .header_menu{
+        display: hidden;
+    }
+}

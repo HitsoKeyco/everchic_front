@@ -1,47 +1,170 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Jost:wght@300;400;500&display=swap');
 
-
-*{
-    font-family: 'Comic Neue', cursive;
+* {
     font-family: 'Jost', sans-serif;
     box-sizing: border-box;
-    margin: 0;
     list-style: none;
-    text-decoration: none;
+
     padding: 0;
+    user-select: none;
+    margin: 0 auto;
+}
+
+:root {
+    /*Background Home*/
+    --bgHomeColor: rgb(241, 240, 241);
+    --bgHomecolor_2: rgba(53, 74, 95, 0.923);
+    --bgHomecolorFilter: rgba(53, 74, 95, 0.56);
+    --bgCartElementContainer: rgba(53, 74, 95, 0.048);
+    /*Formularios*/
+    --bgColorForm: rgb(255, 255, 255);
+
+    /*Input*/
+    --bgColorInput: white;
     
+    /* BannerPromo */
+    --bgPromo: #f28d3ad9;
+    --colorTextPromo: white;
+
+    /* Slider */
+    --bgCollection: #2D9596;
+    --colorTextCollection: white;
+
+    /* CardProduct */
+    --bgCardProduct: #ddefee;
+    --bgModalProduct: #f9f9f9;
+    --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
+    --colorTextCardPrice: rgb(128, 219, 86);
+    --colorTag: #2D9596;
+
+    /* Boton */
+    --colorButton: #2D9596;
+    --bgButtonHover: #23696b;
+    --bgButtonHoverHome: #2D9596;
+    --bgButtonHoverHomeCard: #f28d3ad9;
+
+    /*Texto*/
+    --colorText_a: #265073;
+    --colorText_b: white;
+    --colorText_c: #2D9596;
+    --colorText_d: red;
+    --colorText_e: rgb(150, 149, 149);
+    --colorText_hover: rgb(232, 232, 232);
+    --colorTextActiveLink: rgb(33, 190, 64);
+
+    /*Others*/
+    --bgViolet: rgb(251, 92, 92);
+    --textViolet: rgb(152, 12, 187);
+
+    /*border*/
+    --borderContainer: rgba(154, 151, 151, 0.141);
+    --colorBorderButton: #265073;
+    --colorBorderInput: #2650735a;
+
+    /*barScrollColor*/
+    --colorbar_a: #2d949628;
+    --colorbar_b: rgba(33, 34, 33, 0.115);
+    --bgScrollbar: #edf0f3;
+
 }
 
-:root{
-    font-size: 1rem;
-    --colorButton: #78BF57;
-    --colorButtonHover: #80db56;
-    --colorTextCardPrice: #80db56;
-    --colorText: white;
-    --bgHomeColor:  rgb(224, 224, 224);
-    --bgHomeColorCardProduct:  rgb(255, 255, 255);
+@media (min-width: 600px) {
+    body {
+        padding: 0 10px;
+        padding-top: 125px;
+    }
 }
 
-body{
-    font-size: 16px;
-    background-color: var(--bgHomeColor);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
 
-.banner{
-    background-color: rgb(219, 255, 127);
-}
-
-img{
-    width: 100%;
+img {
     pointer-events: none;
 }
 
-.bx{
+button {
+    border: none;
     cursor: pointer;
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+*::-webkit-scrollbar {
+    width: 5px;
+
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--colorButton);
+    border-radius: 2.5px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: var(--bgScrollbar);
+}
+
+html {
+    overflow-y: visible !important
+}
+
+.active {
+    text-decoration: underline;
+}
+
+
+/* libreria de transicion entre componentes*/
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.fade-exit {
+    opacity: 0;
+}
+
+.fade-exit-active {
+    opacity: 0;
+}
+
+
+
 button{
-    border: none;    
+    height: 45px;    
+    border-radius: 5px;
+    
+    color: var(--colorText_b);
+    transition: 0.3s ease-in-out;
+    background-color: var(--colorButton);
+}
+
+button:hover{
+background-color: var(--bgButtonHover);
+color: var(--colorText_b);
+}
+
+
+
+input{
+    margin-left: 0;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--bgColorInput);
+    outline: none;
+    padding: 0 8px;
+    padding-right: 30px;
+    width: 100%;
+    max-width: 200px;
+    border: 1px solid var(--colorBorderInput);
+}
+
+
+form{
+    background-color: var(--bgColorForm);
 }

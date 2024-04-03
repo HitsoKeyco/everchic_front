@@ -1,0 +1,78 @@
+
+.register_form {    
+    padding: 20px 20px 0 20px;
+    width: 250px;
+    max-width: 400px;
+    height: max-content;
+    margin: 10px;
+    border-radius: 10px;
+
+}
+
+.register_items_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.register_items_container_pass {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Para controlar la vision del pass*/
+}
+
+.register_show_hidden_pass{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
+.register_input_pass{
+    padding-right: 40px;
+}
+
+.register_show_hidden_pass_icon{
+    font-size: 20px;
+    color: var(--colorText_a);
+}
+
+.register_title {    
+    font-size: 1.5em;    
+    font-weight: 400;
+    color: var(--colorText_a);
+}
+
+.register_input {
+    color: black;
+    padding: 0 10px;
+}
+
+.register_label {
+    margin-left: 0;
+    position: relative;
+    top: 10px;
+    left: 10px;
+    background-color: white;
+    padding: 0 5px;
+    color: var(--colorText_a);
+}
+.register_items_links_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.register_recover_pass_link, .register_register_link{        
+    font-size: 0.8em;
+    color: var(--colorText_a);
+    padding: 10px 2.5px;
+    cursor: pointer;
+}
+
+.register_button {
+    margin-top: 15px;
+    width: 150px;
+}
+

@@ -1,24 +1,35 @@
 import axios from "axios";
 import { useState } from "react";
 
-
-
 const getApiProducts = () => {
-    const apiUrl = import.meta.env.VITE_API_URL
-    const [ productsAPI, setProductsAPI] = useState()
-
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const [productsAPI, setProductsAPI] = useState();
+    const [isOneProduct, setIsOneProduct] = useState();
 
     const getProductsAPI = () => {
         axios.get(`${apiUrl}/products`)
-        .then(res => {
-            setProductsAPI(res.data)
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    }
+            .then(res => {
+                setProductsAPI(res.data);
+                localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
 
-    return {productsAPI, getProductsAPI}
-}
+    const getOneProductsAPI = (id) => {
+        axios.get(`${apiUrl}/products/${id}`)
+            .then(res => {
+                setIsOneProduct(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    
+
+    return { productsAPI, getProductsAPI, isOneProduct, getOneProductsAPI };
+};
 
 export default getApiProducts;
