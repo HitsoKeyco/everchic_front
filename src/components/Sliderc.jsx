@@ -3,7 +3,7 @@ import '../components/css/Sliderc.css';
 import CardProduct from './CardProduct';
 
 
-const Sliderc = ({ products, nameCollection }) => {
+const Sliderc = ({ products, isLike, updateLikeProducts }) => {
 
     // Referencias
     const containerSlider = useRef();
@@ -114,7 +114,7 @@ const Sliderc = ({ products, nameCollection }) => {
         }
     }, [])
 
-
+    const [ isSlider, setIsSlider ] = useState(true)
     return (
         <>
             <div
@@ -122,7 +122,7 @@ const Sliderc = ({ products, nameCollection }) => {
                 ref={containerSlider}
             >
                 <div className="slider_container_tittle_collection">
-                    <p className='slider_title_collection'>Coleccion de {nameCollection}</p>
+                    <p className='slider_title_collection'>Colección de {products[0].collection.name}</p>
                 </div>
                 <div
                     className="slider"
@@ -138,7 +138,7 @@ const Sliderc = ({ products, nameCollection }) => {
                 >
                     {
                         products?.map((product) => (
-                            <CardProduct key={product.id} product={product}/>
+                            <CardProduct key={product.id} product={product}  isLike={isLike} updateLikeProducts={updateLikeProducts} isSlider={isSlider}/>
                         ))
                     }
                 </div>

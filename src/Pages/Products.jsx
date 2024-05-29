@@ -5,18 +5,16 @@ import './css/Product.css';
 import FilterProduct from '../components/FilterProduct';
 import { ClipLoader } from 'react-spinners';
 import CardProduct from '../components/CardProduct';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Sliderc from '../components/Sliderc';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 const Products = () => {
     const { productsAPI, getProductsAPI } = getApiProducts();
-
-
-
     const { collectionAPI, getCollectionAPI } = getApiCollections();
     const [stateProducts, setStateProducts] = useState(false);
-    const [isShowCollection, setIsShowColection] = useState(true)
+    const [isShowCollection, setIsShowColection] = useState(false)
 
 
 
@@ -34,13 +32,44 @@ const Products = () => {
     }, []);
 
 
+    /* productos like*/
+    const [isLike, setIsLike] = useState([])
+    const userIdString = localStorage.getItem('user')
+    const userId = userIdString ? JSON.parse(userIdString).id : null;
+    const urlApi = import.meta.env.VITE_API_URL;
+
+    useEffect(() => {
+        if (userId) {
+            updateLikeProducts();
+        }
+    }, [userId])
+
+    const updateLikeProducts = () => {       
+        if (userId) {
+            // Usuario autenticado
+            axios.get(`${urlApi}/users/like_product/${userId}`)
+                .then(res => {
+                    setIsLike(res.data);                    
+                })
+                .catch(err => {
+                    console.error("Error al obtener los likes del usuario:", err);
+                });
+        } else {
+            // Usuario no autenticado
+            const likes = JSON.parse(localStorage.getItem('likes')) || [];
+            setIsLike(likes);
+        }
+    };
+    
 
     // Estados de paginacion
     const [isShowProducts, setisShowProduct] = useState([]);
     const [isLastIndex, setIsLastIndex] = useState(0);
-    const [isProductPerPage, setIsProductPerPage] = useState(4);
+    const [isProductPerPage, setIsProductPerPage] = useState(19);
     const [isMaxPage, setIsMaxPage] = useState(0);
     const [isCounterPage, setIsCounterPage] = useState(1);
+
+
 
     //Carga inicial de productos
     useEffect(() => {
@@ -81,43 +110,40 @@ const Products = () => {
     const idFilter = useSelector(state => state.filterProduct.idFilterProduct);
 
     useEffect(() => {
-        if (idFilter === 2 && productsAPI) {
-            setIsShowColection(false)
-            const products = productsAPI.filter((product) => product.category.name === 'Tejidos')
-            if (products) {
-                setIsMaxPage(Math.ceil(products.length / isProductPerPage));
-                setisShowProduct(products)
-            }
-        } else if (idFilter === 0 && productsAPI) {
-            setIsShowColection(false)
-            setIsMaxPage(Math.ceil(productsAPI.length / isProductPerPage));
-            const additionalProducts = productsAPI.slice(0, isProductPerPage);
-            setIsLastIndex(isProductPerPage);
-            setisShowProduct(additionalProducts);
-        } else if (idFilter === 3 && productsAPI) {
-            setIsShowColection(false)
-            const products = productsAPI.filter((product) => product.category.name === 'Sublimados')
-            if (products) {
-                setIsMaxPage(Math.ceil(products.length / isProductPerPage));
-                setisShowProduct(products)
-            }
-        } else if (idFilter === 4 && productsAPI) {
-            setIsShowColection(false)
-            const products = productsAPI.filter((product) => product.category.name === 'Marca')
-            if (products) {
-                setIsMaxPage(Math.ceil(products.length / isProductPerPage));
-                setisShowProduct(products)
-            }
-        } else if (idFilter === 1 && collectionAPI && productsAPI) {
-            setIsShowColection(true)
+        if (idFilter === 'all' && productsAPI) {
+            const products = productsAPI?.map(product => product);
+            setIsMaxPage(Math.ceil(products?.length / isProductPerPage));
+            setisShowProduct(products);
+            setIsShowColection(false);
+        } else if (idFilter === 'collections') {
+            setIsShowColection(true);            
+        } else if(productsAPI){
+            const products = productsAPI?.filter((product) => product.category.name === idFilter);
+            setIsMaxPage(Math.ceil(products.length / isProductPerPage));
+            setisShowProduct(products);
+            setIsShowColection(false);
         }
-    }, [idFilter])
+    }, [idFilter]);
+
+    const [productsByCategory, setProductsByCategory] = useState({});
+    
+
+    // Función para organizar los productos por categoría
+    useEffect(() => {
+        if (productsAPI) {
+            const organizedProducts = productsAPI?.reduce((acc, product) => {
+                const collectionName = product?.collection?.name;
+                if (!acc[collectionName]) {
+                    acc[collectionName] = [];
+                }
+                acc[collectionName].push(product);
+                return acc;
+            }, {});
+            setProductsByCategory(organizedProducts);
+        }
+    }, [productsAPI]); // Dependencia añadida
 
 
-
-
-
-    // 
 
     return (
         <>
@@ -128,43 +154,35 @@ const Products = () => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                <FilterProduct />
-                <div className="product_filtered_container">
+                <div className="product_menu_filter">
+                    <FilterProduct />
+                </div>
 
-                    <span className='product_filter_notification'>Actualmente solo disponemos calcetines en talla 10 - 12, esperamos muy pronto expandirnos y brindarles una amplia gama de productos.</span>
-
-                    <div className='product_collection_filter_add_controller_Container'>
-                        <div className="product_collection_filter">
-                            {
-                                isShowCollection ?
-                                    collectionAPI?.map((collection) => {
-                                        const filteredProducts = productsAPI?.filter((product) => product.collection.id === collection.id);
-
-                                        return filteredProducts?.length !== 0 && <Sliderc key={collection.id} products={filteredProducts} nameCollection={collection.name} />;
-                                    })
-                                    :
-                                    isShowProducts ?
-                                        isShowProducts
-                                            .map((product, index) => (
-                                                <div key={index}>
-                                                    <CardProduct product={product} />
-                                                </div>
-                                            ))
-                                        :
-                                        !stateProducts
-                                        && (idFilter !== 1 && <ClipLoader color={'#265073'} loading={!stateProducts} size={50} />)
-                            }
-                        </div>
-                    </div>
+                <div className="product__container">
                     {
-                        !isShowCollection &&
-                        (<div className='product_button_more_container'>
-                            <i className='bx bx-chevron-left left_action_pagination' onClick={prevProducts}></i>
-                            <span className='product_page'>{isCounterPage}</span>
-                            <i className='bx bx-chevron-right right_action_pagination' onClick={nextProducts}></i>
-                            <span className='product_quantity_page'>{isMaxPage} Pag.</span>
-                        </div>)
+                        isShowCollection ?
+
+                            Object.entries(productsByCategory).map(([collection, products]) => (
+                                <div className='product_slider_container' key={collection} >
+                                    <div className='product_slider_c'>
+                                        <Sliderc products={products} isLike={isLike} updateLikeProducts={updateLikeProducts}/>
+                                    </div>
+                                </div>
+                            ))
+
+                            :
+
+                            isShowProducts?.length > 0 ? (
+                                isShowProducts.map((product, index) => (
+                                    <div className='product_filtered_container' key={product.id}>
+                                        <CardProduct product={product}  isLike={isLike} updateLikeProducts={updateLikeProducts} />
+                                    </div>
+                                ))) :
+                                (<div className='product_filtered_not_found'><p className='product_filtered_text_not_found'>¡Estos productos se ha agotado! 😪</p></div>)
+
                     }
+
+
                 </div>
 
 

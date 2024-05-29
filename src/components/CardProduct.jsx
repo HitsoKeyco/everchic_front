@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import '../components/css/CardProduct.css';
 import ModalProduct from './ModalProduct';
 import { useDispatch, useSelector } from 'react-redux';
-import { accessFreeProduct, addProduct, addProductFree } from '../store/slices/cart.slice';
+import { addProduct, addProductFree } from '../store/slices/cart.slice';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const CardProduct = ({ product }) => {
+const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
 
     const [isModal, setIsModal] = useState(false);
     const [isPositionInitial, setIsPositionInitial] = useState({ x: 0 })
@@ -43,15 +45,14 @@ const CardProduct = ({ product }) => {
     const freeProducts = useSelector(state => state.cart.quantityProductsFree)
     const cartFree = useSelector(state => state.cart.storedCartFree)
     const unitCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
-
+    const navigate = useNavigate()
     const handleBuy = () => {
-
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
 
         if (positionDifference <= tolerance) {
 
-            if (!isFree) {                
+            if (!isFree) {
                 dispatch(addProduct({
                     productId: product.id,
                     price: product.sell_price,
@@ -60,19 +61,21 @@ const CardProduct = ({ product }) => {
                     category: product.category.name,
                     tittle: product.tittle,
                     size: product.size.size,
+                    weight: product.weight,
                     image: {
                         url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url : null,
                         alt: product.title
                     }
                 }));
-                
-            } else {                
+
+            } else {
                 if (!(freeProducts === unitCartFree)) {
                     dispatch(addProductFree({
                         productId: product.id,
                         price: product.sell_price,
                         productName: product.collection.name,
                         stock: product.stock,
+                        weight: product.weight,
                         category: product.category.name,
                         tittle: product.tittle,
                         size: product.size.size,
@@ -81,35 +84,99 @@ const CardProduct = ({ product }) => {
                             alt: product.title
                         }
                     }));
-                }                 
+
+                    
+                        navigate("/cart");
+                    
+                }
             }
         };
     }
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
+
+    const like = isLike.find(like => like.productId === product.id);
+    
+
+    const userId = useSelector(state => state.user?.user?.id) || null;
+    
+
+    const handleLikeProduct = (e) => {        
+        e.stopPropagation();        
+        const urlApi = import.meta.env.VITE_API_URL;
+        const data = {
+            productId: product.id,
+            userId: userId
+        };
+    
+        if (userId) {
+            // Usuario autenticado
+            if (like) {
+                axios.delete(`${urlApi}/users/like_product/`, { data })
+                .then(res => {
+                    if (res.data) {
+                        updateLikeProducts();
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al eliminar el like:", err);
+                });
+            } else {             
+                axios.post(`${urlApi}/users/like_product`, data)
+                .then(res => {
+                    if (res.data) {
+                        updateLikeProducts();
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al agregar el like:", err);
+                });
+            }
+        } else {
+            // Usuario no autenticado
+            let likes = JSON.parse(localStorage.getItem('likes')) || [];
+            
+            if (like) {
+                // Eliminar el like
+                likes = likes.filter(item => item.productId !== product.id);
+            } else {
+                // Agregar el like
+                if (!likes.some(item => item.productId === product.id)) {
+                    likes.push({ productId: product.id, userId: null });
+                }
+            }
+            
+            localStorage.setItem('likes', JSON.stringify(likes));
+            updateLikeProducts();
+        }
+    };
+
+    
+    
     return (
         <>
             <div ref={cardProduct}
-                className={`card_product ${isFree ? 'gold':''}`}
+                className={`card_product ${isFree ? 'gold' : ''} ${isSlider && 'is_slider'}`}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onClick={handdleModal}>
 
                 <div className="card_container_img">
-                    <p className='card_product_size'> Talla {product.size.size}</p>
+                    <i className={`bx bxs-heart ${like ? 'heart-fill' : '' }`} onClick={handleLikeProduct}></i>
+                    <p className='card_product_size'> Talla {product.size?.size}</p>
                     <img className='card_product_img' src={product.productImgs[0]?.url} alt="" />
                 </div>
 
                 <div className="card_product_body">
                     <div className="card_title_category">
                         <p className='card_product_name'>{product.title}</p>
-                        <p className='card_product_price'>{isFree  ? 'Free' : `$ ${priceUnit}`}</p>
+                        <p className='card_product_price'>{isFree ? 'Free' : `$ ${priceUnit}`}</p>
                     </div>
                     <div className="price_size">
                     </div>
                     <button
                         className='card_product_button_cart'
-                        onClick={e => {
+                        onClick={(e) => {
                             e.stopPropagation();
                             handleBuy()
                         }}

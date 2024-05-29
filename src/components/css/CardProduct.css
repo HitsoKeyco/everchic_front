@@ -1,15 +1,18 @@
 .card_product {
-    width: 100%;
-    max-width: 160px;    
-    height: 250px;    
+    width: 100%; /* Ocupa todo el ancho disponible */        
+    max-width: 200px;
+    height: 290px;
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
-    cursor: grab;
+    border-radius: 10px;    
     transition: transform 0.4s ease;
     border: solid 2px var(--bgCardProduct);
-    transition: box-shadow 0.1s ease;
     background-color: var(--bgCardProduct);
+    box-sizing: border-box; 
+}
+
+.is_slider{
+    cursor: grab;
 }
 
 .card_product:hover {
@@ -22,6 +25,21 @@
     width: 100%;
     height: 70%;
     position: relative;
+    
+}
+
+.bxs-heart{
+    position: absolute;    
+    bottom: 0;
+    right: 0;    
+    padding: 5px;
+    font-size: 1.7em;
+    color: white;
+    cursor: pointer;
+}
+
+.bxs-heart:hover{
+    scale: 1.1;
 }
 
 .card_product_size {
@@ -45,12 +63,11 @@
 
 .card_product_body {
     display: flex;    
-    background-color: var(--bgHomeColorCardProduct);
+    background-color: var(--bgCardProduct);
     width: 100%;
     height: 30%;
     padding: 0 5px;
     border-radius: 0 0 12px 12px;
-
     position: relative;
 }
 
@@ -82,25 +99,24 @@
 .card_product_button_cart {
     width: 30px;
     height: 30px;
-    border-radius: 50%;    
+    border-radius: 50%;
+    border: none;    
     background-color: var(--colorButton);
     color: var(--colorText);
     cursor: pointer;    
     display: flex;
     justify-content: center;
-    align-items: center;
-    transition: 0.2s ease-in-out;
+    align-items: center;    
     position: absolute;
     right: 10px;
     top: 40px
 }
 
 .card_product_button_cart:hover {
-    background-color: var(--bgButtonHoverHomeCard);
+    background-color: rgb(65, 127, 126);
 }
 
-.card_button_plus{
-    
+.card_button_plus{    
     color: var(--colorText_b);
     
 }
@@ -116,12 +132,13 @@
     box-shadow: 0.1px 0.1px 10px 0.1px goldenrod;
 }
 
+.heart-fill{
+    color: red
+}
+
+
 @media (min-width: 412px) {
-    .card_product {        
-        max-width: 185px;    
-        height: 270px;    
-    
-    }
+
     .card_product_name {
         padding-top: 10px;
         color: var(--colorText_a);

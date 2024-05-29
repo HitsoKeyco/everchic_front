@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 99999;
+    z-index: 20;
     background-color: rgba(255, 255, 255, 0.337);
     backdrop-filter: blur(3px);
     padding: 25px;
@@ -18,10 +18,10 @@
     width: 100%;
     max-width: 500px;
     height: max-content;
-    background-color: var(--bgModalProduct);
+    background-color: var(--bgCardContainerProduct);
     position: relative;
     border-radius: 15px;
-    border: 1px solid rgb(239, 239, 239);
+    border: 1px solid var(--borderContainer);
     padding: 5px;
     margin: 5px;
 
@@ -73,9 +73,7 @@
 .modal_button {
     position: absolute;
     bottom: 10px;
-    right: 10px;
-    padding-top: 3px;
-    padding-left: 2px;
+    right: 10px;    
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -86,16 +84,14 @@
     background-color: var(--bgCollection);
     color: var(--colorText_b);
     transition: 0.3s ease-in-out;
+    border: none;
 }
 
 .modal_button:hover {
-    background-color: var(--bgButtonHoverHomeCard);
+    background-color: var(--colorText_a);
 }
 
-.bx-plus {
 
-    font-size: 1.8em;
-}
 
 .modal_description_poduct_title {
     font-size: 1.2em;

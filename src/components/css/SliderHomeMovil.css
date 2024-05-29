@@ -1,0 +1,67 @@
+.slider_home_movil_container {
+    /* Estilos para el contenedor de la imagen */
+    width: 100%;
+    overflow: hidden;
+    /* Evita que la imagen se desborde del contenedor */
+    position: relative;
+    background-color: aquamarine;
+    height: 450px;
+    z-index: 5;
+}
+
+.slide_home_movil {
+    position: absolute;
+
+    /* Estilos para la imagen */
+    width: 100%;
+    /* Ancho al 100% del contenedor */
+    height: 100%;
+    /* Altura al 100% del contenedor */
+    object-fit: cover;
+    /* Mantiene la relación de aspecto y cubre todo el contenedor */
+    object-position: center;
+    /* Centra la imagen dentro del contenedor */
+    transition: 0.3s ease-in-out;
+    
+    
+}
+
+.active {    
+    opacity: 1;
+}
+
+.inactive{
+    opacity: 0;
+}
+
+.slider_home__movil_fade_button_prev{
+    font-size: 40px;
+    user-select: none;
+    
+    
+}
+
+.slider_home__movil_fade_button_next{
+    font-size: 40px;
+    user-select: none;
+    
+}
+
+@media (min-width: 374px) {
+    .slider_home_movil_container {        
+        
+        
+    }
+}
+
+@media (min-width: 768px) {
+    .slider_home_movil_container {
+        
+        
+    }
+    .slide_home_movil{
+        
+    }
+
+}
+

@@ -1,19 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from 'axios'; // Importa axios
+
+// Obtener el tema guardado en localStorage
 
 
+// Obtener el usuario guardado en localStorage
 const userString  = localStorage.getItem('user');
 const user = userString ? JSON.parse(userString) : {};
+
+// Obtener el token guardado en localStorage
+const tokenString  = localStorage.getItem('token');
+const token = tokenString
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        user: user
+        user: user,
+        token: token,
+        theme: 'dark' 
     },
     reducers: {
-        setUser: (state, action) => action.payload
-    }
-});
+        setUser: (state, action) => {
+            const data = action.payload;
+            state.user = data.user;
+            state.token = data.token;
+        },
+        setTheme: (state, action) => {           
+            state.theme = action.payload;
+        },
+        setUpdateDataUser: (state, action) => {
+            state.user = action.payload   
+        },
+    }})
 
-export const { setUser } = userSlice.actions;
+
+
+
+export const { setUser, setTheme, setUpdateDataUser } = userSlice.actions;
+
 export default userSlice.reducer;

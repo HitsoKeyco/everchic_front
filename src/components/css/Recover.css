@@ -1,12 +1,13 @@
 
 .recover_form {    
     padding: 20px 20px 0 20px;
-    width: 250px;
+    width: 350px;
     max-width: 400px;
     height: max-content;
     margin: 10px;
     border-radius: 10px;
-
+    background-color: var(--bgCardContainer);
+    box-shadow: var(--BoxShadowForm);
 }
 
 .recover_items_container {
@@ -20,6 +21,12 @@
     display: flex;
     flex-direction: column;
     position: relative; /* Para controlar la vision del pass*/
+}
+.recover_items_button_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
 }
 
 .recover_show_hidden_pass{
@@ -42,18 +49,12 @@
     color: var(--colorText_a);
 }
 
-.recover_input {
-    color: black;
-    padding: 0 10px;
-}
 
 .recover_label {
     margin-left: 0;
     position: relative;
-    top: 10px;
-    left: 10px;
-    background-color: white;
-    padding: 0 5px;
+    top: 25px;
+    left: 10px;        
     color: var(--colorText_a);
 }
 .recover_items_links_container{
@@ -64,15 +65,15 @@
 
 }
 
-.recover_recover_pass_link, .recover_register_link{        
-    font-size: 0.8em;
+.recover_recover_pass_link, .recover_register_link{            
     color: var(--colorText_a);
     padding: 10px 2.5px;
     cursor: pointer;
 }
 
 .recover_button {
-    margin-top: 15px;
+    margin: 0;
+    
     width: 150px;
 }
 

@@ -1,34 +1,50 @@
 
-.login_form {     
-    padding: 20px 20px 0 20px;
-    width: 250px;
-    max-width: 400px;
+
+.auth_modal_login{
+    width: 100%;
+} 
+
+.login_form {
+    background-color: var(--bgCardContainer);     
+    padding: 20px 20px 0 20px;    
+    width: 100%;
+    max-width: 350px;
     height: max-content;
     margin: 10px;
     border-radius: 10px;
+    border: 1px solid var(--borderContainer);
+    box-shadow: var(--BoxShadowForm)
 
 }
 
-.login_items_container {
+.login_items_container {    
     width: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.login_items_container_pass {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+    
     position: relative; /* Para controlar la vision del pass*/
+}
+
+.login_items_button_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    
 }
 
 .login_show_hidden_pass{
     position: absolute;
-    top: 30px;
-    right: 20px;
+    right: 7px;
+    bottom: 6px;
 }
 .login_input_pass{
     padding-right: 40px;
+}
+
+.login_input {        
+    width: 100%;
+    
 }
 
 .login_show_hidden_pass_icon{
@@ -42,19 +58,15 @@
     color: var(--colorText_a);
 }
 
-.login_input {
-    color: black;
-    padding: 0 10px;
-}
 
 .login_label {
     margin-left: 0;
     position: relative;
-    top: 10px;
-    left: 10px;
-    background-color: white;
+    top: 23px;
+    left: 5px;    
     padding: 0 5px;
     color: var(--colorText_a);
+    font-size: 0.9em;
 }
 .login_items_links_container{
     width: 100%;
@@ -65,14 +77,14 @@
 }
 
 .login_recover_pass_link, .login_register_link{        
-    font-size: 0.8em;
+    font-size: 1em;
     color: var(--colorText_a);
     padding: 10px;
     cursor: pointer;
 }
 
 .login_button {
-    margin-top: 15px;
+    margin: 0;
     width: 150px;
     padding:  0  15px;
 }
@@ -88,8 +100,11 @@
 }
 
 .login_form_logout{
+    background-color: var(--bgCardContainer);
+    border: 1px solid var(--borderContainer);
     padding: 25px;
     border-radius: 10px;
+    box-shadow: var(--BoxShadowForm);
 }
 .login_form_info_user{
     font-weight: 500;

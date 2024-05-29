@@ -1,9 +1,37 @@
 .faqs_container{
     width: 100%;
-    height: 500px; /* Por el momento*/
-
+    height: max-content; /* Por el momento*/
+    
+    padding: 10px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    
+}
 
+.faqs_information_container{
+    margin: auto 0;    
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--bgCardProduct);
+}
+
+.faqs_information_question{
+    font-weight: 500;
+    color: var(--colorText_a);
+}
+
+.faqs_information_answer{
+    color: var(--colorText_a);
+    font-weight: 300;
+}
+
+.faqs_title{
+    margin-left: 0;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--colorText_a);
+}
+.faqs-information-answer{
+    color: var(--colorText_a);
 }

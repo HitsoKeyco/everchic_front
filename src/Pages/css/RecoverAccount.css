@@ -1,0 +1,22 @@
+.recover_account_container{
+    padding-top: 150px;
+    width: 100%;
+    max-width: 1250px;
+    
+    height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.recover_account_title{
+    color: var(--colorText_a);
+    font-size: 1.5em;
+    padding-bottom: 30px;
+}
+
+.recover_account_input{
+    padding: 0 10px;
+    width: 350px;
+}

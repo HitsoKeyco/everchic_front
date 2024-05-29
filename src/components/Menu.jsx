@@ -1,26 +1,30 @@
 import React from 'react'
 import '../components/css/Menu.css'
 import { Link } from 'react-router-dom'
-const Menu = ({ setIsMenu, isCart }) => {
+import { useSelector } from 'react-redux'
+const Menu = ({ setIsMenu }) => {
 
     const handleMenu = () => {
         setIsMenu(false)
     }
 
+
+    const userLog = useSelector((state) => state.user.user)
+
     return (
         <>
             <div className='menu header_menu'>
                 <ul className='menu_items_top'>
-                    <li><i className='bx bx-moon' ></i></li>
-                    <li><i className='bx bx-cart-alt' ></i></li>
                     <li onClick={handleMenu}><i className='bx bx-x'></i></li>
                 </ul>
                 <ul className='menu_items_left'>
-                <li className="menu_item_products" onClick={handleMenu}><Link to='/'>Home</Link></li>
-                <li className="menu_item_products" onClick={handleMenu}><Link to='/products'>Productos</Link></li>
-                <li className="menu_item_products" onClick={handleMenu}><Link to='/tracking'>Pedidos</Link></li>
-                <li className="menu_item_products" onClick={handleMenu}><Link to='/galery'>Galeria</Link></li>
-                <li className="menu_item_products" onClick={handleMenu}><Link to='/faqs'>FAQ</Link></li>
+                    <li onClick={handleMenu}><Link className='menu_item_products' to='/'>Home</Link></li>
+                    {
+                        userLog?.isVerify ? <li onClick={handleMenu}><Link className='menu_item_products' to='/profile'>Mi Perfil</Link></li> : null
+                    }
+                    <li onClick={handleMenu}><Link className='menu_item_products' to='/products'>Productos</Link></li>
+                    <li onClick={handleMenu}><Link className='menu_item_products' to='/galery'>Galeria</Link></li>
+                    <li onClick={handleMenu}><Link className='menu_item_products' to='/faqs'>FAQ</Link></li>
                 </ul>
             </div>
         </>

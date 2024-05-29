@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Register.css'
 import useAuth from '../hooks/useAuth'
-const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleAuthModal }) => {
-    const { register, handleSubmit, reset, formState: { } } = useForm()
+const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
     const [isShowPass, setIsShowPass] = useState(false)
-
-
     const handleShowHiddenPass = () => {
         setIsShowPass(!isShowPass)
     }
@@ -27,11 +25,11 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
     // espera la aprobacion del usuario logeado para cerrar el modal
     useEffect(() => {
         if (isLoged) {
-            handleAuthModal()
+            handleModalContentClick()
         }
     }, [isLoged])
 
-    const onSubmit = (data) => {
+    const submit = (data) => {
         console.log(data);
         createUser(data)        
     }
@@ -39,28 +37,28 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
 
     return (
         <>
-            <form method='POST' className='register_form' onSubmit={handleSubmit(onSubmit)}>
+            <form method='POST' className='register_form' onSubmit={handleSubmit(submit)}>
                 <h1 className='register_title'>Registrarse</h1>
                 <div className="register_items_container">
-                    <label className="register_label" htmlFor="firstName" >Nombre</label>
+                    <label className="register_label" htmlFor="firstName" >Nombre:</label>
                     <input className="register_input" type="text" autoComplete="off"
                         {...register('firstName', { required: 'Este campo es obligatorio' })}
                     />
                 </div>
                 <div className="register_items_container">
-                    <label className="register_label" htmlFor="lastName" >Apellidos</label>
+                    <label className="register_label" htmlFor="lastName" >Apellidos:</label>
                     <input className="register_input" type="text" autoComplete="off"
                         {...register('lastName', { required: 'Este campo es obligatorio' })}
                     />
                 </div>
                 <div className="register_items_container">
-                    <label className="register_label" htmlFor="email" >E-mail</label>
+                    <label className="register_label" htmlFor="email" >E-mail:</label>
                     <input className="register_input" type="text" autoComplete="off"
                         {...register('email', { required: 'Este campo es obligatorio' })}
                     />
                 </div>
                 <div className="register_items_container_pass">
-                    <label className="register_label" htmlFor="password" >Contraseña</label>
+                    <label className="register_label" htmlFor="password" >Contraseña:</label>
                     <input className="register_input_pass" type={isShowPass ? 'text' : 'password'} id='password' name='password' autoComplete="off"
                         {...register('password', { required: 'Este campo es obligatorio' })}
                     />
@@ -73,7 +71,7 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
                         }
                     </div>
                 </div>
-                <div className="register_items_container">
+                <div className="register_items_button_container">
                     <button className='register_button'>Registrarse</button>
                 </div>
                 <div className="register_items_links_container">

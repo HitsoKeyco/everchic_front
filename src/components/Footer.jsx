@@ -1,25 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react';
+import './css/Footer.css';
 
 const Footer = () => {
+    const [isFooterHidden, setIsFooterHidden] = useState(false);
+
+    const handleFooterHidden = () => {
+        const footerContainer = document.querySelector('.footer_container');
+        const footerToogleIcon = document.querySelector('.footer_toogle i');
+
+        footerContainer.classList.toggle('footer_container_hidden');
+        setIsFooterHidden(!isFooterHidden);
+
+        if (isFooterHidden) {
+            footerToogleIcon.classList.replace('bx-up-arrow', 'bx-down-arrow');
+        } else {
+            footerToogleIcon.classList.replace('bx-down-arrow', 'bx-up-arrow');
+        }
+    };
+
     return (
-        <>
-            <footer className='home_footer'>
-                <div className="home_container_footer_elements">
-                    <div className="home_icon_socials">
-                        <i className='bx bxl-instagram'><p className='home_p'>ever_chic_</p></i>
-                        <i className='bx bxl-whatsapp' ><p className='home_p'>+593 990887390</p></i>
-                    </div>
-                    <div className="home_icon_socials">
-                        <a className='home_footer_link' href="">- Politicas de privacidad.</a>
-                        <a className='home_footer_link' href="">- ¿Quienes somos?</a>
-                        <a className='home_footer_link' href="">- Trabaja con nosotros.</a>
-                    </div>
-                </div>
+        <footer className='footer_container'>
+            <div className="footer_toogle">
+                <i className={isFooterHidden ? 'bx bx-up-arrow' : 'bx bx-down-arrow'} onClick={handleFooterHidden}></i>
+            </div>
+            <p className='footer_copyright_text'>&copy; 2024 Everchic. Todos los derechos reservados.</p>
+        </footer>
+        
+    );
+};
 
-            </footer>
-            <p className='home_footer_copyright'>&copy; 2024 Everchic. Todos los derechos reservados.</p>
-        </>
-    )
-}
-
-export default Footer
+export default Footer;

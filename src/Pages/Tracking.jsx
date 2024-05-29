@@ -13,7 +13,7 @@ const Tracking = () => {
             transition={{ duration: 0.3 }}
         >
             <div className='tracking_container'>
-                <ChatBox />
+             
             </div>
         </motion.div>
     )

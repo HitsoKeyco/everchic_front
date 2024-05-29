@@ -8,20 +8,19 @@
     padding: 0;
     user-select: none;
     margin: 0 auto;
+    font-size: 14px;
+}
+
+.swal2-popup{
+    background-color: #0d1117;
+    border: 1px solid var(--borderContainer);
+    color: var(--colorText_a);
 }
 
 :root {
-    /*Background Home*/
-    --bgHomeColor: rgb(241, 240, 241);
-    --bgHomecolor_2: rgba(53, 74, 95, 0.923);
-    --bgHomecolorFilter: rgba(53, 74, 95, 0.56);
-    --bgCartElementContainer: rgba(53, 74, 95, 0.048);
-    /*Formularios*/
-    --bgColorForm: rgb(255, 255, 255);
-
     /*Input*/
-    --bgColorInput: white;
-    
+    --bgColorInput: #161b22;
+
     /* BannerPromo */
     --bgPromo: #f28d3ad9;
     --colorTextPromo: white;
@@ -31,10 +30,13 @@
     --colorTextCollection: white;
 
     /* CardProduct */
-    --bgCardProduct: #ddefee;
+    --bgCardProduct: #0d1117;
+    --bgCardContainerProduct: #0d1117;
     --bgModalProduct: #f9f9f9;
+    --bgCardContainer: #161b22;
+    --bgCardContainerHover: #1f242b;
     --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
-    --colorTextCardPrice: rgb(128, 219, 86);
+    --colorTextCardPrice: rgb(49, 132, 10);
     --colorTag: #2D9596;
 
     /* Boton */
@@ -44,28 +46,50 @@
     --bgButtonHoverHomeCard: #f28d3ad9;
 
     /*Texto*/
-    --colorText_a: #265073;
-    --colorText_b: white;
-    --colorText_c: #2D9596;
+    --colorText_a: #d7d7d7;
+    --colorTextHover: white;
+    --colorText_c: #bfbfbf;
     --colorText_d: red;
-    --colorText_e: rgb(150, 149, 149);
+    --colorText_e: rgb(18, 17, 17);
+    --colorText_b: white;
+    --colorText_f: rgb(3, 6, 19);
     --colorText_hover: rgb(232, 232, 232);
-    --colorTextActiveLink: rgb(33, 190, 64);
+    --colorTextActiveLink: rgb(35, 146, 57);
 
     /*Others*/
     --bgViolet: rgb(251, 92, 92);
-    --textViolet: rgb(152, 12, 187);
+    --textViolet: rgb(159, 145, 251);
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.141);
     --colorBorderButton: #265073;
     --colorBorderInput: #2650735a;
+    --borderCardproduct: rgba(154, 151, 151, 0.141);
 
     /*barScrollColor*/
     --colorbar_a: #2d949628;
     --colorbar_b: rgba(33, 34, 33, 0.115);
     --bgScrollbar: #edf0f3;
 
+    /*ChatBg*/
+    --bgChatContainer: rgb(17, 17, 27);
+
+    /*Background Body*/
+    --bgBodyPage: #010409;
+    --bgBodyPageBlur: #01040990;
+
+    /*Backdrop Color */
+    --bgBackdrop: rgba(15, 14, 14, 0.574);
+
+    /*Box Shadows*/
+    --BoxShadowForm: rgb(155, 155, 155) 0px 0px 15px 1px;
+
+}
+
+
+body {
+    background: var(--bgBodyPage);
+    margin-bottom: 60px;
 }
 
 @media (min-width: 600px) {
@@ -79,6 +103,8 @@
 img {
     pointer-events: none;
 }
+
+
 
 button {
     border: none;
@@ -121,7 +147,7 @@ html {
 
 .fade-enter-active {
     opacity: 1;
-    transition: opacity 300ms;
+    /* transition: opacity 300ms; */
 }
 
 .fade-exit {
@@ -134,37 +160,135 @@ html {
 
 
 
-button{
-    height: 45px;    
+button {
+    height: 45px;
     border-radius: 5px;
-    
-    color: var(--colorText_b);
-    transition: 0.3s ease-in-out;
-    background-color: var(--colorButton);
-}
+    border: solid 2px var(--colorButton);
+    font-size: 1.2em;
 
-button:hover{
-background-color: var(--bgButtonHover);
-color: var(--colorText_b);
-}
-
-
-
-input{
-    margin-left: 0;
-    height: 40px;
-    border-radius: 5px;
-    border: none;
-    background-color: var(--bgColorInput);
-    outline: none;
-    padding: 0 8px;
-    padding-right: 30px;
     width: 100%;
-    max-width: 200px;
+    background-color: var(--colorButton);
+    color: var(--colorText_b);
+    border: none;
+    margin-left: 0;
+}
+
+button:hover {
+    background-color: var(--bgButtonHover);
+    color: var(--colorText_b);
+}
+
+.bx-chevron-right,
+.bx-chevron-left {
+    cursor: pointer;
+}
+
+input {
+    height: 53px;
+    border-radius: 5px;
+    background-color: var(--bgColorInput);
+    width: 100%;
     border: 1px solid var(--colorBorderInput);
+    padding: 20px 10px 3px 10px;
+    font-size: 1.2em;
+    outline-color: var(--bgButtonHover);
+    color: var(--colorText_a);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--bgColorInput) inset !important;
+    -webkit-text-fill-color: var(--colorText_a) !important; /* Color del texto */
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 5px;
+    background-color: var(--bgColorInput);
+    border: 1px solid var(--colorBorderInput);
+    padding: 20px 10px 0px 10px;
+    font-size: 1.2em;
+    outline-color: var(--bgButtonHover);
+    color: var(--colorText_a);
 }
 
 
-form{
-    background-color: var(--bgColorForm);
+.dark_mode {
+    transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    /*Input*/
+    --bgColorInput: #efeff0;
+
+    /* BannerPromo */
+    --bgPromo: #f28d3ad9;
+    --colorTextPromo: white;
+
+    /* Slider */
+    --bgCollection: #2D9596;
+    --colorTextCollection: white;
+
+    /* CardProduct */
+    --bgCardProduct: #efeff0;
+    --bgCardContainerProduct: #efeff0;
+    --bgModalProduct: #010000;
+    --bgCardContainer: #e9ebef;
+    --bgCardContainerHover: #eee9f7;
+    --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
+    
+    --colorTag: #2D9596;
+
+    /* Boton */
+    --colorButton: #2D9596;
+    --bgButtonHover: #23696b;
+    --bgButtonHoverHome: #2D9596;
+    
+
+    /*Texto*/
+    --colorText_a: #1d1c23;
+    --colorTextHover: #1d1c23;
+    --colorText_c: #bfbfbf;
+    --colorText_d: red;
+    --colorText_e: rgb(18, 17, 17);
+    --colorText_b: white;
+    --colorText_f: rgb(3, 6, 19);
+    --colorText_hover: rgb(232, 232, 232);
+    --colorTextActiveLink: rgb(35, 146, 57);
+
+    /*Others*/
+    --bgViolet: rgb(251, 92, 92);
+    --textViolet: rgb(159, 145, 251);
+
+    /*border*/
+    --borderContainer: rgba(154, 151, 151, 0.141);
+    --colorBorderButton: #265073;
+    --colorBorderInput: #2650735a;
+    --borderCardproduct: rgba(154, 151, 151, 0.141);
+
+    /*barScrollColor*/
+    --colorbar_a: #2d949628;
+    --colorbar_b: rgba(33, 34, 33, 0.115);
+    --bgScrollbar: #edf0f3;
+
+    /*ChatBg*/
+    --bgChatContainer: rgb(17, 17, 27);
+
+    /*Background Body*/
+    --bgBodyPage: #f3f3f3;
+    --bgBodyPageBlur: #f3f3f390;
+
+    /*Backdrop Color */
+    --bgBackdrop: rgba(15, 14, 14, 0.574);
+
+    /*Box Shadows*/
+    --BoxShadowForm: rgb(154, 249, 122) 0px 0px 15px 1px;
+
+    .swal2-popup{
+        background-color: var(--bgCardContainer);
+        border: 1px solid var(--borderContainer);
+        color: var(--colorText_a);
+    }
+
+
 }

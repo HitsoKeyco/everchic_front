@@ -4,6 +4,7 @@ import "../components/css/ModalProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, addProductFree } from "../store/slices/cart.slice";
 import SliderImg from "./SliderImg";
+import { useNavigate } from "react-router-dom";
 
 const ModalProduct = ({ product, setIsModal }) => {
 
@@ -23,7 +24,7 @@ const ModalProduct = ({ product, setIsModal }) => {
         const freeProducts = useSelector(state => state.cart.quantityProductsFree)
         const cartFree = useSelector(state => state.cart.storedCartFree)
         const unitCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
-
+    const navigate = useNavigate()
     const handleBuy = () => {
             if (!isFree) {                
                 dispatch(addProduct({
@@ -33,6 +34,7 @@ const ModalProduct = ({ product, setIsModal }) => {
                     stock: product.stock,
                     category: product.category.name,
                     tittle: product.tittle,
+                    weight: product.weight,
                     size: product.size.size,
                     image: {
                         url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url : null,
@@ -55,6 +57,9 @@ const ModalProduct = ({ product, setIsModal }) => {
                             alt: product.title
                         }
                     }));
+                                      
+                        navigate("/cart");
+                    
                 }                 
             }
     }
@@ -78,9 +83,9 @@ const ModalProduct = ({ product, setIsModal }) => {
                         <SliderImg product={product} />
                     }
                     <ul>
-                        <li className="modal_description_poduct_title">{product.title}</li>
-                        <li className="modal_description_poduct_description">{product.description}</li>
-                        <li className="modal_description_poduct_size">Talla: {product.size.size}</li>
+                        <li className="modal_description_poduct_title">{product?.title}</li>
+                        <li className="modal_description_poduct_description">{product?.description}</li>
+                        <li className="modal_description_poduct_size">Talla: {product.size?.size}</li>
                     </ul>
                     <button className="modal_button" onClick={handleBuy}><i className='bx bx-plus ' ></i></button>
                 </div>

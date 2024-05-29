@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../Pages/css/Home.css';
-import { Link } from 'react-router-dom';
-import SliderImg from '../components/SliderImg';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import imagesHome from '../utils/imagesHome';
+import SliderHomeMovil from '../components/SliderHomeMovil';
+
 
 
 const Home = () => {
+  const navigate = useNavigate()
+  const handdleBuyButton = () => {
+    navigate('/products');
+  }
 
   return (
     <>
@@ -21,35 +27,26 @@ const Home = () => {
 
             <div className="home_container_img">
               {
-                <SliderImg />
+                <SliderHomeMovil image={imagesHome} />
               }
             </div>
             {/* Elementos que se muestran para desktop */}
             <div className="home_elements_desktop">
               <div className="home_images_container">
                 <h1 className='home_title'>
-                  Calcetines de <br />
-                  series animadas
+                  Calcetines <br />
+                  comics y deportivos.
                 </h1>
                 <h2 className='home_phrase_welcome'>
                   Bienvenido a everchic, aqui podrás encontrar <br /> calcetines con personajes de series animadas tejidos o sublimados.
                 </h2>
-                <button className='home_btn_buy'>Comprar</button>
+                <button className='home_btn_buy' onClick={handdleBuyButton}>Comprar</button>
 
-                <div className="home_models_info_">
+                {/* <div className="home_models_info_">
                   <img className='home_models_img' src="/models.png" alt="models" />
                   <span className='home_quantity_model_'>+ de 600 Modelos</span>
-                </div>
+                </div> */}
 
-                {/* <div className="home_img_container">
-                <img className='home_img' src="/unsplash_1.png" alt="" />
-              </div>
-              <div className="home_img_container">
-                <img className='home_img' src="/unsplash_2.png" alt="" />
-              </div>
-              <div className="home_img_container">
-                <img className='home_img' src="/unsplash_3.png" alt="" />
-              </div> */}
               </div>
               <div className="home_box_img_container">
                 <div className="home_img_bottom_container">
@@ -69,6 +66,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
+
             <div className="home_text_elements_container">
               <h1 className='home_h1'>¡Descubre Nuestra Colección Única!</h1>
               <h3 className='home_h3'>Calcetines Divertidos y Originales</h3>
@@ -79,6 +77,43 @@ const Home = () => {
                 <span className='home_quantity_model'>+ de 600 Modelos</span>
               </div>
             </div>
+
+            <div className="home_instruccion_buy_container">
+              <div className="home_ofeer_container"></div>
+
+              <div className='home_instruccion_element'>
+                <p className='home_instruccion_title'> Proceso de compra </p>
+                <div className="home_instruccion_line"></div>
+              </div>
+
+              <div className='home_instruccion_element'>
+                <div className="home_instruccion_img_container">
+                  <p className='home_instruccion_instruccion_number'>1</p>
+                  <p className='home_instruccion_summary'> Elige tus calcetines</p>
+                  <div className="home_instruccion_backdrop_img"></div>
+                </div>
+              </div>
+
+              <div className='home_instruccion_element'>
+                <div className="home_instruccion_img_container_2">
+                  <p className='home_instruccion_instruccion_number'>2</p>
+                  <p className='home_instruccion_summary'> Preparamos tu pedido</p>
+                  <div className="home_instruccion_backdrop_img"></div>
+                </div>
+              </div>
+
+              <div className='home_instruccion_element'>
+                <div className="home_instruccion_img_container_3">
+                  <p className='home_instruccion_instruccion_number'>3</p>
+                  <p className='home_instruccion_summary'> Gestionamos el envío</p>
+                  <div className="home_instruccion_backdrop_img"></div>
+                </div>
+              </div>
+            </div>
+
+            
+
+
           </main>
         </div>
       </motion.div>

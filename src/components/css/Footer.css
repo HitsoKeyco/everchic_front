@@ -1,0 +1,55 @@
+.footer_container{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: var(--bgCardContainer);
+    background-color: rgba(52, 52, 51, 0.96);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.3s ease-in-out;
+    z-index: 3;
+}
+
+.footer_toogle{
+    background-color: rgba(52, 52, 51, 0.96);
+    height: 25px;
+    width: 80px;
+    position: absolute;
+    top: -25px;
+    left: 60px;
+    border-radius: 15px 15px 0 0;
+    padding-top: 3px;
+
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+    transition: 0.3s ease-in-out;
+}
+
+.bx-down-arrow, .bx-up-arrow{
+    color: var(--colorText_b);
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.footer_container_hidden{
+    bottom: -40px;
+
+    .footer_toogle{
+        border-radius: 45px 45px 0 0;
+        left: 40px;
+    }
+}
+
+.bx-down-arrow-hidden{
+    display: none;
+}
+
+.footer_copyright_text{
+    color: var(--colorText_b);
+}

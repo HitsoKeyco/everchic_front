@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const filterProductString  = localStorage.getItem('filter_product');
-const filterId = filterProductString ? JSON.parse(filterProductString) : 1;
 
+// 0 da el valor de all
+const value = 'all'
 const filterProductSlice = createSlice({
     name: 'filterProduct',
     initialState: {
-        idFilterProduct: filterId,
+        idFilterProduct: value,
     },
 
     reducers: {
         filterIdProduct: (state, action) => {            
-            state.idFilterProduct = action.payload
-            localStorage.setItem('filter_product', JSON.stringify(state.idFilterProduct))
+            state.idFilterProduct = action.payload            
         }
     }
 })

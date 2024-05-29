@@ -2,33 +2,35 @@ const navLinks = () => {
     const routes = [];
     routes.push({
         to: '/',
-        text: 'Home'
+        text: 'Home',
+        private: false
     });
 
     routes.push({
         to: '/products',
-        text: 'Productos'
+        text: 'Productos',
+        private: false
     });
-
+    
     routes.push({
-        to: '/tracking',
-        text: 'Pedidos'
+        to: '/gallery',
+        text: 'Galeria',
+        private: false
     });
-
-    routes.push({
-        to: '/galery',
-        text: 'Galeria'
-    });
-
-    routes.push({
-        to: '/purchases',
-        text: 'Mis compras'
-    });
-
+    
     routes.push({
         to: '/faqs',
-        text: 'FAQs'
+        text: 'FAQs',
+        private: false
     });
+
+    routes.push({
+        to: '/profile',
+        text: 'Mi Perfil',
+        class: 'isActive',
+        private: true
+    });
+
     return routes
 
 }

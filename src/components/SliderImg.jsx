@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './css/SliderImg.css'
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 function SliderImg({ product }) {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,7 +30,7 @@ function SliderImg({ product }) {
             <AnimatePresence>
             <div className="slide-wrapper">
                 {product?.productImgs.map((slide, index) => (
-                    <Motion.li
+                    <motion.div
                     key={index}
                     animate={{opacity: 1}}
                     exit={{ opacity: 0}}
@@ -41,7 +41,7 @@ function SliderImg({ product }) {
                         src={slide?.url}
                         alt={`Slide ${index}`}
                     />
-                    </Motion.li>
+                    </motion.div>
                 ))}
             </div>
             </AnimatePresence>
