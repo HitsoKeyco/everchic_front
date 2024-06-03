@@ -211,7 +211,7 @@
 .home_ofeer_container{    
     height: 400px;
     width: 100%;
-    background-image: url('oferta.jpg');
+    background-image: url('./img/oferta.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;    
@@ -225,7 +225,7 @@
     align-items: center;
     height: 400px;
     width: 100%;
-    background-image: url('socks_comic.jpg');
+    background-image: url('./img/socks_comic.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;    
@@ -239,7 +239,7 @@
     align-items: center;
     height: 400px;
     width: 100%;
-    background-image: url('shipping.jpg');
+    background-image: url('./img/shipping.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;    
@@ -253,7 +253,7 @@
     align-items: center;
     height: 400px;
     width: 100%;
-    background-image: url('envios.jpg');
+    background-image: url('./img/envios.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;    
@@ -417,7 +417,7 @@
         max-width: 1280px;
         height: 450px;
         display: flex;
-        background-image: url('portada_home_1.png');        
+        background-image: url('./img/portada_home_1.png');        
         background-position: center;
         border-radius: 10px;
         background-size: cover;

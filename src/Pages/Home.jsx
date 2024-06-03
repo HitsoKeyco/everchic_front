@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../Pages/css/Home.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import imagesHome from '../utils/imagesHome';
 import SliderHomeMovil from '../components/SliderHomeMovil';
+import images from '../utils/images';
 
 
 
@@ -27,7 +27,7 @@ const Home = () => {
 
             <div className="home_container_img">
               {
-                <SliderHomeMovil image={imagesHome} />
+                <SliderHomeMovil image={images} />
               }
             </div>
             {/* Elementos que se muestran para desktop */}
@@ -50,19 +50,19 @@ const Home = () => {
               </div>
               <div className="home_box_img_container">
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="/unsplash_11.jpg" alt="" />
+                  <img className='home_img_bottom' src="./img/unsplash_11.jpg" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="/unsplash_5.png" alt="" />
+                  <img className='home_img_bottom' src="./img/unsplash_5.png" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="/unsplash_6.png" alt="" />
+                  <img className='home_img_bottom' src="./img/unsplash_6.png" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="/unsplash_12.jpg" alt="" />
+                  <img className='home_img_bottom' src="./img/unsplash_12.jpg" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="/unsplash_8.png" alt="" />
+                  <img className='home_img_bottom' src="./img/unsplash_8.png" alt="" />
                 </div>
               </div>
             </div>

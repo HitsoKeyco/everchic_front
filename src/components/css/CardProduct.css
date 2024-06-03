@@ -1,15 +1,10 @@
 .card_product {
-    width: 100%; /* Ocupa todo el ancho disponible */        
-    max-width: 200px;
-    height: 290px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;    
-    transition: transform 0.4s ease;
-    border: solid 2px var(--bgCardProduct);
+    width: 100%;    
+    height: 100%;
     background-color: var(--bgCardProduct);
-    box-sizing: border-box; 
-}
+    border-radius: 10px;
+    box-shadow: var(--colorBoxShadowCardproduct);
+}   
 
 .is_slider{
     cursor: grab;
@@ -23,9 +18,8 @@
 
 .card_container_img{
     width: 100%;
-    height: 70%;
+    height: 70%;    
     position: relative;
-    
 }
 
 .bxs-heart{
@@ -58,12 +52,14 @@
     border-radius: 10px 10px 0 0;
     height: 100%;
     width: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 
 .card_product_body {
     display: flex;    
-    background-color: var(--bgCardProduct);
+    
     width: 100%;
     height: 30%;
     padding: 0 5px;
@@ -74,7 +70,7 @@
 .card_product_name {
     padding-top: 5px;
     color: var(--colorText_a);
-    font-size: 0.8em;
+    font-size: 1.1em;
 }
 
 .card_title_category{
@@ -109,7 +105,7 @@
     align-items: center;    
     position: absolute;
     right: 10px;
-    top: 40px
+    top: 35px
 }
 
 .card_product_button_cart:hover {

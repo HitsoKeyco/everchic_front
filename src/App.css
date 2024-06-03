@@ -30,12 +30,12 @@
     --colorTextCollection: white;
 
     /* CardProduct */
-    --bgCardProduct: #0d1117;
+    --bgCardProduct: #1e2631;
     --bgCardContainerProduct: #0d1117;
     --bgModalProduct: #f9f9f9;
     --bgCardContainer: #161b22;
     --bgCardContainerHover: #1f242b;
-    --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
+    --colorBoxShadowCardproduct: rgba(65, 65, 65, 0.115);
     --colorTextCardPrice: rgb(49, 132, 10);
     --colorTag: #2D9596;
 
@@ -230,7 +230,7 @@ textarea {
     --colorTextCollection: white;
 
     /* CardProduct */
-    --bgCardProduct: #efeff0;
+    --bgCardProduct: #e2e2e4;
     --bgCardContainerProduct: #efeff0;
     --bgModalProduct: #010000;
     --bgCardContainer: #e9ebef;

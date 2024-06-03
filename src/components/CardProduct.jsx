@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../components/css/CardProduct.css';
 import ModalProduct from './ModalProduct';
 import { useDispatch, useSelector } from 'react-redux';
@@ -85,9 +85,9 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                         }
                     }));
 
-                    
-                        navigate("/cart");
-                    
+
+                    navigate("/cart");
+
                 }
             }
         };
@@ -96,63 +96,73 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
 
     const like = isLike.find(like => like.productId === product.id);
-    
+
 
     const userId = useSelector(state => state.user?.user?.id) || null;
-    
 
-    const handleLikeProduct = (e) => {        
-        e.stopPropagation();        
+
+    const handleLikeProduct = (e) => {
+        e.stopPropagation();
         const urlApi = import.meta.env.VITE_API_URL;
         const data = {
             productId: product.id,
             userId: userId
         };
-    
+
         if (userId) {
             // Usuario autenticado
             if (like) {
                 axios.delete(`${urlApi}/users/like_product/`, { data })
-                .then(res => {
-                    if (res.data) {
-                        updateLikeProducts();
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al eliminar el like:", err);
-                });
-            } else {             
+                    .then(res => {
+                        if (res.data) {
+                            updateLikeProducts();
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error al eliminar el like:", err);
+                    });
+            } else {
                 axios.post(`${urlApi}/users/like_product`, data)
-                .then(res => {
-                    if (res.data) {
-                        updateLikeProducts();
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al agregar el like:", err);
-                });
+                    .then(res => {
+                        if (res.data) {
+                            updateLikeProducts();
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error al agregar el like:", err);
+                    });
             }
         } else {
             // Usuario no autenticado
             let likes = JSON.parse(localStorage.getItem('likes')) || [];
-            
+
             if (like) {
                 // Eliminar el like
                 likes = likes.filter(item => item.productId !== product.id);
+
             } else {
                 // Agregar el like
                 if (!likes.some(item => item.productId === product.id)) {
                     likes.push({ productId: product.id, userId: null });
                 }
+
             }
-            
+
             localStorage.setItem('likes', JSON.stringify(likes));
             updateLikeProducts();
         }
     };
 
-    
-    
+    //verificar si este producto tiene like cargarlo de local Storage con useEffect
+    useEffect(() => {
+        const likes = JSON.parse(localStorage.getItem('likes')) || [];
+        if (likes.some(item => item.productId === product.id)) {
+            updateLikeProducts();
+        }
+    }, [])
+
+
+
     return (
         <>
             <div ref={cardProduct}
@@ -162,7 +172,7 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                 onClick={handdleModal}>
 
                 <div className="card_container_img">
-                    <i className={`bx bxs-heart ${like ? 'heart-fill' : '' }`} onClick={handleLikeProduct}></i>
+                    <i className={`bx bxs-heart ${like ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
                     <p className='card_product_size'> Talla {product.size?.size}</p>
                     <img className='card_product_img' src={product.productImgs[0]?.url} alt="" />
                 </div>

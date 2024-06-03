@@ -12,6 +12,7 @@ const FilterProduct = () => {
 
     useEffect(() => {
         const urlApi = import.meta.env.VITE_API_URL;
+        
         axios.get(`${urlApi}/categories`)
             .then(res => {
                 setNameCategories(res.data)
