@@ -3,11 +3,13 @@
 .container_slider{       
     width: 100%;
     max-width: 1280px;
-    height: max-content;    
+    height: 100%;    
     overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
+    
+    
     
     
     

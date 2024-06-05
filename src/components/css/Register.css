@@ -5,8 +5,7 @@
     max-width: 400px;
     height: max-content;
     margin: 10px;
-    border-radius: 10px;
-    box-shadow: var(--BoxShadowForm);
+    border-radius: 10px;    
     background-color: var(--bgCardContainer);
 }
 

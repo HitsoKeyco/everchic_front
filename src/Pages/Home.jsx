@@ -2,16 +2,66 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../Pages/css/Home.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import SliderHomeMovil from '../components/SliderHomeMovil';
 import images from '../utils/images';
+import axios from 'axios';
+
+
+import SliderHomeMovil from '../components/SliderHomeMovil';
+
+import SliderHomeNewProducts from '../components/SliderHomeNewProducts';
+import Sliderc from '../components/Sliderc';
+
+
 
 
 
 const Home = () => {
+
   const navigate = useNavigate()
   const handdleBuyButton = () => {
     navigate('/products');
   }
+
+  const [products, setIsNewProducts] = useState([]);
+  const url = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    axios.get(`${url}/products/new_product`)
+      .then(res => {
+        setIsNewProducts(res.data);
+      })
+      .catch(err => console.log(err));
+  }, [])
+
+  /* productos like*/
+  const [isLike, setIsLike] = useState([])
+  const userIdString = localStorage.getItem('user')
+  const userId = userIdString ? JSON.parse(userIdString).id : null;
+  const urlApi = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    if (userId) {
+      updateLikeProducts();
+    }
+  }, [userId])
+
+  const updateLikeProducts = () => {
+    if (userId) {
+      // Usuario autenticado
+      axios.get(`${urlApi}/users/like_product/${userId}`)
+        .then(res => {
+          setIsLike(res.data);
+        })
+        .catch(err => {
+          console.error("Error al obtener los likes del usuario:", err);
+        });
+    } else {
+      // Usuario no autenticado
+      const likes = JSON.parse(localStorage.getItem('likes')) || [];
+      setIsLike(likes);
+    }
+  };
+
 
   return (
     <>
@@ -50,70 +100,43 @@ const Home = () => {
               </div>
               <div className="home_box_img_container">
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="./img/unsplash_11.jpg" alt="" />
+                  <img className='home_img_bottom' src="./img/1.webp" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="./img/unsplash_5.png" alt="" />
+                  <img className='home_img_bottom' src="./img/2.webp" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="./img/unsplash_6.png" alt="" />
+                  <img className='home_img_bottom' src="./img/3.webp" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="./img/unsplash_12.jpg" alt="" />
+                  <img className='home_img_bottom' src="./img/4.webp" alt="" />
                 </div>
                 <div className="home_img_bottom_container">
-                  <img className='home_img_bottom' src="./img/unsplash_8.png" alt="" />
+                  <img className='home_img_bottom' src="./img/5.webp" alt="" />
                 </div>
               </div>
             </div>
 
             <div className="home_text_elements_container">
               <h1 className='home_h1'>¡Descubre Nuestra Colección Única!</h1>
-              <h3 className='home_h3'>Calcetines Divertidos y Originales</h3>
-              <p className='home_p_'>Sumérgete en el mundo de la diversión con nuestra exclusiva colección de calcetines cartoon con materiales de alta calidad para alegrar tus pasos cada día.</p>
-              <button className='home_main_button'><Link to='/products'>Ir a productos</Link></button>
+              <h3 className='home_h3'><span className='home_span_text_color'>DIVERTIDOS</span> <span className='home_and'> & </span> <span className='home_span_text_color'>ORIGINALES</span></h3>
+
+              <Link className='home_call_to_action' to='/products'>
+                <button className='home_main_button'>Productos</button>
+              </Link>
+
               <div className="home_models_info">
-                <img className='home_models_img' src="/models.png" alt="models" />
-                <span className='home_quantity_model'>+ de 600 Modelos</span>
+                <img className='home_models_img' src="./img/models.png" alt="models" />
+                <span className='home_quantity_model'> + de <span className='home_quantity_models_number'>300</span>  Modelos</span>
               </div>
             </div>
 
-            <div className="home_instruccion_buy_container">
-              <div className="home_ofeer_container"></div>
-
-              <div className='home_instruccion_element'>
-                <p className='home_instruccion_title'> Proceso de compra </p>
-                <div className="home_instruccion_line"></div>
-              </div>
-
-              <div className='home_instruccion_element'>
-                <div className="home_instruccion_img_container">
-                  <p className='home_instruccion_instruccion_number'>1</p>
-                  <p className='home_instruccion_summary'> Elige tus calcetines</p>
-                  <div className="home_instruccion_backdrop_img"></div>
-                </div>
-              </div>
-
-              <div className='home_instruccion_element'>
-                <div className="home_instruccion_img_container_2">
-                  <p className='home_instruccion_instruccion_number'>2</p>
-                  <p className='home_instruccion_summary'> Preparamos tu pedido</p>
-                  <div className="home_instruccion_backdrop_img"></div>
-                </div>
-              </div>
-
-              <div className='home_instruccion_element'>
-                <div className="home_instruccion_img_container_3">
-                  <p className='home_instruccion_instruccion_number'>3</p>
-                  <p className='home_instruccion_summary'> Gestionamos el envío</p>
-                  <div className="home_instruccion_backdrop_img"></div>
-                </div>
-              </div>
+            <div className="home_products_container">
+              <SliderHomeNewProducts products={products} updateLikeProducts={updateLikeProducts} />
             </div>
-
-            
-
-
+            <div className="sliderss">
+              <Sliderc products={products} updateLikeProducts={updateLikeProducts}/>
+            </div>
           </main>
         </div>
       </motion.div>

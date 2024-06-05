@@ -7,7 +7,6 @@
     margin: 10px;
     border-radius: 10px;
     background-color: var(--bgCardContainer);
-    box-shadow: var(--BoxShadowForm);
 }
 
 .recover_items_container {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from "framer-motion";
 import './css/SliderHomeMovil.css'
+
 const SliderHomeMovil = ({ image }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
 

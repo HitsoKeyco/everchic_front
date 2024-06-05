@@ -95,8 +95,8 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
 
-    const like = isLike.find(like => like.productId === product.id);
-
+    const like = isLike?.find(like => like.productId === product.id) || null;
+    
 
     const userId = useSelector(state => state.user?.user?.id) || null;
 
@@ -161,7 +161,7 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
         }
     }, [])
 
-
+    
 
     return (
         <>

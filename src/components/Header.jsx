@@ -51,16 +51,25 @@ const Header = () => {
     };
   }, []);
 
+
+  // tema   
   const dispatch = useDispatch();
+  const userTheme = useSelector(state => state.user.theme)
+  useEffect(() => {
+    // Agrega o elimina la clase 'dark_mode' en función del tema del usuario
+    if (userTheme === 'dark') {
+      document.body.classList.add('dark_mode');
+      
+    } else {
+      document.body.classList.remove('dark_mode');
+      
+    }
+  }, [userTheme]); 
 
   const handleDarkMode = () => {
-    const darkMode = document.body.classList.toggle('dark_mode');
-
-    if (darkMode) {
-      dispatch(setTheme('light')); // Cambiar al modo oscuro
-    } else {
-      dispatch(setTheme('dark'));
-    }
+    const newTheme = userTheme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme)
+    dispatch(setTheme(newTheme));
   }
 
   // Manejo de cantidad de producto en estado global a mostrar en cart.

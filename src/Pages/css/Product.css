@@ -67,6 +67,7 @@
 
     /* 2 columnas responivas*/
     grid-template-columns: repeat(2, 1fr);    
+    grid-template-rows:  repeat(auto-fill, 280px);
     gap: 10px;
 }
 

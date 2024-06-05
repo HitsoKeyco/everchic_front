@@ -8,7 +8,7 @@
     padding: 0;
     user-select: none;
     margin: 0 auto;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .swal2-popup{
@@ -40,14 +40,16 @@
     --colorTag: #2D9596;
 
     /* Boton */
-    --colorButton: #2D9596;
-    --bgButtonHover: #23696b;
+    --colorButton: #181918;
+    --bgButtonHover: #2c3333;
+    
     --bgButtonHoverHome: #2D9596;
     --bgButtonHoverHomeCard: #f28d3ad9;
 
     /*Texto*/
     --colorText_a: #d7d7d7;
     --colorTextHover: white;
+    --colorTextHoverButtom: #13C296;
     --colorText_c: #bfbfbf;
     --colorText_d: red;
     --colorText_e: rgb(18, 17, 17);
@@ -62,7 +64,7 @@
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.141);
-    --colorBorderButton: #265073;
+    --colorBorderButton: #13C296;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
 
@@ -76,7 +78,7 @@
 
     /*Background Body*/
     --bgBodyPage: #010409;
-    --bgBodyPageBlur: #01040990;
+    --bgBodyPageBlur: #010409;
 
     /*Backdrop Color */
     --bgBackdrop: rgba(15, 14, 14, 0.574);
@@ -106,10 +108,6 @@ img {
 
 
 
-button {
-    border: none;
-    cursor: pointer;
-}
 
 a {
     text-decoration: none;
@@ -161,22 +159,17 @@ html {
 
 
 button {
-    height: 45px;
-    border-radius: 5px;
-    border: solid 2px var(--colorButton);
-    font-size: 1.2em;
-
-    width: 100%;
+    height: 50px;    
+    border: none;    
+    cursor: pointer;
+    border: 2px solid var(--colorBorderButton);
+    color: var(--colorText_b);
     background-color: var(--colorButton);
-    color: var(--colorText_b);
-    border: none;
-    margin-left: 0;
+    margin: 0;
+    border-radius: 25px;
+    
 }
 
-button:hover {
-    background-color: var(--bgButtonHover);
-    color: var(--colorText_b);
-}
 
 .bx-chevron-right,
 .bx-chevron-left {
@@ -240,14 +233,15 @@ textarea {
     --colorTag: #2D9596;
 
     /* Boton */
-    --colorButton: #2D9596;
-    --bgButtonHover: #23696b;
+    --colorButton: #393e48;
+    --bgButtonHover: #d7f1f1;
     --bgButtonHoverHome: #2D9596;
     
 
     /*Texto*/
     --colorText_a: #1d1c23;
     --colorTextHover: #1d1c23;
+    --colorTextHoverButtom: #13C296;
     --colorText_c: #bfbfbf;
     --colorText_d: red;
     --colorText_e: rgb(18, 17, 17);
@@ -255,6 +249,7 @@ textarea {
     --colorText_f: rgb(3, 6, 19);
     --colorText_hover: rgb(232, 232, 232);
     --colorTextActiveLink: rgb(35, 146, 57);
+    --divertidosOriginales: linear-gradient(to top left,#00F5A0,#00D9F5);
 
     /*Others*/
     --bgViolet: rgb(251, 92, 92);
@@ -262,7 +257,7 @@ textarea {
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.141);
-    --colorBorderButton: #265073;
+    --colorBorderButton: #374151;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
 
@@ -276,7 +271,7 @@ textarea {
 
     /*Background Body*/
     --bgBodyPage: #f3f3f3;
-    --bgBodyPageBlur: #f3f3f390;
+    --bgBodyPageBlur: #f3f3f3;
 
     /*Backdrop Color */
     --bgBackdrop: rgba(15, 14, 14, 0.574);

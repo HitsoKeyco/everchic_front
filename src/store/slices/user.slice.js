@@ -11,12 +11,17 @@ const user = userString ? JSON.parse(userString) : {};
 const tokenString  = localStorage.getItem('token');
 const token = tokenString
 
+//Obtener tema del usuario
+const themeString  = localStorage.getItem('theme');
+const theme = themeString ? themeString : 'light';
+
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: user,
         token: token,
-        theme: 'dark' 
+        theme: theme,
     },
     reducers: {
         setUser: (state, action) => {

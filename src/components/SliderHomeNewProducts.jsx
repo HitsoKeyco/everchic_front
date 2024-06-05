@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../components/css/Sliderc.css';
 import CardProduct from './CardProduct';
+import './css/SliderHomeNewProducts.css'
 
-
-const Sliderc = ({ products, isLike, updateLikeProducts }) => {
+const SliderHomeNewProducts = ({ products, isLike, updateLikeProducts }) => {
 
     // Referencias
     const containerSlider = useRef();
@@ -119,14 +118,14 @@ const Sliderc = ({ products, isLike, updateLikeProducts }) => {
     return (
         <>
             <div
-                className="container_slider"
+                className="new_products_container"
                 ref={containerSlider}
             >
-                <div className="slider_container_tittle_collection">
-                    <p className='slider_title_collection'>Colección de {products[0]?.collection?.name}</p>
+                <div className="new_products_title_container">
+                    <p className='slider_home_movil_title'>Productos nuevos 🔥🔥</p>
                 </div>
                 <div
-                    className="slider"
+                    className="new_products_items_container"
                     ref={slider}
                     style={{ left: `${isPositionSlider.x}px` }}
                     onTouchStart={handleTouchStartSlider}
@@ -148,4 +147,4 @@ const Sliderc = ({ products, isLike, updateLikeProducts }) => {
     );
 };
 
-export default Sliderc;
+export default SliderHomeNewProducts;
