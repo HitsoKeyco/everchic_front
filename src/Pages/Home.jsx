@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import images from '../utils/images';
 import axios from 'axios';
-
-
 import SliderHomeMovil from '../components/SliderHomeMovil';
-
 import SliderHomeNewProducts from '../components/SliderHomeNewProducts';
-import Sliderc from '../components/Sliderc';
+
+import imagesProcessBuy from '../utils/imagesProcessBuy';
+import imagesTestimony from '../utils/imagesTestimony';
+import imagesWarranty from '../utils/imagesWarranty';
 
 
 
@@ -131,12 +131,44 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="home_products_container">
+            <div>
               <SliderHomeNewProducts products={products} updateLikeProducts={updateLikeProducts} />
             </div>
-            <div className="sliderss">
-              <Sliderc products={products} updateLikeProducts={updateLikeProducts}/>
+
+
+            <div className="home_process_buy_container">
+              <h3 className='home_process_buy_title'>Proceso de compra</h3>
+
+              {imagesProcessBuy.map((img, index) => (
+                <div className='home_process_buy_element' key={index}>
+                  <div className='home_process_buy_element_title_container'>
+                    <h4 className='home_process_buy_element_title'>{img.title}</h4>
+                  </div>
+                  <div className='home_process_buy_img_container'>
+                    <img className='home_process_buy_img' src={img.src} alt="" />
+                  </div>
+                </div>
+              ))}
             </div>
+
+            <div className="home_process_buy_container">
+              <h3 className='home_process_buy_title'>Clientes</h3>
+
+              {
+                <SliderHomeMovil image={imagesTestimony} />
+              }
+            </div>
+            <div className='home_stack_container'>
+              {
+                imagesWarranty.map((img, index) => (
+                  <div className='home_stack_element' key={index}>
+                    <img className='home_stack_img' src={img.src} alt="img" />
+                  </div>
+
+                ))}
+            </div>
+
+
           </main>
         </div>
       </motion.div>

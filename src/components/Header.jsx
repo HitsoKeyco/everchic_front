@@ -7,7 +7,6 @@ import InfoPromo from './InfoPromo';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import navLinks from './js/header';
-import ChatBox from './ChatBox';
 import { setTheme } from '../store/slices/user.slice';
 
 
@@ -16,7 +15,7 @@ const Header = () => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isModalAuth, setIsModalAuth] = useState(false)
-  const [isChatBox, setIsChatBox] = useState(false)
+ 
 
   const routes = navLinks()
 
@@ -39,10 +38,7 @@ const Header = () => {
     }
   };
 
-  const handleChatBox = (e) => {
-    e.stopPropagation()
-    setIsChatBox(!isChatBox)
-  }
+
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -182,13 +178,6 @@ const Header = () => {
 
       </div>
 
-      <div className="nav_chat_box_container">
-        <i className='bx bx-message-square-dots nav_chat_box' onClick={handleChatBox}></i>
-      </div>
-
-      {
-        isChatBox && <ChatBox setIsChatBox={setIsChatBox} />
-      }
     </>
   );
 };

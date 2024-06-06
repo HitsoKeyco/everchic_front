@@ -166,7 +166,7 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
     return (
         <>
             <div ref={cardProduct}
-                className={`card_product ${isFree ? 'gold' : ''} ${isSlider && 'is_slider'}`}
+                className={`card_product_container ${isFree ? 'gold' : ''} ${isSlider && 'is_slider'}`}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onClick={handdleModal}>

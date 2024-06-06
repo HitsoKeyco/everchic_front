@@ -25,6 +25,7 @@
 }
 
 
+
 .product_slider_container {
     width: 100%;
 
@@ -67,7 +68,7 @@
 
     /* 2 columnas responivas*/
     grid-template-columns: repeat(2, 1fr);    
-    grid-template-rows:  repeat(auto-fill, 280px);
+    grid-template-rows:  repeat(auto-fill, max-content);
     gap: 10px;
 }
 

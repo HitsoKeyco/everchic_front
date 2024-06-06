@@ -12,7 +12,7 @@ const Faqs = () => {
       transition={{ duration: 0.3 }}
     >
       <div className='faqs_container'>
-        <span className='faqs_title'>Preguntas comunes.</span>
+        <span className='faqs_title'>Preguntas frecuentes.</span>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿Quiénes somos?</h3>
           <p className="faqs_information_answer">Somos una tienda  <b>100% online</b> ubicada en Santo Domingo de los Tsáchilas. Nos especializamos en la venta de calcetines tejidos y sublimados de alta calidad.</p>
