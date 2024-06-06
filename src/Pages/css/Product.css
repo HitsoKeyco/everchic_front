@@ -189,11 +189,7 @@
     color: var(--colorText_a);
 }
 
-/* @media (min-width:376px) {
-    .product_filtered_container {
-        max-width: 170px;
-    }
-} */
+
 
 @media (min-width:768px) {
     .product__container {

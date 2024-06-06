@@ -92,11 +92,6 @@ const Home = () => {
                 </h2>
                 <button className='home_btn_buy' onClick={handdleBuyButton}>Comprar</button>
 
-                {/* <div className="home_models_info_">
-                  <img className='home_models_img' src="/models.png" alt="models" />
-                  <span className='home_quantity_model_'>+ de 600 Modelos</span>
-                </div> */}
-
               </div>
               <div className="home_box_img_container">
                 <div className="home_img_bottom_container">

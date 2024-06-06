@@ -4,13 +4,6 @@
     padding-bottom: 150px;
 }
 
-/* .home_main {
-    width: 100%;
-    background-image: url('patern_sock.svg');
-    background-repeat: repeat-z;
-    background-size: 90px;
-} */
-
 .home_container_img {    
     width: 100%;
 }
@@ -86,9 +79,6 @@
     
 }
 
-.home_main_button:hover {    
-    
-}
 
 .home_products_container{
     width: 100%;
@@ -189,7 +179,7 @@
 
 .home_quantity_model {
     color: var(--colorText_a);
-    font-weight: bold;
+    font-weight: 400;
     font-size: 1.5em;
     margin: 0;
     line-height: 2;
@@ -235,10 +225,6 @@
     display: none;
 
 }
-
-
-
-
 
 .home_instruccion_title{        
     font-size: 1.5em;
@@ -326,6 +312,7 @@
     .home_quantity_model {
         font-size: 2em;
         margin: 0;
+        
     }
 
     .home_models_info {
@@ -419,7 +406,7 @@
         max-width: 1280px;
         height: 450px;
         display: flex;
-        background-image: url('./img/portada_home_1.webp');        
+        background-image: url('/img/portada_home_1.webp');        
         background-position: center;
         border-radius: 10px;
         background-size: cover;
@@ -459,10 +446,6 @@
         border-radius: 10px;
     }
     
-    .home_btn_buy{
-
-
-    }
 
     .home_btn_buy:hover{        
         color: var(--colorText_b);
@@ -488,7 +471,6 @@
         padding: 0 10px;
         border-radius: 12px;
     }
-    /*-----------------------------------------------------*/
 
     .home_box_img_container {
         display: flex;
