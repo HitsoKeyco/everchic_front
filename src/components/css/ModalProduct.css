@@ -50,7 +50,7 @@
     top: calc(50% - 10px);
     padding: 3px;    
     border-radius: 50%;
-    color: var(--colorText_a);
+    color: var(--colorText_e);
     z-index: 99;    
     font-size: 50px;
 
@@ -62,7 +62,7 @@
     right: 10px;
     top: calc(50% - 10px);
     z-index: 99;    
-    color: var(--colorText_a);
+    color: var(--colorText_f);
     font-size: 50px;
     border-radius: 50%;
 

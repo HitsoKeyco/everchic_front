@@ -2,25 +2,25 @@
     position: fixed;    
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;    
     height: 100vh;
-
+    margin: 0;
+    
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--bgBackdrop);
     backdrop-filter: blur(80px);
+    
 }
 
 .auth_modal_register, .auth_modal_login, .auth_modal_recover{
 
     display: flex;
     justify-content: center;
-    align-items: center;    
-    width: max-content;
-    height: max-content;    
-    
-    
+    align-items: center;        
+    width: 100%;    
+    height: 100%;
 }
 
 .hidden{

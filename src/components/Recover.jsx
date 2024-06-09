@@ -5,43 +5,38 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
-const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
+const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick, setIsModalAuth }) => {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
-  const [isShowPass, setIsShowPass] = useState(false)
   const navigate = useNavigate();
 
 
-  const handleShowHiddenPass = () => {
-    setIsShowPass(!isShowPass)
-  }
+
 
   const onSubmit = (data) => {
     const apiUrl = import.meta.env.VITE_API_URL
     axios.post(`${apiUrl}/users/recover_account`, data)
       .then(res => {
-        console.log(res)
-        Swal.fire({
-          icon: 'success',
-          title: '¡Cuenta recuperada con éxito, revisa tu correo!',
-          showConfirmButton: false,
+        if (res) {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Cuenta recuperada con éxito, revisa tu correo!',
           })
-        
+        }
+        setIsModalAuth(false)
         navigate("/")
-        handleModalContentClick(false)
-        
-
       })
       .catch(err => {
-        console.log(err)
-        Swal.fire({
-          icon: 'error',
-          title: '¡Error!',
-          text: 'No se pudo recuperar la cuenta, intenta de nuevo',
-          showConfirmButton: false,
+        if (err) {
+          Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No se pudo recuperar la cuenta o no existe, intenta de nuevo',
+            showConfirmButton: false,
           })
+        }
       })
-    
+
   }
 
   const handleModallogin = () => {

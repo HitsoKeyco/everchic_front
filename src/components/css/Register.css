@@ -1,9 +1,11 @@
 
+
 .register_form {    
-    padding: 20px 20px 0 20px;
-    width: 300px;
-    max-width: 400px;
+    padding: 20px 20px 0 20px;      
     height: max-content;
+    width: 100%;
+    max-width: 400px;
+    
     margin: 10px;
     border-radius: 10px;    
     background-color: var(--bgCardContainer);
@@ -21,7 +23,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
+
 .register_items_container_pass {
     width: 100%;
     display: flex;
@@ -76,8 +80,8 @@
     cursor: pointer;
 }
 
-.register_button {
-    margin: 0;
-    width: 150px;
+.register_button {    
+    width: 100%;    
+    
 }
 

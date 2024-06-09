@@ -18,7 +18,21 @@ const AuthModal = ({ setIsModalAuth }) => {
     const token = useSelector(state => state.user.user.token)
 
     const handleModalContentClick = () => {
-        setIsModalAuth(false);
+        //pregguntar si desea salir con sweet alert
+    //     Swal.fire({
+    //         title: '¿Desea salir?',
+    //         text: '¿Estás seguro que deseas salir?',
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Sí',
+    //         cancelButtonText: 'No',
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //         setIsModalAuth(false);
+    //     }
+    //   })
+
+      setIsModalAuth(false);
     };
 
     return (
@@ -53,6 +67,7 @@ const AuthModal = ({ setIsModalAuth }) => {
                         setIsModalRegister={setIsModalRegister}
                         setIsModalRecover={setIsModalRecover}
                         handleModalContentClick={handleModalContentClick}
+                        setIsModalAuth={setIsModalAuth}
 
                     />
                 )}

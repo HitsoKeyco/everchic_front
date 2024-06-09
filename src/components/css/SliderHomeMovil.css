@@ -22,8 +22,6 @@
     object-position: center;
     /* Centra la imagen dentro del contenedor */
     transition: 0.3s ease-in-out;
-    
-    
 }
 
 .active {    
@@ -34,16 +32,15 @@
     opacity: 0;
 }
 
-.slider_home__movil_fade_button_prev{
-    font-size: 40px;
+.slider_home__movil_fade_button_prev{    
     user-select: none;
     
     
 }
 
-.slider_home__movil_fade_button_next{
-    font-size: 40px;
+.slider_home__movil_fade_button_next{    
     user-select: none;
+    
     
 }
 

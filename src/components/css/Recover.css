@@ -26,6 +26,7 @@
     justify-content: center;
     align-items: center;
     height: 60px;
+    margin: 15px 0;
 }
 
 .recover_show_hidden_pass{
@@ -73,6 +74,6 @@
 .recover_button {
     margin: 0;
     
-    width: 150px;
+    width: 100%;
 }
 

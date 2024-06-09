@@ -4,19 +4,27 @@ import './css/Login.css'
 import useAuth from '../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import axios from 'axios'
 
 
 const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
     const { register, handleSubmit, formState: { } } = useForm()
-    const [isShowPass, setIsShowPass] = useState(false)
+
     const navigate = useNavigate()
 
     const userVerify = useSelector(state => state.user.user)
-    
+
+
+
+
+    const [isShowPass, setIsShowPass] = useState(false)
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
         setIsShowPass(!isShowPass)
     }
+
+
 
     //Funcion que controla modal registro
     const handleModalRegister = () => {
@@ -40,17 +48,34 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         }
     }, [isLoged])
 
+    const [isResendEmail, setIsResendEmail] = useState(false);
 
-    // Manejador de inicio de sesión
-    const onSubmit = async (data) => {
-        try {
-            await loginUser(data);
-        } catch (error) {
-            console.error('Error al obtener el token de reCAPTCHA:', error);
-            // Manejar el error adecuadamente (por ejemplo, mostrar un mensaje de error al usuario)
+    const onSubmit = async (data) => {               
+            if(isResendEmail){                             
+                await reSendEmail(data.email);
+                setIsResendEmail(false)                                      
+            }else{       
+            const result = await loginUser(data);           
+            if(result.state == 'notVerified'){
+                setIsResendEmail(true)
+            }
         }
-    };
 
+
+    }
+
+    const reSendEmail = async (email) => {
+        const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+        const res = await axios.post(url, { email });
+        if (res.data.message == "Se ha enviado un correo de verificación") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Correo electrónico enviado',
+                text: 'Revisa tu correo electrónico para activar tu cuenta',
+            });
+            setIsResendEmail(false);   
+        }
+    }
 
 
     //manejador de logOut
@@ -107,6 +132,18 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                                 >
                                     Acceder
                                 </button>
+                                {
+                                    isResendEmail && (
+                                        <button
+                                            className="g-recaptcha login_button"
+                                            data-sitekey="6Lfu16IpAAAAAIuKKGjZSATdGSh6PNkndSQ-9wwB"
+                                            data-callback="onSubmit"
+                                            data-action="submit"
+                                        >
+                                            Reenviar email
+                                        </button>
+                                    )
+                                }
                             </div>
                             <div className='login_messaje'>
                             </div>

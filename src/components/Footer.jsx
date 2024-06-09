@@ -2,30 +2,47 @@ import React, { useState } from 'react';
 import './css/Footer.css';
 
 const Footer = () => {
-    const [isFooterHidden, setIsFooterHidden] = useState(false);
 
-    const handleFooterHidden = () => {
-        const footerContainer = document.querySelector('.footer_container');
-        const footerToogleIcon = document.querySelector('.footer_toogle');
-
-        footerContainer.classList.toggle('footer_container_hidden');
-        setIsFooterHidden(!isFooterHidden);
-
-        if (isFooterHidden) {
-            footerToogleIcon.classList.replace('bx-down-arrow', 'bx-up-arrow');
-        } else {
-            footerToogleIcon.classList.replace('bx-up-arrow', 'bx-down-arrow');
-        }
-    };
 
     return (
-        <footer className={`footer_container ${isFooterHidden ? '':'footer_container_hidden'}`}>
-            <div className="footer_toogle">
-                <i className={isFooterHidden ? 'bx bx-down-arrow' : 'bx bx-up-arrow'} onClick={handleFooterHidden}></i>
+        <footer className='footer_container'>
+            <div className='footer_section_container'>
+                <div className='footer_section'>
+                    <ul className='footer_info'>
+                        <li className='footer_title_logo'>Everchic</li>
+                        <li><a href="mailto:everchic.sa@gmail.com" className='footer_link footer_link_email'>everchic.sa@gmail.com</a></li>
+                        <li>Santo Domingo de los Tsachilas - Ecuador</li>
+                    </ul>
+                </div>
+                <div className='footer_section'>
+                    <ul className='footer_info'>
+                        <li className='footer_title'>Información</li>
+                        <li><a href="#" className='footer_link'>Acerca de nosotros</a></li>
+                        <li><a href="#" className='footer_link'>Devoluciones</a></li>
+                        <li><a href="#" className='footer_link'>Contactanos</a></li>
+                        <li><a href="#" className='footer_link'>Trabaja con nosotros</a></li>
+                    </ul>
+                </div>
+                <div className='footer_section'>
+                    <ul className='footer_info'>
+                        <li className='footer_title'>Recursos</li>
+                        <li><a href="#" className='footer_link'>Blog</a></li>
+                        <li><a href="#" className='footer_link'>Ayuda</a></li>
+                    </ul>
+                </div>
+                <div className='footer_section'>
+                    <ul className='footer_social'>
+                        <li className='footer_title'>Redes Sociales</li>
+                        <li><a href="#" className='footer_link'>Facebook</a></li>
+                        <li><a href="#" className='footer_link'>Twitter</a></li>
+                        <li><a href="#" className='footer_link'>Instagram</a></li>
+                    </ul>
+                </div>
             </div>
             <p className='footer_copyright_text'>&copy; 2024 Everchic. Todos los derechos reservados.</p>
         </footer>
-        
+
+
     );
 };
 

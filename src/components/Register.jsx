@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Register.css'
 import useAuth from '../hooks/useAuth'
+
 const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
@@ -22,23 +23,24 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
 
     const { isLoged, createUser } = useAuth()
 
-    // espera la aprobacion del usuario logeado para cerrar el modal
-    useEffect(() => {
-        if (isLoged) {
-            handleModalContentClick()
-        }
-    }, [isLoged])
+    const submit = async(data) => {
+        try{
+            const res = await createUser(data);            
+            if(res){                
+                handleModalContentClick(false)
+            }
+        } catch {
+            console.log('Error')
+        } 
+    };
+    
 
-    const submit = (data) => {
-        console.log(data);
-        createUser(data)        
-    }
 
 
     return (
         <>
             <form method='POST' className='register_form' onSubmit={handleSubmit(submit)}>
-                <h1 className='register_title'>Registrarse</h1>
+                <h1 className='register_title'>Registro</h1>
                 <div className="register_items_container">
                     <label className="register_label" htmlFor="firstName" >Nombre:</label>
                     <input className="register_input" type="text" autoComplete="off"

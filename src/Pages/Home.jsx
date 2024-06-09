@@ -161,8 +161,37 @@ const Home = () => {
                   </div>
 
                 ))}
+
+            </div>
+            <h3 className='home_process_buy_title'>Entidades Bancarias</h3>
+
+            <div className="home_icon_payment_container">
+              <div className="home_icon_payment_img_container">
+                <img className="home_icon_img" src="./payments/banco-pichincha.svg" alt="" />
+              </div>
+              <div className="home_icon_payment_img_container">
+                <img className="home_icon_img" src="./payments/banco-produbanco.svg" alt="" />
+              </div>
+              <div className="home_icon_payment_img_container">
+                <img className="home_icon_img" src="./payments/banco-guayaquil.svg" alt="" />
+              </div>
+              <div className="home_icon_payment_img_container">
+                <img className="home_icon_img" src="./payments/banco-pacifico.svg" alt="" />
+              </div>
             </div>
 
+
+            <div className='home_shipping_container'>
+              <h3 className='home_process_buy_title'>Envios</h3>
+              <div className='home_shipping_element_container'> 
+                <div className='home_shipping_element'>
+                  <img src="./img_shipping/servientrega.svg" alt="" />
+                </div>
+                <div>
+                  <img src="./img_shipping/cooperativa.svg" alt="" />
+                </div>
+              </div>
+            </div>
 
           </main>
         </div>

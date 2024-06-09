@@ -1,7 +1,8 @@
 .app {
     height: max-content;
-    width: 100%;
-    padding-bottom: 150px;
+    width: 100%;    
+    background-position: center;
+    background-size: 50px;    ;    
 }
 
 .home_container_img {    
@@ -278,10 +279,10 @@
 .home_stack_container{
     margin-top: 40px;
     width: 100%;
-    display: flex;
+    display: flex;    
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    
 }
 
 .home_stack_element{
@@ -289,6 +290,39 @@
     padding: 25px;
 }
 
+
+
+.home_icon_payment_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 25px;
+}
+
+.home_icon_payment_img_container{
+    width: 100%;
+}
+
+.home_icon_img{
+    padding: 15px 45px;
+}
+
+.home_shipping_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home_shipping_element_container{
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
 
 @media (min-width: 411px) {
     .home_h1 {        
@@ -444,6 +478,11 @@
         width: 100%;
         height: 100%;
         border-radius: 10px;
+    }
+    .home_btn_buy{
+        width: 200px;
+        margin-left: 50px;
+        margin-top: 25px;
     }
     
 

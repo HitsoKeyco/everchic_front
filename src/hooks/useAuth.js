@@ -7,61 +7,87 @@ import { deleteAllProducts } from "../store/slices/cart.slice";
 
 const useAuth = () => {
     const [isLoged, setIsloged] = useState(false)
-    
+
+
     const dispatch = useDispatch()
     const url = import.meta.env.VITE_API_URL;
 
-    const createUser = (data) => {
-        axios.post(`${url}/users`, data)
-            .then(res => {
-                if (res.data) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        text: "Revisa tu correo y activa tu cuenta",
-                        showConfirmButton: true,
-                        timer: 1500
-                    });
-                }
-            })
-            .catch(err => {
-                if (err) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Algo salio mal!",
-                    });
-                }
-            })
-    }
+    const createUser = async (data) => {
+        try {
+            const res = await axios.post(`${url}/users`, data);
+            if (res.data.email) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Genial',
+                    text: `Por favor verifica tu cuenta en tu correo: ${res.data.email}`,
+                });
+                return res.data.email
+            }
+        } catch (err) {
+            console.log(err);
+            if (err.response.data.message === 'Este email ya esta registrado, pero aun no verificado.') {
+                Swal.fire({
+                    icon: 'info',
+                    text: err.response.data.message,
+                });
+            } else if (err.response.data.message === 'Este email ya esta registrado y verificado, inicia sesión') {
+                Swal.fire({
+                    icon: 'info',
+                    text: err.response.data.message,
+                });
+            }
+        }
+    };
 
-    const loginUser = (data) => {
-        axios.post(`${url}/users/login`, data)
-            .then(res => {
-                if (res.data) {
-                    localStorage.setItem('token', (res.data.token))
-                    localStorage.setItem('user', JSON.stringify(res.data.user))
-                    dispatch(setUser(res.data))
+    const [isVerify, setIsVerify] = useState('')
+    //Este email ya esta registrado y verificado, inicia sesión
+    const loginUser = async (data) => {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, data);
+    
+            if (res.data.user.isVerify) {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+                dispatch(setUser(res.data));
+                setIsloged(true); // Asegúrate de definir setIsloged correctamente en tu componente
+                localStorage.removeItem('likes');
+                return { state: 'success' };
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Por favor verifica tu cuenta en tu correo',
+                });
+                return { state: 'notVerified' };
+            }
+        } catch (err) {
+            if (err.response) {
+                const { message } = err.response.data;
+                if (message === 'La contraseña o email ingresada es incorrecta.') {
                     Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1500
+                        icon: 'error',
+                        text: message,
                     });
-                    setIsloged(true)
-                    localStorage.removeItem('likes')
-                }
-            })
-            .catch(err => {
-                if (err) {
+                    return { state: 'invalidCredentials' };
+                } else if (message === 'El usuario no existe. Por favor, regístrate para acceder a tu cuenta.') {
                     Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Algo salio mal!",
+                        icon: 'info',
+                        text: message,
                     });
+                    return { state: 'userNotFound' };
+                } else if (message === 'Tu correo electrónico no ha sido verificado. Por favor, verifica tu correo.') {
+                    Swal.fire({
+                        icon: 'info',
+                        text: message,
+                    });
+                    return { state: 'notVerified' };
                 }
-            })
-    }
+            } else {
+                // Si hay un error de red u otro tipo de error
+                return { state: 'failNetwork', message: 'Error de red. Por favor, inténtelo de nuevo más tarde.' };
+            }
+        }
+    };
+    
 
     const logOut = () => {
         localStorage.removeItem('token');

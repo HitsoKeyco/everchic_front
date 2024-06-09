@@ -8,6 +8,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import navLinks from './js/header';
 import { setTheme } from '../store/slices/user.slice';
+import Swal from 'sweetalert2';
 
 
 const Header = () => {
@@ -15,7 +16,7 @@ const Header = () => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isModalAuth, setIsModalAuth] = useState(false)
- 
+
 
   const routes = navLinks()
 
@@ -55,12 +56,12 @@ const Header = () => {
     // Agrega o elimina la clase 'dark_mode' en función del tema del usuario
     if (userTheme === 'dark') {
       document.body.classList.add('dark_mode');
-      
+
     } else {
       document.body.classList.remove('dark_mode');
-      
+
     }
-  }, [userTheme]); 
+  }, [userTheme]);
 
   const handleDarkMode = () => {
     const newTheme = userTheme === 'light' ? 'dark' : 'light';

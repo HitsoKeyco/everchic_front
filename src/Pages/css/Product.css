@@ -1,5 +1,12 @@
 /*----------------Page Product------------------*/
+.product_element_container{
+    display: flex;
+    flex-direction: column;
+}
 
+.product_filter_mobile_container{
+    padding-top: 60px;
+}
 .product_menu_filter {
     display: none;
 }

@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Sliderc from '../components/Sliderc';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import FilterProductMovil from '../components/FilterProductMovil';
 
 const Products = () => {
     const { productsAPI, getProductsAPI } = getApiProducts();
@@ -43,12 +44,12 @@ const Products = () => {
         }
     }, [userId])
 
-    const updateLikeProducts = () => {       
+    const updateLikeProducts = () => {
         if (userId) {
             // Usuario autenticado
             axios.get(`${urlApi}/users/like_product/${userId}`)
                 .then(res => {
-                    setIsLike(res.data);                    
+                    setIsLike(res.data);
                 })
                 .catch(err => {
                     console.error("Error al obtener los likes del usuario:", err);
@@ -59,7 +60,7 @@ const Products = () => {
             setIsLike(likes);
         }
     };
-    
+
 
     // Estados de paginacion
     const [isShowProducts, setisShowProduct] = useState([]);
@@ -115,8 +116,8 @@ const Products = () => {
             setisShowProduct(products);
             setIsShowColection(false);
         } else if (idFilter === 'collections') {
-            setIsShowColection(true);            
-        } else if(productsAPI){
+            setIsShowColection(true);
+        } else if (productsAPI) {
             const products = productsAPI?.filter((product) => product.category.name === idFilter);
             setIsMaxPage(Math.ceil(products.length / isProductPerPage));
             setisShowProduct(products);
@@ -125,7 +126,7 @@ const Products = () => {
     }, [idFilter]);
 
     const [productsByCategory, setProductsByCategory] = useState({});
-    
+
 
     // Función para organizar los productos por categoría
     useEffect(() => {
@@ -153,37 +154,42 @@ const Products = () => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                <div className="product_menu_filter">
-                    <FilterProduct />
-                </div>
+                <div className='product_element_container'>
+                    <div className='product_filter_mobile_container'>
+                        <FilterProductMovil />
+                    </div>
+                    <div className="product_menu_filter">
+                        <FilterProduct />
+                    </div>
 
-                <div className="product__container">
-                    {
-                        isShowCollection ?
+                    <div className="product__container">
 
-                            Object.entries(productsByCategory).map(([collection, products]) => (
-                                <div className='product_slider_container' key={collection} >
-                                    <div className='product_slider_c'>
-                                        <Sliderc products={products} isLike={isLike} updateLikeProducts={updateLikeProducts}/>
+                        {
+                            isShowCollection ?
+
+                                Object.entries(productsByCategory).map(([collection, products]) => (
+                                    <div className='product_slider_container' key={collection} >
+                                        <div className='product_slider_c'>
+                                            <Sliderc products={products} isLike={isLike} updateLikeProducts={updateLikeProducts} />
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                                ))
 
-                            :
+                                :
 
-                            isShowProducts?.length > 0 ? (
-                                isShowProducts.map((product, index) => (
-                                    <div className='product_filtered_container' key={product.id}>
-                                        <CardProduct product={product}  isLike={isLike} updateLikeProducts={updateLikeProducts} />
-                                    </div>
-                                ))) :
-                                (<div className='product_filtered_not_found'><p className='product_filtered_text_not_found'>¡Estos productos se ha agotado! 😪</p></div>)
+                                isShowProducts?.length > 0 ? (
+                                    isShowProducts.map((product, index) => (
+                                        <div className='product_filtered_container' key={product.id}>
+                                            <CardProduct product={product} isLike={isLike} updateLikeProducts={updateLikeProducts} />
+                                        </div>
+                                    ))) :
+                                    (<div className='product_filtered_not_found'><p className='product_filtered_text_not_found'>¡Estos productos se ha agotado! 😪</p></div>)
 
-                    }
+                        }
 
 
+                    </div>
                 </div>
-
 
             </motion.div>
 

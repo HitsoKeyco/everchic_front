@@ -17,13 +17,7 @@ const images = [
       src: "./img/5.webp",
    },
    {
-      src: "./img/5.webp",
-   },
-   {
-      src: "./img/5.webp",
-   },
-   {
-      src: "./img/5.webp",
+      src: "./img/6.webp",
    }
 ];
 
