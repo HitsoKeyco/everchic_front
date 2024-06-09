@@ -13,6 +13,7 @@ const AuthModal = ({ setIsModalAuth }) => {
 
     const handleAuthModal = (e) => {
         e.stopPropagation();
+        setIsModalAuth(false);
     };
 
     const token = useSelector(state => state.user.user.token)

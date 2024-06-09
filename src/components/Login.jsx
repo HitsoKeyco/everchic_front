@@ -54,10 +54,19 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
             if(isResendEmail){                             
                 await reSendEmail(data.email);
                 setIsResendEmail(false)                                      
-            }else{       
+            }else{
+
             const result = await loginUser(data);           
             if(result.state == 'notVerified'){
                 setIsResendEmail(true)
+            }else if(result.state == 'success'){
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Bienvenido',
+                    showConfirmButton: false,                    
+                    timer: 1500
+                })
             }
         }
 
