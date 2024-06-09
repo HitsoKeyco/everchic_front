@@ -50,7 +50,8 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
 
     const [isResendEmail, setIsResendEmail] = useState(false);
 
-    const onSubmit = async (data) => {               
+    const onSubmit = async (data) => {  
+        handleFormClick()             
             if(isResendEmail){                             
                 await reSendEmail(data.email);
                 setIsResendEmail(false)                                      

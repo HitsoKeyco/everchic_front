@@ -13,33 +13,25 @@ const AuthModal = ({ setIsModalAuth }) => {
 
     const handleAuthModal = (e) => {
         e.stopPropagation();
-        setIsModalAuth(false);
     };
 
     const token = useSelector(state => state.user.user.token)
 
     const handleModalContentClick = () => {
-        //pregguntar si desea salir con sweet alert
-    //     Swal.fire({
-    //         title: '¿Desea salir?',
-    //         text: '¿Estás seguro que deseas salir?',
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonText: 'Sí',
-    //         cancelButtonText: 'No',
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //         setIsModalAuth(false);
-    //     }
-    //   })
+        console.log('aqui');
+        setIsModalAuth(false);
+    };
 
-      setIsModalAuth(false);
+    const handleContainerClick = (e) => {
+        console.log('aqui2');
+        e.stopPropagation()
+
     };
 
     return (
 
         <div className="auth_modal_container" onClick={handleModalContentClick}>
-            <div className={`auth_modal_login ${isModalLogin ? '' : 'hidden'}`} onClick={handleAuthModal}>
+            <div className={`auth_modal_login ${isModalLogin ? '' : 'hidden'}`} onClick={handleContainerClick}>
                 {isModalLogin && (
                     <Login
                         setIsModalLogin={setIsModalLogin}

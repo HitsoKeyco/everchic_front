@@ -1,10 +1,4 @@
 
-
-
-.auth_modal_login{
-    width: 100%;
-} 
-
 .login_form {
     background-color: var(--bgCardContainer);     
     padding: 20px 20px 0 20px;    
