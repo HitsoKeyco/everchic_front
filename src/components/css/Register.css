@@ -68,17 +68,24 @@
 .register_items_links_container{
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: 25px;
+    padding-bottom: 15px;
 
 }
 
 .register_recover_pass_link, .register_register_link{        
     font-size: 1em;
     color: var(--colorText_a);
-    padding: 10px 2.5px;
-    cursor: pointer;
+    cursor: pointer;    
 }
+
+.register_recover_pass_link:hover, .register_register_link:hover{        
+    color: var(--colorTextHover);
+}
+
 
 .register_button {    
     width: 100%;    

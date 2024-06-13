@@ -155,9 +155,11 @@ const Products = () => {
                 transition={{ duration: 0.3 }}
             >
                 <div className='product_element_container'>
+                    {/*
                     <div className='product_filter_mobile_container'>
                         <FilterProductMovil />
                     </div>
+                    */}
                     <div className="product_menu_filter">
                         <FilterProduct />
                     </div>

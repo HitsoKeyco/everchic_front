@@ -10,10 +10,7 @@ import SliderHomeNewProducts from '../components/SliderHomeNewProducts';
 import imagesProcessBuy from '../utils/imagesProcessBuy';
 import imagesTestimony from '../utils/imagesTestimony';
 import imagesWarranty from '../utils/imagesWarranty';
-
-
-
-
+import BannerHome from '../components/BannerHome';
 
 const Home = () => {
 
@@ -124,6 +121,11 @@ const Home = () => {
                 <img className='home_models_img' src="./img/models.png" alt="models" />
                 <span className='home_quantity_model'> + de <span className='home_quantity_models_number'>300</span>  Modelos</span>
               </div>
+            </div>
+            <div className='home_banner_home_container'>
+              {
+                <BannerHome />
+              }
             </div>
 
             <div>

@@ -8,16 +8,17 @@
     padding: 0;
     user-select: none;
     margin: 0 auto;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-.swal2-popup{
+.swal2-popup {
     background-color: #0d1117;
     border: 1px solid var(--borderContainer);
     color: var(--colorText_a);
 }
 
 :root {
+    
     /*Input*/
     --bgColorInput: #161b22;
 
@@ -42,14 +43,17 @@
     /* Boton */
     --colorButton: #181918;
     --bgButtonHover: #2c3333;
-    
     --bgButtonHoverHome: #2D9596;
     --bgButtonHoverHomeCard: #f28d3ad9;
 
+    /* Input */
+    --colorOutlineFocus: rgb(151, 147, 147);
+
     /*Texto*/
-    --colorText_a: #d7d7d7;
+    --colorText_a: #eae8e8;
     --colorTextHover: white;
     --colorTextHoverButtom: #13C296;
+    --colorTextHover: #13C296;
     --colorText_c: #bfbfbf;
     --colorText_d: red;
     --colorText_e: rgb(18, 17, 17);
@@ -60,10 +64,10 @@
 
     /*Others*/
     --bgViolet: rgb(251, 92, 92);
-    --textViolet: rgb(159, 145, 251);
+    --textViolet: rgb(91, 82, 145);
 
     /*border*/
-    --borderContainer: rgba(154, 151, 151, 0.141);
+    --borderContainer: rgba(154, 151, 151, 0.263);
     --colorBorderButton: #13C296;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
@@ -81,7 +85,7 @@
     --bgBodyPageBlur: #010409;
 
     /*Backdrop Color */
-    --bgBackdrop: rgba(15, 14, 14, 0.574);
+    --bgBackdrop: rgba(15, 14, 14, 0.223);
 
     /*Box Shadows*/
     --BoxShadowForm: rgb(155, 155, 155) 0px 0px 15px 1px;
@@ -91,7 +95,7 @@
 
 body {
     background: var(--bgBodyPage);
-    
+
 }
 
 @media (min-width: 600px) {
@@ -159,15 +163,17 @@ html {
 
 
 button {
-    height: 50px;    
-    border: none;    
+    height: 50px;
+    border: none;
     cursor: pointer;
     border: 2px solid var(--colorBorderButton);
     color: var(--colorText_b);
     background-color: var(--colorButton);
     margin: 0;
     border-radius: 25px;
-    
+}
+button:hover{    
+    background-color: var(--bgButtonHover);        
 }
 
 
@@ -183,9 +189,12 @@ input {
     width: 100%;
     border: 1px solid var(--colorBorderInput);
     padding: 20px 10px 3px 10px;
-    font-size: 1.2em;
-    outline-color: var(--bgButtonHover);
+    font-size: 1.2em;    
     color: var(--colorText_a);
+}
+
+input:focus{    
+    outline: 2px solid var(--colorOutlineFocus);
 }
 
 input:-webkit-autofill,
@@ -193,7 +202,8 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px var(--bgColorInput) inset !important;
-    -webkit-text-fill-color: var(--colorText_a) !important; /* Color del texto */
+    -webkit-text-fill-color: var(--colorText_a) !important;
+    /* Color del texto */
 }
 
 textarea {
@@ -229,19 +239,21 @@ textarea {
     --bgCardContainer: #e9ebef;
     --bgCardContainerHover: #eee9f7;
     --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
-    
+
     --colorTag: #2D9596;
 
     /* Boton */
     --colorButton: #393e48;
-    --bgButtonHover: #d7f1f1;
+    --bgButtonHover: #2d2d2d;
     --bgButtonHoverHome: #2D9596;
-    
+
+    /*Input*/
+    --colorOutlineFocus: rgb(151, 147, 147);
 
     /*Texto*/
-    --colorText_a: #1d1c23;
-    --colorTextHover: #1d1c23;
+    --colorText_a: #1d1c23;    
     --colorTextHoverButtom: #13C296;
+    --colorTextHover: #13C296;
     --colorText_c: #bfbfbf;
     --colorText_d: red;
     --colorText_e: rgb(18, 17, 17);
@@ -249,14 +261,14 @@ textarea {
     --colorText_f: rgb(3, 6, 19);
     --colorText_hover: rgb(232, 232, 232);
     --colorTextActiveLink: rgb(35, 146, 57);
-    --divertidosOriginales: linear-gradient(to top left,#00F5A0,#00D9F5);
+    --divertidosOriginales: linear-gradient(to top left, #00F5A0, #00D9F5);
 
     /*Others*/
     --bgViolet: rgb(251, 92, 92);
     --textViolet: rgb(159, 145, 251);
 
     /*border*/
-    --borderContainer: rgba(154, 151, 151, 0.141);
+    --borderContainer: rgba(154, 151, 151, 0.263);
     --colorBorderButton: #374151;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
@@ -274,12 +286,12 @@ textarea {
     --bgBodyPageBlur: #f3f3f3;
 
     /*Backdrop Color */
-    --bgBackdrop: rgba(15, 14, 14, 0.574);
+    --bgBackdrop: rgba(15, 14, 14, 0.576);
 
     /*Box Shadows*/
     --BoxShadowForm: rgb(154, 249, 122) 0px 0px 15px 1px;
 
-    .swal2-popup{
+    .swal2-popup {
         background-color: var(--bgCardContainer);
         border: 1px solid var(--borderContainer);
         color: var(--colorText_a);

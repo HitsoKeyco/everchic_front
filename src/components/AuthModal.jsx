@@ -17,13 +17,11 @@ const AuthModal = ({ setIsModalAuth }) => {
 
     const token = useSelector(state => state.user.user.token)
 
-    const handleModalContentClick = () => {
-        console.log('aqui');
+    const handleModalContentClick = () => {        
         setIsModalAuth(false);
     };
 
-    const handleContainerClick = (e) => {
-        console.log('aqui2');
+    const handleContainerClick = (e) => {        
         e.stopPropagation()
 
     };

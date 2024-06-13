@@ -1,15 +1,13 @@
 
 .login_form {
     background-color: var(--bgCardContainer);     
-    padding: 20px 20px 0 20px;    
-    width: 100%;
-    max-width: 350px;
+    padding: 20px 20px 20px 20px;    
+    width: 100%;    
+    max-width: 400px;
     height: max-content;
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--borderContainer);
-    
-
 }
 
 .login_items_container {    
@@ -67,16 +65,21 @@
 .login_items_links_container{
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
 }
 
+
 .login_recover_pass_link, .login_register_link{        
     font-size: 1em;
-    color: var(--colorText_a);
-    padding: 10px;
+    color: var(--colorText_a);    
     cursor: pointer;
+}
+
+.login_recover_pass_link:hover, .login_register_link:hover{        
+    color: var(--colorTextHover);
 }
 
 .login_button {

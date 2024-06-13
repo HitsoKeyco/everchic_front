@@ -217,7 +217,7 @@
 
 .cart_button_send_order{
     background-color: var(--colorButton);
-} */
+}
 
 .cart_product_left_container{
     width: 100%;
@@ -225,7 +225,6 @@
     flex-direction: column;
     gap: 10px;
     border-radius: 12px;
-       
 }
 
 /*-------------- options ----------------- */
@@ -264,6 +263,7 @@
   
 .cart_detail_label_shipping_radio {
     width: 20px;
+    height: 20px;
     margin: 0;
 }
 .cart_detail_label_radio {

@@ -8,8 +8,6 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import navLinks from './js/header';
 import { setTheme } from '../store/slices/user.slice';
-import Swal from 'sweetalert2';
-
 
 const Header = () => {
   const navigate = useNavigate();

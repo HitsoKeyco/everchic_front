@@ -26,12 +26,12 @@
     right: 0;
     padding: 10px;
     font-size: 1.5em;
-    color: rgb(230, 224, 224);
+    color: rgb(116, 114, 114);
     cursor: pointer;
 }
 
-.bxs-heart:hover{    
-    transform: scale(1.1);
+
+.heart-fill{    
     color: red;
 }
 
@@ -72,6 +72,10 @@
     right: 10px;
     bottom: 10px;
 
+}
+
+.card_product_button_cart:hover{
+    transform: scale(1.1);
 }
 
 .card_product_body{

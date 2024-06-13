@@ -47,7 +47,7 @@
 }
 
 .menu_item_products:hover{
-    color: blueviolet;
+    color: var(--colorTextHover);
     cursor: pointer;
 }
 

@@ -60,16 +60,24 @@
 .recover_items_links_container{
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
+    padding-bottom: 15px;
 
 }
 
 .recover_recover_pass_link, .recover_register_link{            
-    color: var(--colorText_a);
-    padding: 10px 2.5px;
+    color: var(--colorText_a);    
     cursor: pointer;
+    
 }
+
+.recover_recover_pass_link:hover, .recover_register_link:hover{            
+    color: var(--colorTextHover);
+    
+}
+
 
 .recover_button {
     margin: 0;

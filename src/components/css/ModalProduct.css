@@ -81,14 +81,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--bgCollection);
+    border: 2px solid var(--bgCollection);
     color: var(--colorText_b);
-    transition: 0.3s ease-in-out;
-    border: none;
+    transition: 0.3s ease-in-out;    
 }
 
 .modal_button:hover {
-    background-color: var(--colorText_a);
+    transform: scale(1.1);   
 }
 
 
