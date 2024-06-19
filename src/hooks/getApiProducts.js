@@ -11,7 +11,7 @@ const getApiProducts = () => {
 
     
     const getProductsAPI = () => {
-        axios.get(`${apiUrl}/products`)
+        axios.get(`${apiUrl}/products?page=${pagination.currentPage}&limit=${limit}`)
             .then(res => {
                 setProductsAPI(res.data);
                 localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));

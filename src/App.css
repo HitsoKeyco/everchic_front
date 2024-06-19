@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Jost:wght@300;400;500&display=swap');
 
+
 * {
     font-family: 'Jost', sans-serif;
     box-sizing: border-box;
     list-style: none;
-
     padding: 0;
     user-select: none;
-    margin: 0 auto;
-    font-size: 14px;
+    font-size: 16px;
+    margin: 0
 }
 
 .swal2-popup {
@@ -17,43 +17,18 @@
     color: var(--colorText_a);
 }
 
+
 :root {
-    
+
     /*Input*/
-    --bgColorInput: #161b22;
-
-    /* BannerPromo */
-    --bgPromo: #f28d3ad9;
-    --colorTextPromo: white;
-
-    /* Slider */
-    --bgCollection: #2D9596;
-    --colorTextCollection: white;
-
-    /* CardProduct */
-    --bgCardProduct: #1e2631;
-    --bgCardContainerProduct: #0d1117;
-    --bgModalProduct: #f9f9f9;
-    --bgCardContainer: #161b22;
-    --bgCardContainerHover: #1f242b;
-    --colorBoxShadowCardproduct: rgba(65, 65, 65, 0.115);
-    --colorTextCardPrice: rgb(49, 132, 10);
-    --colorTag: #2D9596;
-
-    /* Boton */
-    --colorButton: #181918;
-    --bgButtonHover: #2c3333;
-    --bgButtonHoverHome: #2D9596;
-    --bgButtonHoverHomeCard: #f28d3ad9;
-
-    /* Input */
     --colorOutlineFocus: rgb(151, 147, 147);
-
+    --bgInput: #e9e9e9;
     /*Texto*/
-    --colorText_a: #eae8e8;
-    --colorTextHover: white;
+    --colorText_a: #1d1c23;
     --colorTextHoverButtom: #13C296;
     --colorTextHover: #13C296;
+    --colorTextButtonHome: rgb(36, 35, 35);
+    --colorTextButtonHomeHover: rgb(29, 28, 28);
     --colorText_c: #bfbfbf;
     --colorText_d: red;
     --colorText_e: rgb(18, 17, 17);
@@ -61,14 +36,15 @@
     --colorText_f: rgb(3, 6, 19);
     --colorText_hover: rgb(232, 232, 232);
     --colorTextActiveLink: rgb(35, 146, 57);
+    --divertidosOriginales: linear-gradient(to top left, #00F5A0, #00D9F5);
 
     /*Others*/
     --bgViolet: rgb(251, 92, 92);
-    --textViolet: rgb(91, 82, 145);
+    --textViolet: rgb(159, 145, 251);
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.263);
-    --colorBorderButton: #13C296;
+    --colorBorderButton: #374151;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
 
@@ -81,28 +57,46 @@
     --bgChatContainer: rgb(17, 17, 27);
 
     /*Background Body*/
-    --bgBodyPage: #010409;
-    --bgBodyPageBlur: #010409;
+    --bgBodyPage: #f3f3f3;
+    --bgBodyPageBlur: #f3f3f3;
+
+    /* CardProduct */
+    --bgCardProduct: #eeecec;
+    --bgCardContainerProduct: #e9e9e9;
+    --bgModalProduct: #010000;
+    --bgCardContainer: #e9ebef;
+    --bgCardContainerHover: #eee9f7;
+    --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
+    --colorTag: #2D9596;
+    --colorSoldOut: #f83838;
 
     /*Backdrop Color */
-    --bgBackdrop: rgba(15, 14, 14, 0.223);
+    --bgBackdrop: rgba(15, 14, 14, 0.576);
 
     /*Box Shadows*/
-    --BoxShadowForm: rgb(155, 155, 155) 0px 0px 15px 1px;
+    --BoxShadowForm: rgb(154, 249, 122) 0px 0px 15px 1px;
+
+    /* Boton */
+    --colorButton: #ebebed;
+    --bgButtonHover: #e5e5e5;
+    --colorButtonHome: #ebebed;
+    --bgButtonHoverHome: #ffffff;
+
+
+    .swal2-popup {
+        background-color: var(--bgCardContainer);
+        border: 1px solid var(--borderContainer);
+        color: var(--colorText_a);
+    }
+
 
 }
 
 
 body {
-    background: var(--bgBodyPage);
-
-}
-
-@media (min-width: 600px) {
-    body {
-        padding: 0 10px;
-        padding-top: 125px;
-    }
+    width: 100%;    
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -110,7 +104,9 @@ img {
     pointer-events: none;
 }
 
-
+ul {
+    margin: 0;
+}
 
 
 a {
@@ -162,18 +158,31 @@ html {
 
 
 
-button {
+.button {
     height: 50px;
     border: none;
     cursor: pointer;
     border: 2px solid var(--colorBorderButton);
-    color: var(--colorText_b);
+    color: var(--colorText_a);
+    background-color: var(--colorButton);
+    margin: 0;
+    border-radius: 5px;
+}
+
+.button_home {
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    border: 2px solid var(--colorBorderButton);
+    color: var(--colorText_a);
     background-color: var(--colorButton);
     margin: 0;
     border-radius: 25px;
 }
-button:hover{    
-    background-color: var(--bgButtonHover);        
+
+.button:hover {
+    background-color: var(--bgButtonHover);    
+    transform: scale(1.01);
 }
 
 
@@ -182,16 +191,17 @@ button:hover{
     cursor: pointer;
 }
 
-input {
+input, textarea {
     height: 53px;
     border-radius: 5px;
-    background-color: var(--bgColorInput);
+    background-color: var(--bgInput);
     width: 100%;
     border: 1px solid var(--colorBorderInput);
     padding: 20px 10px 3px 10px;
-    font-size: 1.2em;    
+    font-size: 1.2em;
     color: var(--colorText_a);
 }
+
 
 input:focus{    
     outline: 2px solid var(--colorOutlineFocus);
@@ -210,7 +220,7 @@ textarea {
     width: 100%;
     height: 100px;
     border-radius: 5px;
-    background-color: var(--bgColorInput);
+    background-color: var(--bgInput);
     border: 1px solid var(--colorBorderInput);
     padding: 20px 10px 0px 10px;
     font-size: 1.2em;
@@ -220,6 +230,84 @@ textarea {
 
 
 .dark_mode {
+    /*Input*/
+    --bgColorInput: #161b22;
+    --bgInput: #1b1b1b;
+
+    /* BannerPromo */
+    --bgPromo: #f28d3ad9;
+    --colorTextPromo: white;
+
+    /* Slider */
+    --bgCollection: #2D9596;
+    --colorTextCollection: white;
+
+    /* CardProduct */
+    --bgCardProduct: #1e2631;
+    --bgCardContainerProduct: #0d1117;
+    --bgModalProduct: #f9f9f9;
+    --bgCardContainer: #161b22;
+    --bgCardContainerHover: #1f242b;
+    --colorBoxShadowCardproduct: rgba(65, 65, 65, 0.115);
+    --colorTextCardPrice: rgb(49, 132, 10);
+    --colorTag: #2D9596;
+    --colorSoldOut: #f83838;
+
+    /* Boton */
+    --colorButton: #181918;
+    --bgButtonHover: #2c3333;
+    --colorButtonHome: #ebebed;
+    --bgButtonHoverHome: #dddddd;
+    
+    --bgButtonHoverHomeCard: #f28d3ad9;
+
+    /* Input */
+    --colorOutlineFocus: rgb(151, 147, 147);
+
+    /*Texto*/
+    --colorText_a: #d5d0d0;
+    --colorTextHover: white;
+    --colorTextHoverButtom: #13C296;
+    --colorTextHover: #13C296;
+    --colorTextButtonHome: rgb(36, 35, 35);
+    --colorTextButtonHomeHover: rgb(45, 44, 44);
+    --colorText_c: #bfbfbf;
+    --colorText_d: red;
+    --colorText_e: rgb(18, 17, 17);
+    --colorText_b: white;
+    --colorText_f: rgb(3, 6, 19);
+    --colorText_hover: rgb(232, 232, 232);
+    --colorTextActiveLink: rgb(35, 146, 57);
+
+    /*Others*/
+    --bgViolet: rgb(251, 92, 92);
+    --textViolet: rgb(91, 82, 145);
+
+    /*border*/
+    --borderContainer: rgba(154, 151, 151, 0.263);
+    --colorBorderButton: #515252;
+    --colorBorderInput: #2650735a;
+    --borderCardproduct: rgba(154, 151, 151, 0.141);
+
+    /*barScrollColor*/
+    --colorbar_a: #2d949628;
+    --colorbar_b: rgba(33, 34, 33, 0.115);
+    --bgScrollbar: #edf0f3;
+
+    /*ChatBg*/
+    --bgChatContainer: rgb(17, 17, 27);
+
+    /*Background Body*/
+    --bgBodyPage: #010409;
+    --bgBodyPageBlur: #010409;
+
+    /*Backdrop Color */
+    --bgBackdrop: rgba(15, 14, 14, 0.223);
+
+    /*Box Shadows*/
+    --BoxShadowForm: rgb(155, 155, 155) 0px 0px 15px 1px;
+
+
     transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     /*Input*/
     --bgColorInput: #efeff0;
@@ -234,68 +322,16 @@ textarea {
 
     /* CardProduct */
     --bgCardProduct: #e2e2e4;
-    --bgCardContainerProduct: #efeff0;
+    --bgCardContainerProduct: #24242a;
     --bgModalProduct: #010000;
-    --bgCardContainer: #e9ebef;
+    --bgCardContainer: #171717;
     --bgCardContainerHover: #eee9f7;
     --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
-
     --colorTag: #2D9596;
 
     /* Boton */
-    --colorButton: #393e48;
-    --bgButtonHover: #2d2d2d;
-    --bgButtonHoverHome: #2D9596;
-
-    /*Input*/
-    --colorOutlineFocus: rgb(151, 147, 147);
-
-    /*Texto*/
-    --colorText_a: #1d1c23;    
-    --colorTextHoverButtom: #13C296;
-    --colorTextHover: #13C296;
-    --colorText_c: #bfbfbf;
-    --colorText_d: red;
-    --colorText_e: rgb(18, 17, 17);
-    --colorText_b: white;
-    --colorText_f: rgb(3, 6, 19);
-    --colorText_hover: rgb(232, 232, 232);
-    --colorTextActiveLink: rgb(35, 146, 57);
-    --divertidosOriginales: linear-gradient(to top left, #00F5A0, #00D9F5);
-
-    /*Others*/
-    --bgViolet: rgb(251, 92, 92);
-    --textViolet: rgb(159, 145, 251);
-
-    /*border*/
-    --borderContainer: rgba(154, 151, 151, 0.263);
-    --colorBorderButton: #374151;
-    --colorBorderInput: #2650735a;
-    --borderCardproduct: rgba(154, 151, 151, 0.141);
-
-    /*barScrollColor*/
-    --colorbar_a: #2d949628;
-    --colorbar_b: rgba(33, 34, 33, 0.115);
-    --bgScrollbar: #edf0f3;
-
-    /*ChatBg*/
-    --bgChatContainer: rgb(17, 17, 27);
-
-    /*Background Body*/
-    --bgBodyPage: #f3f3f3;
-    --bgBodyPageBlur: #f3f3f3;
-
-    /*Backdrop Color */
-    --bgBackdrop: rgba(15, 14, 14, 0.576);
-
-    /*Box Shadows*/
-    --BoxShadowForm: rgb(154, 249, 122) 0px 0px 15px 1px;
-
-    .swal2-popup {
-        background-color: var(--bgCardContainer);
-        border: 1px solid var(--borderContainer);
-        color: var(--colorText_a);
-    }
-
+    --colorButton: #2d2d2d;
+    --bgButtonHover:  #3a3b3b;
+    --bgButtonHoverHome: #c6c6c6;
 
 }

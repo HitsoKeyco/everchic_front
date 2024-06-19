@@ -23,7 +23,7 @@ const Menu = ({ setIsMenu }) => {
                         userLog?.isVerify ? <li onClick={handleMenu}><Link className='menu_item_products' to='/profile'>Mi Perfil</Link></li> : null
                     }
                     <li onClick={handleMenu}><Link className='menu_item_products' to='/products'>Productos</Link></li>
-                    <li onClick={handleMenu}><Link className='menu_item_products' to='/galery'>Galeria</Link></li>
+                    {/* <li onClick={handleMenu}><Link className='menu_item_products' to='/galery'>Galeria</Link></li> */}
                     <li onClick={handleMenu}><Link className='menu_item_products' to='/faqs'>FAQ</Link></li>
                 </ul>
             </div>

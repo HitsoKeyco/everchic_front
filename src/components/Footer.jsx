@@ -6,6 +6,7 @@ const Footer = () => {
 
     return (
         <footer className='footer_container'>
+
             <div className='footer_section_container'>
                 <div className='footer_section'>
                     <ul className='footer_info'>
@@ -17,17 +18,17 @@ const Footer = () => {
                 <div className='footer_section'>
                     <ul className='footer_info'>
                         <li className='footer_title'>Información</li>
-                        <li><a href="#" className='footer_link'>Acerca de nosotros</a></li>
-                        <li><a href="#" className='footer_link'>Devoluciones</a></li>
+                        <li><a href="#" className='footer_link'>Acerca de nosotros 👷</a></li>
+                        <li><a href="#" className='footer_link'>Devoluciones 👷</a></li>
                         <li><a href="#" className='footer_link'>Contactanos</a></li>
-                        <li><a href="#" className='footer_link'>Trabaja con nosotros</a></li>
+                        <li><a href="#" className='footer_link'>Trabaja con nosotros 👷</a></li>
                     </ul>
                 </div>
                 <div className='footer_section'>
                     <ul className='footer_info'>
                         <li className='footer_title'>Recursos</li>
-                        <li><a href="#" className='footer_link'>Blog</a></li>
-                        <li><a href="#" className='footer_link'>Ayuda</a></li>
+                        <li><a href="#" className='footer_link'>Blog 👷</a></li>
+                        <li><a href="#" className='footer_link'>Ayuda 👷</a></li>
                     </ul>
                 </div>
                 <div className='footer_section'>
@@ -40,6 +41,7 @@ const Footer = () => {
                 </div>
             </div>
             <p className='footer_copyright_text'>&copy; 2024 Everchic. Todos los derechos reservados.</p>
+
         </footer>
 
 

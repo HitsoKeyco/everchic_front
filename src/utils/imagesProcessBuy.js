@@ -1,19 +1,16 @@
-
 const imagesProcessBuy = [
-
-    {
-       title: "Elije tus calcetines",
+   {
+       title: "Variedad",
        src: "./img/9.webp",
-    },
-    {
-        title: "Preparamos tus calcetines",
+   },
+   {
+       title: "Experiencia única",
        src: "./img/8.webp",
-    },
-    {
-        title: "Enviamos tu pedido",
+   },
+   {
+       title: "Es algo especial",
        src: "./img/7.webp",
-    },
+   },
+];
 
- ];
- 
- export default imagesProcessBuy
+export default imagesProcessBuy;

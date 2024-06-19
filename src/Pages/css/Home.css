@@ -225,6 +225,7 @@
 .home_elements_desktop {
     display: none;
 
+
 }
 
 .home_instruccion_title{        
@@ -258,22 +259,27 @@
 }
 
 .home_process_buy_container{
+    width: 100%;
+    max-width: 1280px;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     gap: 25px;
 }
 
 .home_process_buy_element_title_container{
     width: 100%;
-    .home_process_buy_element_title{
-        color: var(--colorText_a);
-        font-weight: 500;
-        font-size: 22px;
-        text-align: center;    
-        line-height: 2;
-        margin: 0
+}
 
-    }
+.home_process_buy_element_title{
+    color: var(--colorText_a);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;    
+    line-height: 2;
+    margin: 0
+
 }
 
 .home_stack_container{
@@ -322,6 +328,12 @@
     flex-direction: column;
     align-items: center;
     gap: 25px;
+}
+
+.home_call_to_action{
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -433,6 +445,7 @@
         flex-direction: column;
         width: 100%;
         max-width: 1280px;
+        
     }
 
     .home_images_container {
@@ -484,14 +497,17 @@
         width: 200px;
         margin-left: 50px;
         margin-top: 25px;
+        border: 2px solid white;
+        font-weight: 500;
+        color: var(--colorTextButtonHome);
+        opacity: 0.8;
+        background-color: var(--colorButtonHome);
+    }
+    .home_btn_buy:hover{
+        background-color: var(--bgButtonHoverHome);
+        color: var(--colorTextButtonHomeHover);
     }
     
-
-    .home_btn_buy:hover{        
-        color: var(--colorText_b);
-        
-    }
-
     .home_models_info_{
     margin-left: 70px;
     margin-top: 20px;
@@ -521,12 +537,43 @@
 
     .home_main {
         background-image: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--bgBodyPage);
+        padding-top: 140px;
+        
     }
 
     .home_instruccion_buy_container{        
         display: none;
         
     }
+
+    .home_process_buy_container{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .home_process_buy_element_title{
+        font-size: 14px;
+        padding-top: 15px;
+    }
+
+    .home_process_buy_img_container{
+        border-radius: 14px;
+    }
+
+    .home_process_buy_img{
+        border-radius: 5px;
+    }
+
+    .slider_home_movil_container{
+        padding-top: 15px;
+    }
+
+
 
 }
 
@@ -539,5 +586,22 @@
     .home_box_img_container {        
         gap: 25px;
         
+    }
+    .home_process_buy_element_title{
+        font-size: 16px;        
+    }
+    .home_elements_desktop {
+
+        padding: 0 10px;
+    }
+    .home_banner_home_container{
+        padding: 0 10px;
+    }
+    .home_products_new_container{
+        padding: 0 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

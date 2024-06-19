@@ -1,3 +1,12 @@
+.profile_container{
+    width: 100%;
+    max-width: 1280px;
+    padding: 10px;
+    height: max-content;
+    padding-top: 80px;
+    
+}
+
 .profile_container_orders{
     margin-top: 20px;
     border-radius: 5px;
@@ -15,7 +24,7 @@
     padding: 0 25px;    
     align-items: center;    
     border-radius: 5px; 
-    background-color: var(--bgCardProduct);   
+    background-color: var(--bgCardContainer);   
 }
 
 .profile_avatar_container{
@@ -62,12 +71,6 @@
     font-weight: 400;
 }
 
-.profile_container{
-    width: 100%;
-    padding: 10px;
-    height: max-content;
-    
-}
 
 .profile_elements_container{
     margin: 0;
@@ -87,7 +90,7 @@
     width: 100%;
 }
 
-@media (min-width: 650px) {
+@media (min-width: 600px) {
 
     .profile_data_customer_container{
         display: flex;
@@ -99,5 +102,9 @@
     }
     .profile_container_orders{
         flex: 0.7;
+    }
+    .profile_container{        
+        padding-top: 150px;
+        
     }
 }

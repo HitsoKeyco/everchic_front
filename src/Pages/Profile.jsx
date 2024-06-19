@@ -216,7 +216,7 @@ const Profile = () => {
                 />
 
               </div>
-              <button>Actualizar datos</button>
+              <button className='button'>Actualizar datos</button>
 
             </form>
 

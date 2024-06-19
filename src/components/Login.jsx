@@ -106,7 +106,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
 
                         <form className="login_form_logout" action="" onSubmit={handleSubmit(onLogOut)}>
                             <h3 className='login_form_info_user'>Hola {userVerify?.firstName}</h3>
-                            <button className='login_button_logout'>Cerrar sesión</button>
+                            <button className='login_button_logout button'>Cerrar sesión</button>
                         </form>
                     )
                     :
@@ -135,7 +135,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                             </div>
                             <div className="login_items_button_container">
                                 <button
-                                    className="g-recaptcha login_button"
+                                    className="g-recaptcha login_button button"
                                     data-sitekey="6Lfu16IpAAAAAIuKKGjZSATdGSh6PNkndSQ-9wwB"
                                     data-callback="onSubmit"
                                     data-action="submit"
@@ -145,7 +145,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                                 {
                                     isResendEmail && (
                                         <button
-                                            className="g-recaptcha login_button"
+                                            className="g-recaptcha login_button button"
                                             data-sitekey="6Lfu16IpAAAAAIuKKGjZSATdGSh6PNkndSQ-9wwB"
                                             data-callback="onSubmit"
                                             data-action="submit"

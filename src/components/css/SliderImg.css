@@ -7,22 +7,26 @@
     overflow: hidden;
     /* Evita que la imagen se desborde del contenedor */
     position: relative;
+    
+}
+.slide-wrapper{
+    background-color: red;
 }
 
 .slide {
-    position: absolute;
-
-    /* Estilos para la imagen */
-    width: 100%;
-    /* Ancho al 100% del contenedor */
+    position: absolute;    
+    width: 100%;    
     height: 100%;
-    /* Altura al 100% del contenedor */
-    object-fit: cover;
-    /* Mantiene la relación de aspecto y cubre todo el contenedor */
-    object-position: center;
-    /* Centra la imagen dentro del contenedor */
     transition: 0.3s ease-in-out;
-    border-radius: 15px;
+         
+}
+
+.magnifier-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px 12px 0 0;
 }
 
 .active {    
@@ -36,15 +40,14 @@
 .slider_home_fade_button_prev{
     font-size: 40px;
     user-select: none;
-    
-    
 }
+
 
 .slider_home_fade_button_next{
     font-size: 40px;
     user-select: none;
-    
 }
+
 
 @media (min-width: 374px) {
     .slider-container {        

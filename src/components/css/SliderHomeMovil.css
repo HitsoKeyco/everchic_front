@@ -3,8 +3,7 @@
     width: 100%;
     overflow: hidden;
     /* Evita que la imagen se desborde del contenedor */
-    position: relative;
-    background-color: aquamarine;
+    position: relative;    
     height: 450px;
     z-index: 5;
 }

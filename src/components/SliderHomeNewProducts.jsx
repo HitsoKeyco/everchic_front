@@ -122,7 +122,7 @@ const SliderHomeNewProducts = ({ products, isLike, updateLikeProducts }) => {
                 ref={containerSlider}
             >
                 <div className="new_products_title_container">
-                    <p className='slider_home_movil_title'>Productos nuevos 🔥🔥</p>
+                    <p className='slider_home_movil_title'>Productos nuevos 🔥🔥 <i className='bx bx-right-arrow-alt bx-tada' ></i></p>
                 </div>
                 <div
                     className="new_products_items_container"

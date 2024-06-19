@@ -21,7 +21,7 @@ const ProductItem = ({ product, infoFree}) => {
     const handleRemoveProductFree = () => {
         dispatch(deleteProductFree({ productId: product.productId }))
     }
-    
+        
     return (
         <>
             <div className='product_item_container'>

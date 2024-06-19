@@ -3,58 +3,63 @@
     top: 0;
     left: 0;
     width: 100vw;    
-    
     z-index: 20;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--bgBodyPageBlur);
-    
-    overflow-y: visible !important;    
+    overflow-y: visible !important;
     transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    background-color: var(--bgBodyPage);
+    
 }
 
-.private{
+.header_elements_container {
+    width: 100%;
+    max-width: 1280px;       
+}
+
+.private {
     display: none;
 }
-.private_active{
+
+.private_active {
     display: block;
 }
 
-.nav{
+.nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 1em;    
-    color: var(--colorText_b);    
+    padding: 1em 1em;
+    color: var(--colorText_b);
     width: 100%;
     max-width: 1280px;
     border-bottom: 1px solid var(--borderCardproduct);
-    
+
 }
 
-.nav {     
+.nav {
     max-width: 1280px;
     border-bottom: none;
 }
 
-.linkActive{
-    color:var(--colorText_b);
+.linkActive {
+    color: var(--colorText_b);
     padding: 0 10px;
-    border-radius: 3px;    
+    border-radius: 3px;
     background-color: var(--colorTextActiveLink);
 }
 
-.linkDesactive{
-    color:var(--colorText_a);
+.linkDesactive {
+    color: var(--colorText_a);
 }
 
 .nav_items_left,
 .nav_items_right {
     display: flex;
     align-items: center;
-    
+
 
 }
 
@@ -80,7 +85,7 @@
 
 .nav_item_search {
     display: none;
-    
+
 }
 
 
@@ -94,8 +99,8 @@
 }
 
 .nav_link {
-display: flex;
-gap: 5px;
+    display: flex;
+    gap: 5px;
 
 }
 
@@ -156,12 +161,12 @@ gap: 5px;
     position: absolute;
     top: 10px;
     right: -5px;
-    width: 15px;
-    height: 15px;    
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    font-size: 0.8em;
-    font-weight: 400;    
-    cursor: pointer;    
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -171,9 +176,10 @@ gap: 5px;
 
 .header_info_promo_container {
     width: 100%;
-    
+
     display: none;
 }
+
 .bx-search {
     display: none;
 }
@@ -183,68 +189,72 @@ gap: 5px;
     width: 100%;
     max-width: 1280px;
     display: none;
-    
+
 }
 
-.header_social_networks_container{
+.header_social_networks_container {
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.icon_header_social_network{
+
+.icon_header_social_network {
     font-size: 1.3em;
     padding: 0;
 }
-.separate{
+
+.separate {
     padding: 0 5px;
     opacity: 0.5;
 }
 
-.header_address{
+.header_address {
     margin: 0
 }
 
-.nav_chat_box_container{
+.nav_chat_box_container {
     position: fixed;
     bottom: 0;
     right: 0;
 }
 
-.nav_chat_box{
+.nav_chat_box {
     font-size: 3em;
-    padding: 15px;    
+    padding: 15px;
 }
 
-.nav_chat_box:hover{
+.nav_chat_box:hover {
     font-size: 4em;
     cursor: pointer;
 }
 
-.chat_box_container{
+.chat_box_container {
     position: fixed;
     bottom: 20px;
-    right: 70px;        
+    right: 70px;
 }
-.chat_box_container_active{
+
+.chat_box_container_active {
     position: fixed;
     bottom: 20px;
     right: 70px;
     opacity: 1;
-    
+
 }
 
-.nav_item_link_element{
+.nav_item_link_element {
     display: none;
 }
 
-    
+
 
 @media (min-width: 600px) {
-    .nav_item_link_element{
+    .nav_item_link_element {
         display: inherit;
     }
+
     .bx-menu {
         display: none;
 
@@ -270,9 +280,9 @@ gap: 5px;
         display: block;
         display: flex;
         justify-content: space-between;
-        
+
         border-bottom: 2px solid var(--borderCardproduct);
-        
+
         padding: 5px 10px;
         color: var(--colorText_a);
         font-weight: 300;
@@ -284,7 +294,7 @@ gap: 5px;
         display: flex;
         justify-content: space-between;
         padding: 1em 1em;
-        width: 100%;        
+        width: 100%;
         color: var(--colorText_a);
     }
 
@@ -297,11 +307,11 @@ gap: 5px;
         border-radius: 50%;
         font-size: 0.8em;
         font-weight: 500;
-        
+
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
     }
 
 
@@ -329,10 +339,10 @@ gap: 5px;
     }
 
 
-    .header_info_user{
+    .header_info_user {
         padding-right: 15px;
         font-size: 1em;
-        color: var(--colorText_b);        
+        color: var(--colorText_a);
         padding: 0px 5px;
         margin-right: 5px;
         border-radius: 3px;

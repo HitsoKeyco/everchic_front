@@ -6,13 +6,14 @@ import images from '../utils/images';
 import axios from 'axios';
 import SliderHomeMovil from '../components/SliderHomeMovil';
 import SliderHomeNewProducts from '../components/SliderHomeNewProducts';
-
 import imagesProcessBuy from '../utils/imagesProcessBuy';
-import imagesTestimony from '../utils/imagesTestimony';
-import imagesWarranty from '../utils/imagesWarranty';
 import BannerHome from '../components/BannerHome';
+import getApiProducts from '../hooks/getApiProducts';
+import getApiCollections from '../hooks/getApiCollections';
+import { Button } from '@mui/material';
 
 const Home = () => {
+
 
   const navigate = useNavigate()
   const handdleBuyButton = () => {
@@ -87,7 +88,7 @@ const Home = () => {
                 <h2 className='home_phrase_welcome'>
                   Bienvenido a everchic, aqui podrás encontrar <br /> calcetines con personajes de series animadas tejidos o sublimados.
                 </h2>
-                <button className='home_btn_buy' onClick={handdleBuyButton}>Comprar</button>
+                <button className='home_btn_buy button' onClick={handdleBuyButton}>Comprar</button>
 
               </div>
               <div className="home_box_img_container">
@@ -114,7 +115,7 @@ const Home = () => {
               <h3 className='home_h3'><span className='home_span_text_color'>DIVERTIDOS</span> <span className='home_and'> & </span> <span className='home_span_text_color'>ORIGINALES</span></h3>
 
               <Link className='home_call_to_action' to='/products'>
-                <button className='home_main_button'>Productos</button>
+                <button className='home_main_button button_home'>Productos</button>                
               </Link>
 
               <div className="home_models_info">
@@ -128,13 +129,14 @@ const Home = () => {
               }
             </div>
 
-            <div>
+            <div className='home_products_new_container'>
               <SliderHomeNewProducts products={products} updateLikeProducts={updateLikeProducts} />
             </div>
 
 
+            <h3 className='home_process_buy_title'></h3>
+
             <div className="home_process_buy_container">
-              <h3 className='home_process_buy_title'>Proceso de compra</h3>
 
               {imagesProcessBuy.map((img, index) => (
                 <div className='home_process_buy_element' key={index}>
@@ -147,54 +149,6 @@ const Home = () => {
                 </div>
               ))}
             </div>
-
-            <div className="home_process_buy_container">
-              <h3 className='home_process_buy_title'>Clientes</h3>
-
-              {
-                <SliderHomeMovil image={imagesTestimony} />
-              }
-            </div>
-            <div className='home_stack_container'>
-              {
-                imagesWarranty.map((img, index) => (
-                  <div className='home_stack_element' key={index}>
-                    <img className='home_stack_img' src={img.src} alt="img" />
-                  </div>
-
-                ))}
-
-            </div>
-            <h3 className='home_process_buy_title'>Entidades Bancarias</h3>
-
-            <div className="home_icon_payment_container">
-              <div className="home_icon_payment_img_container">
-                <img className="home_icon_img" src="./payments/banco-pichincha.svg" alt="" />
-              </div>
-              <div className="home_icon_payment_img_container">
-                <img className="home_icon_img" src="./payments/banco-produbanco.svg" alt="" />
-              </div>
-              <div className="home_icon_payment_img_container">
-                <img className="home_icon_img" src="./payments/banco-guayaquil.svg" alt="" />
-              </div>
-              <div className="home_icon_payment_img_container">
-                <img className="home_icon_img" src="./payments/banco-pacifico.svg" alt="" />
-              </div>
-            </div>
-
-
-            <div className='home_shipping_container'>
-              <h3 className='home_process_buy_title'>Envios</h3>
-              <div className='home_shipping_element_container'> 
-                <div className='home_shipping_element'>
-                  <img src="./img_shipping/servientrega.svg" alt="" />
-                </div>
-                <div>
-                  <img src="./img_shipping/cooperativa.svg" alt="" />
-                </div>
-              </div>
-            </div>
-
           </main>
         </div>
       </motion.div>

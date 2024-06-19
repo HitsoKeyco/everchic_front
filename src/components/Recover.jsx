@@ -61,7 +61,7 @@ const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handl
           />
         </div>
         <div className="recover_items_button_container">
-          <button className='recover_button'>Recuperar</button>
+          <button className='recover_button button'>Recuperar</button>
         </div>
         <div className="recover_items_links_container">
           <span className="recover_register_link" onClick={handleModallogin}>Iniciar Sesión</span>

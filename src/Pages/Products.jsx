@@ -1,40 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import getApiCollections from '../hooks/getApiCollections';
-import getApiProducts from '../hooks/getApiProducts';
+import React, { cloneElement, useEffect, useState } from 'react';
 import './css/Product.css';
 import FilterProduct from '../components/FilterProduct';
 import CardProduct from '../components/CardProduct';
-import { useSelector } from 'react-redux';
-import Sliderc from '../components/Sliderc';
+import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import FilterProductMovil from '../components/FilterProductMovil';
+import { addProductStore } from '../store/slices/cart.slice';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import FilterSocks from '../components/FilterSocks';
+import ProductCarousel from '../components/ProductCarousel';
+
+
 
 const Products = () => {
-    const { productsAPI, getProductsAPI } = getApiProducts();
-    const { collectionAPI, getCollectionAPI } = getApiCollections();
-    const [stateProducts, setStateProducts] = useState(false);
-    const [isShowCollection, setIsShowColection] = useState(false)
+    // ################### Api url ##########################    
+    const apiUrl = import.meta.env.VITE_API_URL;
 
+    // ################### hooks ##########################
+    const dispatch = useDispatch();
 
+    // ################### States ##########################   
+    const [productsAPI, setProductsAPI] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [collections, setCollections] = useState([{ name: 'Colección' }]);
+    const [searchFilter, setSearchFilter] = useState({ type: '', value: '' });
+    const [searchCategory, setSearchCategory] = useState('');
+    const [searchCollection, setSearchCollection] = useState(false);
+    const [pagination, setPagination] = useState({
+        total: 0,
+        currentPage: 1,
+        totalPages: 0
+    });
 
+    // ################### Pagination Limit products ##########################  
+    const limit = 4;
+
+    // ################### Fecth Products Custom, Category ##########################  
+    const [changeFilter, setChangeFilter] = useState(false);
+ 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getProductsAPI();
-                await getCollectionAPI();
-                setStateProducts(true)
-            } catch (error) {
-                console.error('Error al cargar datos:', error);
-            }
-        };
-        fetchData();
-    }, []);
+        fetchProducts();
+    }, [pagination.currentPage, changeFilter]);
 
 
-    /* productos like*/
-    const [isLike, setIsLike] = useState([])
-    const userIdString = localStorage.getItem('user')
+
+    const fetchProducts = () => {
+        //sabiendo q tengo searchCollection
+        let url = '';
+        if (searchCategory && !searchCollection) {
+            url = `${apiUrl}/categories/category?categoryId=${searchCategory}&page=${pagination.currentPage}&limit=${limit}`;
+        } else if (searchCollection && !searchCategory) {
+            url = `${apiUrl}/collections/group_collection?page=${pagination.currentPage}&limit=${limit}`;
+        } else if(!searchCategory && !searchCollection){
+            url = `${apiUrl}/products?page=${pagination.currentPage}&limit=${limit}`;
+        }
+        axios.get(url)
+            .then(res => {
+                const { total, currentPage, totalPages, products } = res.data;
+                setPagination({ total, currentPage, totalPages });                
+                setProductsAPI(products);
+                localStorage.setItem('everchic_stored_products', JSON.stringify(products));
+                dispatch(addProductStore(products));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    // ################### Function handle pagination ########################## 
+    const goToPage = (event, page) => {
+        setPagination(prev => ({ ...prev, currentPage: page }));
+    };
+
+    // ################### handle like products ########################## 
+    const [isLike, setIsLike] = useState([]);
+    const userIdString = localStorage.getItem('user');
     const userId = userIdString ? JSON.parse(userIdString).id : null;
     const urlApi = import.meta.env.VITE_API_URL;
 
@@ -42,11 +84,10 @@ const Products = () => {
         if (userId) {
             updateLikeProducts();
         }
-    }, [userId])
+    }, [userId]);
 
     const updateLikeProducts = () => {
         if (userId) {
-            // Usuario autenticado
             axios.get(`${urlApi}/users/like_product/${userId}`)
                 .then(res => {
                     setIsLike(res.data);
@@ -55,94 +96,33 @@ const Products = () => {
                     console.error("Error al obtener los likes del usuario:", err);
                 });
         } else {
-            // Usuario no autenticado
             const likes = JSON.parse(localStorage.getItem('likes')) || [];
             setIsLike(likes);
         }
     };
 
-
-    // Estados de paginacion
-    const [isShowProducts, setisShowProduct] = useState([]);
-    const [isLastIndex, setIsLastIndex] = useState(0);
-    const [isProductPerPage, setIsProductPerPage] = useState(19);
-    const [isMaxPage, setIsMaxPage] = useState(0);
-    const [isCounterPage, setIsCounterPage] = useState(1);
-
-
-
-    //Carga inicial de productos
+    // ################### Fetch categories ##########################    
     useEffect(() => {
-        if (productsAPI) {
-            setIsMaxPage(Math.ceil(productsAPI.length / isProductPerPage));
-            const additionalProducts = productsAPI.slice(0, isProductPerPage);
-            setIsLastIndex(isProductPerPage);
-            setisShowProduct(additionalProducts);
-        }
-    }, [productsAPI, isProductPerPage]);
+        axios.get(`${apiUrl}/categories`)
+            .then(res => {
+                setCategories(res.data);
 
-    // Manejador next productos
-    const nextProducts = () => {
-        if (isCounterPage < isMaxPage) {
-            const newIndex = isLastIndex + isProductPerPage;
-            const additionalProducts = productsAPI.slice(isLastIndex, newIndex);
+            })
+            .catch(err => {
+                console.log('No se han encontrado categorías', err);
+            });
+    }, []);
 
-            // Actualizar el estado del último índice y los productos mostrados
-            setIsLastIndex(newIndex);
-            setisShowProduct(additionalProducts);
-            setIsCounterPage(prevCounter => prevCounter + 1);
-        }
-    };
+    // #################### Filter Options #####################    
+    const filterOptionsCategory = createFilterOptions({
+        matchFrom: 'start',
+        stringify: (option) => option.name,
+    });
 
-    // Manejador prev productos
-    const prevProducts = () => {
-        if (isCounterPage > 1) {
-            const newIndex = isLastIndex - isProductPerPage;
-            const additionalProducts = productsAPI.slice(newIndex - isProductPerPage, newIndex);
-
-            // Actualizar el estado del último índice y los productos mostrados
-            setIsLastIndex(newIndex);
-            setisShowProduct(additionalProducts);
-            setIsCounterPage(prevCounter => prevCounter - 1);
-        }
-    };
-
-    const idFilter = useSelector(state => state.filterProduct.idFilterProduct);
-
-    useEffect(() => {
-        if (idFilter === 'all' && productsAPI) {
-            const products = productsAPI?.map(product => product);
-            setIsMaxPage(Math.ceil(products?.length / isProductPerPage));
-            setisShowProduct(products);
-            setIsShowColection(false);
-        } else if (idFilter === 'collections') {
-            setIsShowColection(true);
-        } else if (productsAPI) {
-            const products = productsAPI?.filter((product) => product.category.name === idFilter);
-            setIsMaxPage(Math.ceil(products.length / isProductPerPage));
-            setisShowProduct(products);
-            setIsShowColection(false);
-        }
-    }, [idFilter]);
-
-    const [productsByCategory, setProductsByCategory] = useState({});
-
-
-    // Función para organizar los productos por categoría
-    useEffect(() => {
-        if (productsAPI) {
-            const organizedProducts = productsAPI?.reduce((acc, product) => {
-                const collectionName = product?.collection?.name;
-                if (!acc[collectionName]) {
-                    acc[collectionName] = [];
-                }
-                acc[collectionName].push(product);
-                return acc;
-            }, {});
-            setProductsByCategory(organizedProducts);
-        }
-    }, [productsAPI]); // Dependencia añadida
-
+    const filterOptionsCollection = createFilterOptions({
+        matchFrom: 'start',
+        stringify: (option) => option.name,
+    });
 
 
     return (
@@ -155,46 +135,87 @@ const Products = () => {
                 transition={{ duration: 0.3 }}
             >
                 <div className='product_element_container'>
-                    {/*
                     <div className='product_filter_mobile_container'>
-                        <FilterProductMovil />
+                        <FilterSocks
+                            categories={categories}
+                            collections={collections}
+
+                            setSearchCategory={setSearchCategory}
+                            setSearchCollection={setSearchCollection}                            
+
+                            setPagination={setPagination}
+                            filterOptionsCategory={filterOptionsCategory}
+                            filterOptionsCollection={filterOptionsCollection}
+                            setChangeFilter={setChangeFilter}
+                            changeFilter={changeFilter}
+
+                            setProductsAPI={setProductsAPI}
+
+                        />
                     </div>
-                    */}
+
+{/* 
                     <div className="product_menu_filter">
                         <FilterProduct />
-                    </div>
+                    </div> */}
 
-                    <div className="product__container">
-
+                    <div className={`${searchCollection ? 'product_container_carousel' : 'product_container'} `}>
                         {
-                            isShowCollection ?
+                            productsAPI.length > 0 ? (
+                                <>
 
-                                Object.entries(productsByCategory).map(([collection, products]) => (
-                                    <div className='product_slider_container' key={collection} >
-                                        <div className='product_slider_c'>
-                                            <Sliderc products={products} isLike={isLike} updateLikeProducts={updateLikeProducts} />
-                                        </div>
-                                    </div>
-                                ))
+                                    {
+                                        // cuando no existe ninguna selección en el filtro
+                                        searchCategory == '' && !searchCollection && (
+                                            productsAPI?.map((product, index) => (
+                                                <div className="product_card_product_container" key={index}>
+                                                    <CardProduct product={product} updateLikeProducts={updateLikeProducts} />
+                                                </div>
+                                            )))
+                                    }
+                                    
+                                    {
+                                        searchCategory && !searchCollection && (
+                                            productsAPI?.map((product, index) => (                                                
+                                                <div className="product_card_product_container" key={index}>
+                                                    <CardProduct product={product} updateLikeProducts={updateLikeProducts} />
+                                                </div>
+                                            ))
+                                        )
+                                    }
 
-                                :
-
-                                isShowProducts?.length > 0 ? (
-                                    isShowProducts.map((product, index) => (
-                                        <div className='product_filtered_container' key={product.id}>
-                                            <CardProduct product={product} isLike={isLike} updateLikeProducts={updateLikeProducts} />
-                                        </div>
-                                    ))) :
-                                    (<div className='product_filtered_not_found'><p className='product_filtered_text_not_found'>¡Estos productos se ha agotado! 😪</p></div>)
-
+                                    {
+                                        searchCollection && searchCategory == '' && (
+                                            productsAPI?.map((collection, index) => {                                                
+                                                if (collection?.products?.length > 0) {
+                                                    return (
+                                                        <div className="carousel_container" key={index}>
+                                                            <ProductCarousel products={collection.products} nameCollection={collection.collectionName} updateLikeProducts={updateLikeProducts} />
+                                                        </div>
+                                                    )
+                                                }
+                                            })
+                                        )
+                                    }
+                                </>
+                            ) : (
+                                ''
+                            )
                         }
-
-
+                    </div>
+                    <div className='product_pagination_container'>
+                        <Stack spacing={2}>
+                            <Pagination
+                                count={pagination.totalPages}
+                                page={parseInt(pagination.currentPage)}
+                                onChange={goToPage}
+                                variant="outlined"
+                                shape="rounded"
+                            />
+                        </Stack>
                     </div>
                 </div>
-
             </motion.div>
-
         </>
     );
 };

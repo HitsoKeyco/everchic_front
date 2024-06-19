@@ -5,6 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addProduct, addProductFree } from '../store/slices/cart.slice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import 'react-medium-image-zoom/dist/styles.css'
+import LazyLoad from 'react-lazyload';
+
+
+
+
+
 
 const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
 
@@ -63,7 +70,7 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                     size: product.size.size,
                     weight: product.weight,
                     image: {
-                        url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url : null,
+                        url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
                         alt: product.title
                     }
                 }));
@@ -80,27 +87,27 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                         tittle: product.tittle,
                         size: product.size.size,
                         image: {
-                            url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url : null,
+                            url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
                             alt: product.title
                         }
                     }));
 
-                    
+
                     navigate("/cart");
-                    
+
                 }
             }
         };
     }
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
-    
-    const [ islikeProduct, setIslikeProduct ] = useState()
+
+    const [islikeProduct, setIslikeProduct] = useState()
 
     const like = isLike?.find(like => like.productId === product.id) || null;
     const userId = useSelector(state => state.user?.user?.id) || null;
-    
-    
+
+
     const handleLikeProduct = (e) => {
         e.stopPropagation();
         const urlApi = import.meta.env.VITE_API_URL;
@@ -108,54 +115,54 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
             productId: product.id,
             userId: userId
         };
-        
+
         if (userId) {
             // Usuario autenticado
-            if (like) {                
+            if (like) {
                 axios.delete(`${urlApi}/users/like_product/`, { data })
-                .then(res => {
-                    if (res.data) {
-                        updateLikeProducts();
-                        
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al eliminar el like:", err);
-                });
-            } else {                
+                    .then(res => {
+                        if (res.data) {
+                            updateLikeProducts();
+
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error al eliminar el like:", err);
+                    });
+            } else {
                 axios.post(`${urlApi}/users/like_product`, data)
-                .then(res => {
-                    if (res.data) {
-                        updateLikeProducts();
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al agregar el like:", err);
-                });
+                    .then(res => {
+                        if (res.data) {
+                            updateLikeProducts();
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error al agregar el like:", err);
+                    });
             }
 
-            
+
         } else {
             // Usuario no autenticado
             let likes = JSON.parse(localStorage.getItem('likes')) || [];
-            
+
             if (like) {
                 // Eliminar el like
                 likes = likes.filter(item => item.productId !== product.id);
-                
+
             } else {
                 // Agregar el like
                 if (!likes.some(item => item.productId === product.id)) {
                     likes.push({ productId: product.id, userId: null });
                 }
-                
+
             }
-            
+
             localStorage.setItem('likes', JSON.stringify(likes));
             updateLikeProducts();
         }
     };
-    
+
     //verificar si este producto tiene like cargarlo de local Storage con useEffect
     useEffect(() => {
         const likes = JSON.parse(localStorage.getItem('likes')) || [];
@@ -163,9 +170,8 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
             updateLikeProducts();
         }
     }, [])
-    
-    
-    
+
+
     return (
         <>
             <div ref={cardProduct}
@@ -177,7 +183,14 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                 <div className="card_container_img">
                     <i className={`bx bxs-heart ${like ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
                     <p className='card_product_size'> Talla {product.size?.size}</p>
-                    <img className='card_product_img' src={product.productImgs[0]?.url} alt="" />
+
+
+                    <LazyLoad height={200} weight={200} effect="blur">
+
+                                <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" />
+
+                    </LazyLoad>
+
                 </div>
 
                 <div className="card_product_body">
@@ -185,17 +198,28 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                         <p className='card_product_name'>{product.title}</p>
                         <p className='card_product_price'>{isFree ? 'Free' : `$ ${priceUnit}`}</p>
                     </div>
-                    <div className="price_size">
+                    <div className='card_product_by_container'>
+                        {
+                            product.stock == 0 ?
+                                (
+                                    <div className="card_product_stock">
+                                        <span className='card_product_text_sold_out'>Agotado</span>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <button
+                                        className='card_product_button_cart button'
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleBuy()
+                                        }}
+                                    >
+                                        <i className='bx bx-plus card_button_plus'></i>
+                                    </button>
+                                )
+                        }
                     </div>
-                    <button
-                        className='card_product_button_cart'
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleBuy()
-                        }}
-                    >
-                        <i className='bx bx-plus card_button_plus'></i>
-                    </button>
                 </div>
 
             </div>

@@ -1,5 +1,15 @@
 .checkout_container{
-    margin-top: 60px;
+    padding-top: 60px;
     width: 100%;
-    max-width: 1280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+@media (min-width:600px) {
+    .checkout_container{
+        padding-top: 140px;
+        
+    }   
 }

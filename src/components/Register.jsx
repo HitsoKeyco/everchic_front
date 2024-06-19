@@ -74,7 +74,7 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
                     </div>
                 </div>
                 <div className="register_items_button_container">
-                    <button className='register_button'>Registrarse</button>
+                    <button className='register_button button'>Registrarse</button>
                 </div>
                 <div className="register_items_links_container">
                     <span className="register_register_link" onClick={handleLoginModal}>Iniciar Sesión</span>

@@ -123,7 +123,8 @@ const Sliderc = ({ products, isLike, updateLikeProducts }) => {
                 ref={containerSlider}
             >
                 <div className="slider_container_tittle_collection">
-                    <p className='slider_title_collection'>Colección de {products[0]?.collection?.name}</p>
+                    <p className='slider_title_collection'>Colección de {products[0]?.collection?.name} <i className='bx bxs-right-arrow-alt bx-tada' ></i></p>
+                    
                 </div>
                 <div
                     className="slider"

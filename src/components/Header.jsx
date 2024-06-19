@@ -50,9 +50,10 @@ const Header = () => {
   // tema   
   const dispatch = useDispatch();
   const userTheme = useSelector(state => state.user.theme)
+
   useEffect(() => {
     // Agrega o elimina la clase 'dark_mode' en función del tema del usuario
-    if (userTheme === 'dark') {
+    if (userTheme === 'darkTheme') {
       document.body.classList.add('dark_mode');
 
     } else {
@@ -62,7 +63,7 @@ const Header = () => {
   }, [userTheme]);
 
   const handleDarkMode = () => {
-    const newTheme = userTheme === 'light' ? 'dark' : 'light';
+    const newTheme = userTheme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
     localStorage.setItem('theme', newTheme)
     dispatch(setTheme(newTheme));
   }
@@ -82,99 +83,100 @@ const Header = () => {
             <InfoPromo />
           }
         </div>
-        <div className="header_info_enterprise">
-          <p className='header_address'>Santo Domingo de los Tsachilas, cuando compras aqui alimentas a 2 gatitos.</p>
+        <div className='header_elements_container'>
+          <div className="header_info_enterprise">
+            <p className='header_address'>Santo Domingo de los Tsachilas</p>
 
-          <div className="header_social_networks_container">
-            {
-              userLog?.firstName ?
-                <p className='header_info_user'>{`Bienvenid@ ${userLog?.firstName}`}</p>
-                :
-                ''
-            }
+            <div className="header_social_networks_container">
+              {
+                userLog?.firstName ?
+                  <p className='header_info_user'>{`Bienvenid@ ${userLog?.firstName}`}</p>
+                  :
+                  ''
+              }
 
 
-            <a href="http://www.instagram.com/ever_chic_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
-              <i className='bx bxl-instagram icon_header_social_network' ></i>
-            </a>
-            <span className='separate'>|</span>
-            <i className='bx bxl-facebook-square icon_header_social_network'></i>
-            <span className='separate'>|</span>
-            <a href="http://wa.link/uibwp1" target="_blank" rel="noopener noreferrer">
-              <i className='bx bxl-whatsapp icon_header_social_network'></i>
-            </a>
+              <a href="http://www.instagram.com/ever_chic_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
+                <i className='bx bxl-instagram icon_header_social_network' ></i>
+              </a>
+              <span className='separate'>|</span>
+              <i className='bx bxl-facebook-square icon_header_social_network'></i>
+              <span className='separate'>|</span>
+              <a href="http://wa.link/uibwp1" target="_blank" rel="noopener noreferrer">
+                <i className='bx bxl-whatsapp icon_header_social_network'></i>
+              </a>
+            </div>
+
+
+
           </div>
+          <div className='nav'>
 
-
-
-        </div>
-        <div className='nav'>
-
-          <ul className="nav_items_left">
-            <li>
-              <Link to='/' className="logo">Everchic</Link>
-            </li>
-            {
-              routes.map((route, index) => {
-                if (route.private && userVerify == null) return null
-                return (
-                  <li className="nav_item_link_element" key={index}>
-                    <NavLink
-                      to={route.to}
-                      className={`
+            <ul className="nav_items_left">
+              <li>
+                <Link to='/' className="logo">Everchic</Link>
+              </li>
+              {
+                routes.map((route, index) => {
+                  if (route.private && userVerify == null) return null
+                  return (
+                    <li className="nav_item_link_element" key={index}>
+                      <NavLink
+                        to={route.to}
+                        className={`
                           ${route.class === 'isActive' ? 'linkActive' : 'linkDesactive'}
                   `}
-                    >
-                      {route.text}
-                    </NavLink>
-                  </li>
-                )
-              })
-            }
-          </ul>
+                      >
+                        {route.text}
+                      </NavLink>
+                    </li>
+                  )
+                })
+              }
+            </ul>
 
-          <ul className="nav_items_right">
-            <div className='nav_item_search_container'>
+            <ul className="nav_items_right">
+              {/* <div className='nav_item_search_container'>
               <input id="searchInput" className='nav_item_search' type="text" placeholder='Ejemplo: Bob esponja' />
               <i className='bx bx-search'></i>
-            </div>
+            </div> */}
 
-            <li>
-              <i className="bx bx-user" onClick={handleModalAuth}></i>
-            </li>
-
-            <li className='nav_items_separate'>|</li>
-
-            <li>
-              <i
-                className="bx bx-moon"
-                onClick={handleDarkMode}
-              ></i>
-            </li>
-
-            <li className='nav_items_separate'>|</li>
-
-            <div className="header_cart">
-              <li onClick={handleCart}>
-                <i className="bx bx-cart-alt"></i>
+              <li>
+                <i className="bx bx-user" onClick={handleModalAuth}></i>
               </li>
-              <div className="quantity_products" onClick={handleCart}>
-                {quantity}
+
+              <li className='nav_items_separate'>|</li>
+
+              <li>
+                <i
+                  className="bx bx-moon"
+                  onClick={handleDarkMode}
+                ></i>
+              </li>
+
+              <li className='nav_items_separate'>|</li>
+
+              <div className="header_cart">
+                <li onClick={handleCart}>
+                  <i className="bx bx-cart-alt"></i>
+                </li>
+                <div className="quantity_products" onClick={handleCart}>
+                  {quantity}
+                </div>
               </div>
-            </div>
 
-            <li className='nav_items_separate finaly_item'>|</li>
-            <li onClick={handleMenu}>
-              <i className="bx bx-menu"></i>
-            </li>
-          </ul>
+              <li className='nav_items_separate finaly_item'>|</li>
+              <li onClick={handleMenu}>
+                <i className="bx bx-menu"></i>
+              </li>
+            </ul>
 
+          </div>
+
+          {isMenu && <Menu setIsMenu={setIsMenu} userLog={userLog} />}
+
+          {isModalAuth && <AuthModal setIsModalAuth={setIsModalAuth} />}
         </div>
-
-        {isMenu && <Menu setIsMenu={setIsMenu} userLog={userLog} />}
-
-        {isModalAuth && <AuthModal setIsModalAuth={setIsModalAuth} />}
-
       </div>
 
     </>

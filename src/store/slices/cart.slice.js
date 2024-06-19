@@ -2,21 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import Swal from 'sweetalert2'
 
 // Función para calcular el precio unitario basado en el número de unidades
-const calculatePriceUnit = (units) => {
-    if (units < 3) {
-        return 5;
-    } else if (units >= 3 && units < 6) {
-        return 13 / 3;
-    } else if (units >= 6 && units < 12) {
-        return 20 / 6;
-    } else if (units >= 12 && units < 60) {
-        return 36 / 12;
-    } else if (units >= 60) {
-        return 165 / 60;
-    }
-};
-
-
 
 const storedCartString = localStorage.getItem('everchic_cart');
 const storedCart = storedCartString ? JSON.parse(storedCartString) : [];
@@ -497,8 +482,26 @@ const cartSlice = createSlice({
 });
 
 
+const calculatePriceUnit = (units) => {
+    if (units < 3) {
+        return 5;
+    } else if (units >= 3 && units < 6) {
+        return 13 / 3;
+    } else if (units >= 6 && units < 12) {
+        return 20 / 6;
+    } else if (units >= 12 && units < 60) {
+        return 36 / 12;
+    } else if (units >= 60) {
+        return 165 / 60;
+    }
+};
+
+
+
 export const { deleteAllProducts, addPriceShippingStore, addProductStore, addProduct, plusProduct, minusProduct, deleteProduct, addProductFree, accessFreeProduct, deleteProductFree } = cartSlice.actions;
 
 
 
 export default cartSlice.reducer;
+
+

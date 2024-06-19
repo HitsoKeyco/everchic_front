@@ -1,12 +1,10 @@
-
-
 .new_products_container{       
     width: 100%;
     max-width: 1280px;
     height: 100%;    
     overflow-x: hidden;
     overflow-y: hidden;
-    display: flex;
+    display: flex;   
     flex-direction: column;
     border-radius: 10px;
     padding: 5px;
@@ -26,8 +24,7 @@
 }
 
 .new_products_title_container{
-    display: flex;
-    justify-content: center;
+    display: flex;    
     align-items: center;
     width: 100%;
     margin: 0;
@@ -36,9 +33,8 @@
 
 .slider_home_movil_title{
     font-size: 18px;
-    color: var(--colorText_a);
-    margin-left: 10px;
+    color: var(--colorText_a);    
     padding-top: 10px;
-    
+    margin-left: 10px;
 }
 

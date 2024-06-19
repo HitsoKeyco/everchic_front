@@ -372,12 +372,12 @@ const AddCustomer = () => {
 
                         <button
                             type="submit"
-                            className="add_customer_button"
+                            className="add_customer_button button"
                         >
                             Enviar al vendedor
                         </button>
                         <button
-                            className="add_customer_button"
+                            className="add_customer_button button"
                             onClick={handleGoToTheCart}
                         >
                             Volver al carrito

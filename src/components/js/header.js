@@ -12,11 +12,11 @@ const navLinks = () => {
         private: false
     });
     
-    routes.push({
-        to: '/gallery',
-        text: 'Galeria',
-        private: false
-    });
+    // routes.push({
+    //     to: '/gallery',
+    //     text: 'Galeria',
+    //     private: false
+    // });
     
     routes.push({
         to: '/faqs',
