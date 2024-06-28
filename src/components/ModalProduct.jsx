@@ -76,8 +76,8 @@ const ModalProduct = ({ product, setIsModal }) => {
 
     return (
         <>
-            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md">
-                <DialogContent>
+            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md" style={{ zIndex: 9 }}>
+                
                     <div className="modal_product_container"
                         onTouchMove={handleContentClick}
                         onClick={handleContainerClick}
@@ -110,7 +110,7 @@ const ModalProduct = ({ product, setIsModal }) => {
                             }
                         </div>
                     </div>
-                </DialogContent>
+                
             </Dialog>
         </>
     );

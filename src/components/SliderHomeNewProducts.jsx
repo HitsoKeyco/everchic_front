@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import CardProduct from './CardProduct';
 import './css/SliderHomeNewProducts.css'
 
-const SliderHomeNewProducts = ({ products, isLike, updateLikeProducts }) => {
+const SliderHomeNewProducts = ({ products }) => {
 
     // Referencias
     const containerSlider = useRef();
@@ -138,7 +138,7 @@ const SliderHomeNewProducts = ({ products, isLike, updateLikeProducts }) => {
                 >
                     {
                         products?.map((product) => (                            
-                            <CardProduct key={product.id} product={product}  isLike={isLike} updateLikeProducts={updateLikeProducts} isSlider={isSlider}/>
+                            <CardProduct key={product.id} product={product}  isSlider={isSlider}/>
                         ))
                     }
                 </div>

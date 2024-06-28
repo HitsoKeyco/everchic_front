@@ -1,6 +1,5 @@
 import React, { cloneElement, useEffect, useState } from 'react';
 import './css/Product.css';
-import FilterProduct from '../components/FilterProduct';
 import CardProduct from '../components/CardProduct';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -11,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import FilterSocks from '../components/FilterSocks';
 import ProductCarousel from '../components/ProductCarousel';
+
 
 
 
@@ -35,7 +35,7 @@ const Products = () => {
     });
 
     // ################### Pagination Limit products ##########################  
-    const limit = 4;
+    const limit = 10;
 
     // ################### Fecth Products Custom, Category ##########################  
     const [changeFilter, setChangeFilter] = useState(false);
@@ -74,32 +74,6 @@ const Products = () => {
         setPagination(prev => ({ ...prev, currentPage: page }));
     };
 
-    // ################### handle like products ########################## 
-    const [isLike, setIsLike] = useState([]);
-    const userIdString = localStorage.getItem('user');
-    const userId = userIdString ? JSON.parse(userIdString).id : null;
-    const urlApi = import.meta.env.VITE_API_URL;
-
-    useEffect(() => {
-        if (userId) {
-            updateLikeProducts();
-        }
-    }, [userId]);
-
-    const updateLikeProducts = () => {
-        if (userId) {
-            axios.get(`${urlApi}/users/like_product/${userId}`)
-                .then(res => {
-                    setIsLike(res.data);
-                })
-                .catch(err => {
-                    console.error("Error al obtener los likes del usuario:", err);
-                });
-        } else {
-            const likes = JSON.parse(localStorage.getItem('likes')) || [];
-            setIsLike(likes);
-        }
-    };
 
     // ################### Fetch categories ##########################    
     useEffect(() => {
@@ -154,12 +128,7 @@ const Products = () => {
                         />
                     </div>
 
-{/* 
-                    <div className="product_menu_filter">
-                        <FilterProduct />
-                    </div> */}
-
-                    <div className={`${searchCollection ? 'product_container_carousel' : 'product_container'} `}>
+                    <div className={`${searchCollection && searchCategory == '' ? 'product_container_carousel' : 'product_container'} `}>
                         {
                             productsAPI.length > 0 ? (
                                 <>
@@ -169,7 +138,7 @@ const Products = () => {
                                         searchCategory == '' && !searchCollection && (
                                             productsAPI?.map((product, index) => (
                                                 <div className="product_card_product_container" key={index}>
-                                                    <CardProduct product={product} updateLikeProducts={updateLikeProducts} />
+                                                    <CardProduct product={product} />
                                                 </div>
                                             )))
                                     }
@@ -178,7 +147,7 @@ const Products = () => {
                                         searchCategory && !searchCollection && (
                                             productsAPI?.map((product, index) => (                                                
                                                 <div className="product_card_product_container" key={index}>
-                                                    <CardProduct product={product} updateLikeProducts={updateLikeProducts} />
+                                                    <CardProduct product={product} />
                                                 </div>
                                             ))
                                         )
@@ -190,7 +159,7 @@ const Products = () => {
                                                 if (collection?.products?.length > 0) {
                                                     return (
                                                         <div className="carousel_container" key={index}>
-                                                            <ProductCarousel products={collection.products} nameCollection={collection.collectionName} updateLikeProducts={updateLikeProducts} />
+                                                            <ProductCarousel products={collection.products} nameCollection={collection.collectionName} />
                                                         </div>
                                                     )
                                                 }

@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { setUser } from "../store/slices/user.slice";
 import { deleteAllProducts } from "../store/slices/cart.slice";
+import { useNavigate } from "react-router-dom";
 
 const useAuth = () => {
     const [isLoged, setIsloged] = useState(false)
 
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const url = import.meta.env.VITE_API_URL;
 
@@ -45,12 +46,13 @@ const useAuth = () => {
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, data);
     
-            if (res.data.user.isVerify) {
+            if (res.data.user.isVerify) {                
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
                 dispatch(setUser(res.data));
                 setIsloged(true); // Asegúrate de definir setIsloged correctamente en tu componente
                 localStorage.removeItem('likes');
+                navigate('/')
                 return { state: 'success' };
             } else {
                 Swal.fire({
@@ -100,6 +102,7 @@ const useAuth = () => {
         dispatch(setUser({ user: '', token: '' }))
         dispatch(deleteAllProducts())
         setIsloged(false)
+        navigate('/')
     }
 
     return { isLoged, createUser, loginUser, logOut }

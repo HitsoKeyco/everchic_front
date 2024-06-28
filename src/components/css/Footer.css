@@ -1,11 +1,11 @@
 .footer_container {        
-    background-color: #3a3a3b;
-    color: var(--colorText_b);
+    background-color: var(--bgColorFooter);
+    color: var(--colorText_a);
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin-top: 20px;
+    
 }
 
 .footer_section_container{
@@ -24,6 +24,7 @@
     padding: 0;
 }
 
+
 .footer_title {
     font-weight: 500;
     margin-bottom: 10px;
@@ -37,7 +38,7 @@
 .footer_link {
     text-decoration: none;
     
-    color: var(--colorText_b);
+    color: var(--colorText_a);
 }
 
 
@@ -62,7 +63,7 @@
 .footer_copyright_text {
     margin-top: 20px;
     text-align: center;
-    color: var(--colorText_b);
+    color: var(--colorText_a);
 }
 
 a{
@@ -83,7 +84,7 @@ a{
         gap: 5px
     }
     .footer_link{
-        font-weight: 300;
+        font-weight: 400;
     }
 
 }

@@ -1,5 +1,5 @@
 import './App.css';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home';
 import Header from './components/Header';
 import Products from './Pages/Products';
@@ -18,13 +18,38 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import getConfigAuth from './utils/getConfigAuth';
+import useAuth from './hooks/useAuth';
 
 
 
 function App() {
-  
-  const theme = useSelector(state => state.user.theme); 
+
+  const theme = useSelector(state => state.user.theme);
   const userVerify = useSelector(state => state.user.user.isVerify)
+  const apiUrl = import.meta.env.VITE_API_URL
+  const navigate = useNavigate()
+  const { isLoged, loginUser, logOut } = useAuth()
+
+
+
+  useEffect(() => {
+    axios.get(`${apiUrl}/users/valid_session`, getConfigAuth())
+      .then(res => {        
+      })
+      .catch(err => {
+        if (err.response) {          
+          logOut();
+          navigate('/')
+        }
+      });
+
+    return () => {
+      // Opcional: Limpieza si es necesario
+    };
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme == 'lightTheme' ? lightTheme : darkTheme}>
@@ -37,7 +62,7 @@ function App() {
           <Route path='/faqs' element={<Faqs />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/checkout' element={<Checkout />} />
-          <Route path='/profile' element={userVerify ? <Profile /> : <Home />} />          
+          <Route path='/profile' element={userVerify ? <Profile /> : <Home />} />
           <Route path='/verify/:verificationToken' element={<VerifyEmail />} />
           <Route path='/recover_account/:verificationToken' element={<RecoverAccount />} />
           <Route path='*' element={<NoMatch />} />

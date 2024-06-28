@@ -3,7 +3,7 @@ import '../components/css/Sliderc.css';
 import CardProduct from './CardProduct';
 
 
-const Sliderc = ({ products, isLike, updateLikeProducts }) => {
+const Sliderc = ({ products }) => {
 
     // Referencias
     const containerSlider = useRef();
@@ -140,7 +140,7 @@ const Sliderc = ({ products, isLike, updateLikeProducts }) => {
                 >
                     {
                         products?.map((product) => (                            
-                            <CardProduct key={product.id} product={product}  isLike={isLike} updateLikeProducts={updateLikeProducts} isSlider={isSlider}/>
+                            <CardProduct key={product.id} product={product}  isSlider={isSlider}/>
                         ))
                     }
                 </div>

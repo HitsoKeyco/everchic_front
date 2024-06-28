@@ -7,9 +7,15 @@
     border-radius: 5px;
 }
 
+.card_product_container:hover{
+    transform: scale(1.01);
+    box-shadow: 0px 0px 10px -3px  rgba(29, 29, 29, 0.294);
+}
+
+
 .card_container_img {
-    min-width: 150px;
-    max-width: 190px;
+    
+    
     aspect-ratio: 1/1;
 
     display: flex;

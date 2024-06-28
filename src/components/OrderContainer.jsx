@@ -1,37 +1,42 @@
-import React, { useEffect, useState } from 'react'
+// OrderContainer.js
+import React, { useEffect, useState } from 'react';
 import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import OrderItem from './OrderItem';
-import './css/OrderContainer.css'
+import './css/OrderContainer.css';
 
 const OrderContainer = ({ order }) => {
+    const [items, setItems] = useState([]);
+    const [products, setProducts] = useState([]);
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const [isGroupItemsOrder, setIsGroupItemsOrder] = useState()
-    
     useEffect(() => {
-        axios.get(`${apiUrl}/orders_items/order/${order.id}`, getConfigAuth())
-            .then(res => {
-                setIsGroupItemsOrder(res.data)
-            })
-            .catch(err => console.log(err))
-    }, [])
+        const fetchOrderItems = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/orders_items/order/${order.id}`, getConfigAuth());
+                const itemsData = response.data;
+                setItems(itemsData);
+                
+                const productPromises = itemsData.map(item => axios.get(`${apiUrl}/products/${item.productId}`, getConfigAuth()));
+                const productsData = await Promise.all(productPromises);
+                setProducts(productsData.map(res => res.data));
+            } catch (err) {
+                console.error(err);
+            }
+        };
 
-    
-return (
-    <>
+        fetchOrderItems();
+    }, [order.id, apiUrl]);
 
-        {
-
-            isGroupItemsOrder && isGroupItemsOrder.map((product, index) => (
-                <div className="order_product_container" key={index}>
-                    <OrderItem product={product} />
+    return (
+        <>
+            {items.map((item, index) => (
+                <div className="order_product_container" key={item.id}>
+                    <OrderItem product={item} productData={products[index]} />
                 </div>
-            ))
+            ))}
+        </>
+    );
+};
 
-        }
-    </>
-)
-}
-
-export default OrderContainer
+export default OrderContainer;

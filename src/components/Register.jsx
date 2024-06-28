@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Register.css'
 import useAuth from '../hooks/useAuth'
+import validatePasswordRegister from '../hooks/validatePasswordRegister'
 
 const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
@@ -23,17 +24,29 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
 
     const { isLoged, createUser } = useAuth()
 
-    const submit = async(data) => {
-        try{
-            const res = await createUser(data);            
-            if(res){                
-                handleModalContentClick(false)
+    const submit = async (data) => {
+        console.log(data);
+        try {
+            const errors = validatePasswordRegister(data);
+            console.log(errors);
+            if (Object.keys(errors).length === 0){
+                const res = await createUser(data);
+                if (res) {
+                    handleModalContentClick(false)
+                }
+            }else{
+                Swal.fire({
+                    position: "center",
+                    icon: "info",
+                    text: errors.firstName || errors.lastName || errors.password || errors.email,                    
+                    showConfirmButton: true
+                });
             }
         } catch {
             console.log('Error')
-        } 
+        }
     };
-    
+
 
 
 

@@ -3,17 +3,18 @@ import '../components/css/CardProduct.css';
 import ModalProduct from './ModalProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProduct, addProductFree } from '../store/slices/cart.slice';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'react-medium-image-zoom/dist/styles.css'
 import LazyLoad from 'react-lazyload';
+import likeService from '../utils/likeService';
 
 
 
 
 
 
-const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
+
+const CardProduct = ({ product, isSlider }) => {
 
     const [isModal, setIsModal] = useState(false);
     const [isPositionInitial, setIsPositionInitial] = useState({ x: 0 })
@@ -59,11 +60,11 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
 
         if (positionDifference <= tolerance) {
 
-            if (!isFree) {
+            if (!isFree && product) {
                 dispatch(addProduct({
                     productId: product.id,
                     price: product.sell_price,
-                    productName: product.collection.name,
+                    productName: product.collection?.name,
                     stock: product.stock,
                     category: product.category.name,
                     tittle: product.tittle,
@@ -101,75 +102,45 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
     }
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
-
-    const [islikeProduct, setIslikeProduct] = useState()
-
-    const like = isLike?.find(like => like.productId === product.id) || null;
     const userId = useSelector(state => state.user?.user?.id) || null;
+
+    const { updateLikeProducts, getLikeProducts } = likeService()
+
+    const [isLike, setIslike] = useState(false)
+    const [love, setIslove] = useState(false)
 
 
     const handleLikeProduct = (e) => {
         e.stopPropagation();
-        const urlApi = import.meta.env.VITE_API_URL;
-        const data = {
-            productId: product.id,
-            userId: userId
-        };
-
-        if (userId) {
-            // Usuario autenticado
-            if (like) {
-                axios.delete(`${urlApi}/users/like_product/`, { data })
-                    .then(res => {
-                        if (res.data) {
-                            updateLikeProducts();
-
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Error al eliminar el like:", err);
-                    });
-            } else {
-                axios.post(`${urlApi}/users/like_product`, data)
-                    .then(res => {
-                        if (res.data) {
-                            updateLikeProducts();
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Error al agregar el like:", err);
-                    });
-            }
+        setIslove(true);
+        setIslike(!isLike)
+        fetchUpdateLike()
+    }
 
 
-        } else {
-            // Usuario no autenticado
-            let likes = JSON.parse(localStorage.getItem('likes')) || [];
-
-            if (like) {
-                // Eliminar el like
-                likes = likes.filter(item => item.productId !== product.id);
-
-            } else {
-                // Agregar el like
-                if (!likes.some(item => item.productId === product.id)) {
-                    likes.push({ productId: product.id, userId: null });
-                }
-
-            }
-
-            localStorage.setItem('likes', JSON.stringify(likes));
-            updateLikeProducts();
-        }
-    };
-
-    //verificar si este producto tiene like cargarlo de local Storage con useEffect
     useEffect(() => {
-        const likes = JSON.parse(localStorage.getItem('likes')) || [];
-        if (likes.some(item => item.productId === product.id)) {
-            updateLikeProducts();
-        }
+        fetchGetLike();
     }, [])
+
+    const fetchGetLike = async () => {
+        const res = await getLikeProducts();
+        const likeProductId = res.includes(product.id)
+        if (likeProductId) {
+            setIslove(true);
+        } else {
+            setIslove(false);
+        }
+    }
+
+    const fetchUpdateLike = async () => {
+        const res = await updateLikeProducts(product.id, userId)
+        const validLike = res.includes(product.id)
+        if (validLike) {
+            fetchGetLike();
+        } else {
+            setIslove(false);
+        }
+    }
 
 
     return (
@@ -181,15 +152,17 @@ const CardProduct = ({ product, isLike, updateLikeProducts, isSlider }) => {
                 onClick={handdleModal}>
 
                 <div className="card_container_img">
-                    <i className={`bx bxs-heart ${like ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
+                    <i className={`bx bxs-heart ${love ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
                     <p className='card_product_size'> Talla {product.size?.size}</p>
 
 
-                    <LazyLoad height={200} weight={200} effect="blur">
 
-                                <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" />
 
+                    <LazyLoad  >
+                        <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" loading="lazy"/>
                     </LazyLoad>
+
+
 
                 </div>
 

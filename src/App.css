@@ -7,7 +7,7 @@
     list-style: none;
     padding: 0;
     user-select: none;
-    font-size: 16px;
+    font-size: 14px;
     margin: 0
 }
 
@@ -17,6 +17,27 @@
     color: var(--colorText_a);
 }
 
+.MuiPaper-root {
+    border-radius: 10px !important;
+}
+
+.MuiAccordionDetails-root,
+.MuiList-root {
+    background-color: var(--bgCardContainer);
+    padding: 10px !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+.MuiButtonBase-root,
+.MuiList-root {
+    background-color: var(--bgCardContainerProduct) !important;
+    border-radius: 10px !important;
+
+}
+
+.MuiButtonBase-root {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
 
 :root {
 
@@ -79,26 +100,35 @@
     /* Boton */
     --colorButton: #ebebed;
     --bgButtonHover: #e5e5e5;
-    --colorButtonHome: #ebebed;
-    --bgButtonHoverHome: #ffffff;
+    --colorButtonHome: #c09319;
+    --bgButtonHoverHome:  #c39925;
 
+    /* Scrollbar*/
+    --bgBar: black;
+    --bgBarThumb: #2d949628;
 
-    .swal2-popup {
-        background-color: var(--bgCardContainer);
-        border: 1px solid var(--borderContainer);
-        color: var(--colorText_a);
-    }
-
-
+    /* Footer */
+    --bgColorFooter: #e8e8ea;
 }
+
+.swal2-popup {
+    background-color: var(--bgCardContainer);
+    border: 1px solid var(--borderContainer);
+    color: var(--colorText_a);
+}
+
 
 
 body {
-    width: 100%;    
+    width: 100%;
     display: flex;
     flex-direction: column;
+
 }
 
+.swal2-shown, .swal2-height-auto{
+    z-index: 9999999999999 !important;
+}
 
 img {
     pointer-events: none;
@@ -120,15 +150,15 @@ a {
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: var(--colorButton);
+    background-color: var(--bgBar);
     border-radius: 2.5px;
 }
 
 *::-webkit-scrollbar-track {
-    background-color: var(--bgScrollbar);
+    background-color: var(--bgBarThumb);
 }
 
-html {
+body {
     overflow-y: visible !important
 }
 
@@ -181,7 +211,7 @@ html {
 }
 
 .button:hover {
-    background-color: var(--bgButtonHover);    
+    background-color: var(--bgButtonHover);
     transform: scale(1.01);
 }
 
@@ -191,7 +221,8 @@ html {
     cursor: pointer;
 }
 
-input, textarea {
+input,
+textarea {
     height: 53px;
     border-radius: 5px;
     background-color: var(--bgInput);
@@ -203,16 +234,21 @@ input, textarea {
 }
 
 
-input:focus{    
+input:focus {
     outline: 2px solid var(--colorOutlineFocus);
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px var(--bgColorInput) inset !important;
-    -webkit-text-fill-color: var(--colorText_a) !important;
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 80px var(--bgInput) inset !important;
+    /* Fondo oscuro */
+    -webkit-text-fill-color: var(--bgColorInput) !important;
     /* Color del texto */
 }
 
@@ -222,10 +258,10 @@ textarea {
     border-radius: 5px;
     background-color: var(--bgInput);
     border: 1px solid var(--colorBorderInput);
-    padding: 20px 10px 0px 10px;
+
     font-size: 1.2em;
     outline-color: var(--bgButtonHover);
-    color: var(--colorText_a);
+
 }
 
 
@@ -256,10 +292,9 @@ textarea {
     /* Boton */
     --colorButton: #181918;
     --bgButtonHover: #2c3333;
-    --colorButtonHome: #ebebed;
-    --bgButtonHoverHome: #dddddd;
-    
-    --bgButtonHoverHomeCard: #f28d3ad9;
+    --colorButtonHome: #c09319;
+    --bgButtonHoverHome:  #c39925;
+
 
     /* Input */
     --colorOutlineFocus: rgb(151, 147, 147);
@@ -331,7 +366,12 @@ textarea {
 
     /* Boton */
     --colorButton: #2d2d2d;
-    --bgButtonHover:  #3a3b3b;
-    --bgButtonHoverHome: #c6c6c6;
+
+    /* Scrollbar*/
+    --bgBar: rgb(51, 148, 126);
+    --bgBarThumb: rgb(0, 0, 0);
+
+    /* Footer */
+    --bgColorFooter: #151515;
 
 }
