@@ -9,9 +9,8 @@ import { setUpdateDataUser } from '../store/slices/user.slice';
 
 const AddCustomer = ({ setNewDataShipping }) => {
     const dispatch = useDispatch();
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = import.meta.env.VITE_API_URL;    
     const user = useSelector(state => state.user) || null;
-
     const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm();
 
     useEffect(() => {

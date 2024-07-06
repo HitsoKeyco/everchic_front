@@ -55,6 +55,9 @@ const Orders = () => {
 
     return (
         <>
+            <div className='profile_title_shipping_container'>
+                <h4 className='profile_title_shipping'>Mis pedidos</h4>
+            </div>
             {orders.map((order, index) => (
                 <div className={`orders_main_container ${hiddenStates[index] && 'orders_main_container_hidden'}`} key={order.id}>
                     <div className="order_main_header">

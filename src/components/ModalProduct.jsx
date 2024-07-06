@@ -10,13 +10,15 @@ import DialogContent from '@mui/material/DialogContent';
 const ModalProduct = ({ product, setIsModal }) => {
 
     const handleContainerClick = (e) => {
+        //desactivar scroll
+        e.stopPropagation();                
         setIsModal(false);
-        e.stopPropagation();
 
     };
 
     const handleContentClick = (e) => {
         e.stopPropagation();
+        e.preventDefault();
     };
 
     //Agregar productos al cart
@@ -76,7 +78,7 @@ const ModalProduct = ({ product, setIsModal }) => {
 
     return (
         <>
-            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md" style={{ zIndex: 9 }}>
+            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md" style={{ zIndex: 9, overflow: "hidden" }}>
                 
                     <div className="modal_product_container"
                         onTouchMove={handleContentClick}

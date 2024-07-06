@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion';
 import './css/Profile.css'
 import { useForm } from 'react-hook-form';
@@ -7,14 +7,29 @@ import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Orders from '../components/Orders';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const Profile = () => {
-  const urlApi = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const keySite = '187e0876-793a-422a-b2da-d11e9eea6d2a';
+  const [loading, setLoading] = useState(false); // Estado de carga
+
   const { register, setValue, handleSubmit, formState: { errors } } = useForm();
 
+  const [tokenCaptcha, setTokenCaptcha] = useState("");
+  const [error, setError] = useState(null);
+
+  const theme = useSelector(state => state.user.theme);
+
+  const captchaRef = useRef(null);
+
+  const onLoad = () => {
+    captchaRef.current.execute();
+
+  }
 
   const user = useSelector(state => state.user.user);
-
   useEffect(() => {
     if (user) {
       loadDataUser();
@@ -23,17 +38,35 @@ const Profile = () => {
 
   /* Actualizar datos */
   const submit = (data) => {
-    axios.put(`${urlApi}/users/${user.id}`, data, getConfigAuth())
+    setLoading(true);
+    axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
       .then(res => {
-        if (res) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            text: "Actualización completada",
-            showConfirmButton: false,
-            timer: 1500
-          });
-        }
+        axios.put(`${apiUrl}/users/${user.id}`, data, getConfigAuth())
+          .then(res => {
+            if (res) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                text: "Actualización completada",
+                showConfirmButton: false,
+                timer: 1500
+              });
+            }
+          })
+          .catch(err => {
+            if (err) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                text: "Opps.. hay algun error..",
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          })
+          .finally(() => {
+            setLoading(false)
+          })
       })
       .catch(err => {
         if (err) {
@@ -45,7 +78,12 @@ const Profile = () => {
             timer: 1500
           })
         }
-      });
+      })
+      .finally(() => {
+        setLoader(false)
+        captchaRef.current.resetCaptcha();
+      })
+
 
   }
 
@@ -54,7 +92,8 @@ const Profile = () => {
   /* -------- Función cargar datos de usuario -----------*/
 
   const loadDataUser = () => {
-    axios.get(`${urlApi}/users/${user.id}`, getConfigAuth())
+    setLoading(true);
+    axios.get(`${apiUrl}/users/${user.id}`, getConfigAuth())
       .then(res => {
         setValue('dni', res.data.dni);
         setValue('firstName', res.data.firstName);
@@ -64,7 +103,10 @@ const Profile = () => {
         setValue('city', res.data.city);
         setValue('address', res.data.address);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
 
@@ -83,15 +125,14 @@ const Profile = () => {
             <div className="profile_avatar_container">
               <img className='profile_avatar' src={`https://api.dicebear.com/8.x/pixel-art/svg?seed=${user?.firstName}`} alt="" />
             </div>
-            <div className="profile_avatar_info_container">              
-              <h3 className='profile_title'>{ user.firstName + ' ' + user.lastName}</h3>
+            <div className="profile_avatar_info_container">
+              <h3 className='profile_title'>{user.firstName + ' ' + user.lastName}</h3>
               <p className='profile_subtitle'>{user.city}</p>
             </div>
           </div>
 
           <div className="profile_data_customer_container">
-            <div className="profile_container_orders">
-              <h4 className='profile_title_shipping'>Mis pedidos</h4>
+            <div className="profile_container_orders">              
               <Orders />
             </div>
 
@@ -216,14 +257,35 @@ const Profile = () => {
                 />
 
               </div>
+
+              <div className={`add_customer_recaptcha`}>
+                <HCaptcha
+                  sitekey={keySite}
+                  onLoad={onLoad}
+                  onVerify={(tokenCaptcha) => setTokenCaptcha(tokenCaptcha)}
+                  onError={(err) => setError(err)}
+                  ref={captchaRef}
+                  theme={theme == 'darkTheme' ? 'dark' : 'light'}
+                />
+              </div>
               <button className='button'>Actualizar datos</button>
 
             </form>
 
-
+            <Backdrop
+              sx={{
+                color: '#fff',
+                zIndex: (theme) => theme.zIndex.drawer + 1
+              }}
+              open={loading}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </div>
         </div>
       </motion.div>
+
+
 
     </>
   )

@@ -52,21 +52,25 @@ const Header = () => {
   const userTheme = useSelector(state => state.user.theme)
 
   useEffect(() => {
-    // Agrega o elimina la clase 'dark_mode' en función del tema del usuario
-    if (userTheme === 'darkTheme') {
-      document.body.classList.add('dark_mode');
-
-    } else {
-      document.body.classList.remove('dark_mode');
-
+    // Configura el tema inicial basado en la preferencia almacenada
+    const savedTheme = localStorage.getItem('theme') || 'lightTheme';
+    if (savedTheme !== userTheme) {
+      dispatch(setTheme(savedTheme));
     }
-  }, [userTheme]);
+
+    // Agrega o elimina la clase 'darkTheme' en función del tema del usuario
+    if (userTheme === 'darkTheme') {
+      document.body.classList.add('darkTheme');
+    } else {
+      document.body.classList.remove('darkTheme');
+    }
+  }, [userTheme, dispatch]);
 
   const handleDarkMode = () => {
     const newTheme = userTheme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
-    localStorage.setItem('theme', newTheme)
+    localStorage.setItem('theme', newTheme);
     dispatch(setTheme(newTheme));
-  }
+  };
 
   // Manejo de cantidad de producto en estado global a mostrar en cart.
   const cart = useSelector((state) => state.cart.storedCart);

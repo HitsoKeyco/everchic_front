@@ -25,7 +25,7 @@ const Home = () => {
   const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get(`${url}/products/new_product`)
+    axios.get(`${url}/products/new_product`, getConfigAuth())
       .then(res => {
         setIsNewProducts(res.data);
       })
@@ -33,7 +33,7 @@ const Home = () => {
   }, [])
 
   const apiUrl = import.meta.env.VITE_API_URL
-  const { isLoged, loginUser, logOut } = useAuth()
+  const { isLoged, loginUser, logOut, logOutTime } = useAuth()
 
 
 
@@ -43,8 +43,7 @@ const Home = () => {
       })
       .catch(err => {
         if (err.response) {
-          logOut();
-          navigate('/')
+          logOutTime();
         }
       });
 

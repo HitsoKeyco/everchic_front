@@ -23,14 +23,14 @@
 }
 
 .profile_title_container{    
-    width: 100%;
-    height: 80px;    
+    width: 100%;    
     display: flex;
     gap: 25px;
-    padding: 0 25px;    
+    padding: 25px 25px;    
     align-items: center;    
     border-radius: 5px; 
-    background-color: var(--bgCardContainer);   
+    background-color: var(--bgCardContainerProduct);
+    border: 2px solid var(--borderContainer);   
 }
 
 .profile_avatar_container{
@@ -69,6 +69,7 @@
     background-color: var(--bgCardContainerProduct);
     border-radius: 5px;
     padding: 10px;
+    height: max-content;
 }
 
 

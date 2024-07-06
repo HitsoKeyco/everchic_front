@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -20,7 +20,7 @@
     height: max-content;
     background-color: var(--bgCardContainerProduct);
     position: relative;
-    border-radius: 15px;
+    border-radius: 12px;
     border: 1px solid var(--borderContainer);
     margin: 5px;
 }

@@ -17,6 +17,11 @@
     max-height: 0; /* Oculta el contenido estableciendo la altura máxima a 0 */
 }
 
+.profile_title_shipping{
+    padding-left: 25px;
+    
+}
+
 .order_main_header {
     position: absolute;
     top: 0;

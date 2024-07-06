@@ -52,7 +52,7 @@ const ProductCarousel = ({ products, nameCollection = '' }) => {
   };
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box sx={{ paddingTop: '20px' }}>
       <Box>
         <p>{`${nameCollection ? `Colección de ${nameCollection}` : 'Productos nuevos 🔥🔥🔥'  } `}</p>
         

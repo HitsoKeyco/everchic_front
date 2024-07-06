@@ -8,17 +8,19 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import AddCustomer from '../components/AddCustomer';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Backdrop, CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
 import validationAfterBuy from '../utils/validationAfterBuy';
+import RegisterCart from '../components/RegisterCart';
 
 
 
 const Cart = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const [loading, setLoading] = useState(false); // Estado de carga
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -48,7 +50,7 @@ const Cart = () => {
 
         }
     }
-    
+
 
     const infoFree = {
         value: true
@@ -157,15 +159,16 @@ const Cart = () => {
     const priceShippingStore = useSelector(state => state.cart.stateShippingCart)
     const total = (priceTotalStore + priceShippingStore).toFixed(2)
 
-    const user = useSelector(state => state.user) || null;
-    const token = useSelector(state => state.user.token) || null;
-    
+    const user = useSelector(state => state.user);
+    const token = useSelector(state => state.user.token);
+
     /* ----------------  Captcha --------------------- */
     /* ------- Hcapcha solo se monta 1 vez --------------*/
     const theme = useSelector(state => state.user.theme);
     const captchaRef = useRef(null);
     const [newUser, setNewUser] = useState();
-    const [newDataShipping, setNewDataShipping] = useState();
+    const [newDataShipping, setNewDataShipping] = useState([])
+
 
     const handleNewUser = (userData) => {
         setNewUser(userData);
@@ -180,10 +183,18 @@ const Cart = () => {
     }
 
 
+
     const submit = () => {
-        const newData = { cart, cartFree, newUser: newUser, newDataShipping: newDataShipping, price_unit: priceUnit, total: total, email: user.user.email };
-        const errors = validationAfterBuy(newDataShipping);
-        
+        setLoading(true)
+        let userActive = {}
+        if (newDataShipping.length > 0) {
+            userActive = newDataShipping
+        } else {
+            userActive = user?.user
+        }
+        const errors = validationAfterBuy(userActive);
+        const data = { cart, cartFree, userActive, price_unit: priceUnit, total: total };
+
         //token de Hcaptcha
         if (cart.length === 0) {
             Swal.fire({
@@ -192,37 +203,16 @@ const Cart = () => {
                 title: "No tienes ningun producto agregado",
                 showConfirmButton: false,
                 timer: 1500,
-
             });
+            setLoading(false)
         } else {
             if (Object.keys(errors).length === 0) {
-                console.log('Sin error');
                 axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
                     .then(res => {
-                        if (res) {
-                            axios.post(`${apiUrl}/orders`, newData)
+                        if (res && userActive) {
+                            axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth())
                                 .then(res => {
-                                    if (user.id) {
-                                        axios.put(`${apiUrl}/users/${user.user.id}`, newDataShipping, getConfigAuth())
-                                            .then(res => {
-                                                if (res.data) {
-                                                    Swal.fire({
-                                                        position: "center",
-                                                        icon: "success",
-                                                        text: "Orden enviada con exito",
-                                                        showConfirmButton: false,
-                                                        timer: 1500
-                                                    });
-                                                    localStorage.removeItem('everchic_cart_free')
-                                                    localStorage.removeItem('everchic_cart')
-                                                    dispatch(deleteAllProducts())
-                                                    navigate('/profile');
-                                                }
-                                            }
-                                            )
-                                            .catch(err => console.log(err))
-                                    } else {
-
+                                    if (res.data) {
                                         Swal.fire({
                                             position: "center",
                                             icon: "success",
@@ -245,6 +235,11 @@ const Cart = () => {
                                         });
                                     }
                                 })
+                                .finally(
+                                    () => {
+                                        setLoading(false)
+                                    }
+                                )
                         }
 
                     })
@@ -258,14 +253,16 @@ const Cart = () => {
                                 showConfirmButton: true
                             });
                         }
+                        setLoading(false)
                     });
             } else {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    text: errors.dni || errors.firstName || errors.email || errors.password||  errors.lastName || errors.phone_1 || errors.phone_2 || errors.city || errors.address,
+                    text: errors.dni || errors.firstName || errors.email || errors.password || errors.lastName || errors.phone_1 || errors.phone_2 || errors.city || errors.address,
                     showConfirmButton: true
                 });
+                setLoading(false)
             }
         }
     };
@@ -346,9 +343,13 @@ const Cart = () => {
                         <div className='add_customer_info_user_container'>
                             <AddCustomer setNewDataShipping={handleNewDataShipping} />
                         </div>
-                        {/* <div className='cart_register_user_container'>
-                            <RegisterCart setNewUser={handleNewUser} />
-                        </div> */}
+                        {
+                            user?.user.token ?
+                                <div className='cart_register_user_container'>
+                                    <RegisterCart setNewUser={handleNewUser} />
+                                </div>
+                                : ''
+                        }
                         <form
                             className="cart_detail_shipping_form"
                             action=""
@@ -438,6 +439,17 @@ const Cart = () => {
                     </div>
                 </div>
             </div>
+            <Backdrop
+
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1
+                }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
 
         </>
     );

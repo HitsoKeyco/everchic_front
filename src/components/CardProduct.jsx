@@ -93,8 +93,9 @@ const CardProduct = ({ product, isSlider }) => {
                         }
                     }));
 
-
-                    navigate("/cart");
+                    if (freeProducts - unitCartFree == 1) {
+                        navigate("/cart");
+                    }
 
                 }
             }
@@ -142,6 +143,23 @@ const CardProduct = ({ product, isSlider }) => {
         }
     }
 
+    const [solOut, setSoldOut] = useState(false)
+    const productStoreWish = cart.find(element => element.productId == product.id) || false;
+
+    useEffect(() => {
+        if (productStoreWish) {
+            if (productStoreWish.quantity == productStoreWish.stock) {
+                setSoldOut(true);
+            } else {
+                setSoldOut(false);
+            }
+        } else {
+            setSoldOut(false); // Si el producto no está en el carrito, no está agotado
+        }
+    }, [productStoreWish.quantity]);
+
+
+
 
     return (
         <>
@@ -159,7 +177,7 @@ const CardProduct = ({ product, isSlider }) => {
 
 
                     <LazyLoad  >
-                        <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" loading="lazy"/>
+                        <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" loading="lazy" />
                     </LazyLoad>
 
 
@@ -173,7 +191,7 @@ const CardProduct = ({ product, isSlider }) => {
                     </div>
                     <div className='card_product_by_container'>
                         {
-                            product.stock == 0 ?
+                            product.stock == 0 || solOut?
                                 (
                                     <div className="card_product_stock">
                                         <span className='card_product_text_sold_out'>Agotado</span>

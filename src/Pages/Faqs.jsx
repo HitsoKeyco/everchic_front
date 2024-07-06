@@ -24,7 +24,7 @@ const Faqs = () => {
         </div>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿A partir de cuántas docenas recibiré un par de obsequio?</h3>
-          <p className="faqs_information_answer">Por cada docena de calcetines que adquieras, recibirás un par de obsequio adicional como agradecimiento por tu compra, cuando agreges los 12 pares se abrira un boton en el carrito para que agreges el par gratis.</p>
+          <p className="faqs_information_answer">Por cada docena de calcetines que adquieras, recibirás un par de obsequio adicional como agradecimiento por tu compra, cuando agregues los 12 pares se abrira un boton en el carrito para que agreges el par gratis.</p>
         </div>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿Cuál es el costo de los envíos?</h3>

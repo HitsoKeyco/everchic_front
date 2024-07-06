@@ -50,9 +50,8 @@ const useAuth = () => {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
                 dispatch(setUser(res.data));
-                setIsloged(true); // Asegúrate de definir setIsloged correctamente en tu componente
-                localStorage.removeItem('likes');
-                navigate('/')
+                setIsloged(true);
+                localStorage.removeItem('likes');                
                 return { state: 'success' };
             } else {
                 Swal.fire({
@@ -105,7 +104,15 @@ const useAuth = () => {
         navigate('/')
     }
 
-    return { isLoged, createUser, loginUser, logOut }
+    const logOutTime = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('likes')
+        dispatch(setUser({ user: '', token: '' }))
+        setIsloged(false)
+    }
+
+    return { isLoged, createUser, loginUser, logOut, logOutTime }
 }
 
 export default useAuth

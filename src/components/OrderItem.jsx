@@ -3,7 +3,6 @@ import './css/OrderItem.css';
 
 const OrderItem = ({ product, productData }) => {
     const total = parseFloat(product.price_unit * product.quantity).toFixed(2);
-
     return (
         <>
             {productData && (

@@ -18,7 +18,15 @@
 }
 
 .MuiPaper-root {
-    border-radius: 10px !important;
+    background-color: var(--bgCardContainer) !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    
+}
+.swal2-shown, .swal2-height-auto{
+    width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
 }
 
 .MuiAccordionDetails-root,
@@ -83,7 +91,7 @@
 
     /* CardProduct */
     --bgCardProduct: #eeecec;
-    --bgCardContainerProduct: #e9e9e9;
+    --bgCardContainerProduct: #f1f1f1;
     --bgModalProduct: #010000;
     --bgCardContainer: #e9ebef;
     --bgCardContainerHover: #eee9f7;
@@ -92,7 +100,7 @@
     --colorSoldOut: #f83838;
 
     /*Backdrop Color */
-    --bgBackdrop: rgba(15, 14, 14, 0.576);
+    --bgBackdrop: rgba(249, 249, 249, 0.576);
 
     /*Box Shadows*/
     --BoxShadowForm: rgb(154, 249, 122) 0px 0px 15px 1px;
@@ -117,17 +125,19 @@
     color: var(--colorText_a);
 }
 
-
+.MuiDialog-container, .MuiDialog-scrollPaper, .css-hz1bth-MuiDialog-container{
+    overflow: hidden;
+}
 
 body {
     width: 100%;
     display: flex;
     flex-direction: column;
-
 }
 
 .swal2-shown, .swal2-height-auto{
     z-index: 9999999999999 !important;
+    overflow-x: hidden;
 }
 
 img {
@@ -265,7 +275,7 @@ textarea {
 }
 
 
-.dark_mode {
+.darkTheme {
     /*Input*/
     --bgColorInput: #161b22;
     --bgInput: #1b1b1b;
@@ -356,8 +366,7 @@ textarea {
     --colorTextCollection: white;
 
     /* CardProduct */
-    --bgCardProduct: #e2e2e4;
-    --bgCardContainerProduct: #24242a;
+    --bgCardProduct: #e2e2e4;    
     --bgModalProduct: #010000;
     --bgCardContainer: #171717;
     --bgCardContainerHover: #eee9f7;

@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import FilterSocks from '../components/FilterSocks';
 import ProductCarousel from '../components/ProductCarousel';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
+import { WidthFull } from '@mui/icons-material';
 
 
 
@@ -28,6 +30,7 @@ const Products = () => {
     const [searchFilter, setSearchFilter] = useState({ type: '', value: '' });
     const [searchCategory, setSearchCategory] = useState('');
     const [searchCollection, setSearchCollection] = useState(false);
+    const [loading, setLoading] = useState(false); // Estado de carga
     const [pagination, setPagination] = useState({
         total: 0,
         currentPage: 1,
@@ -35,38 +38,41 @@ const Products = () => {
     });
 
     // ################### Pagination Limit products ##########################  
-    const limit = 10;
+    const limit = 18;
 
     // ################### Fecth Products Custom, Category ##########################  
     const [changeFilter, setChangeFilter] = useState(false);
- 
+
     useEffect(() => {
         fetchProducts();
     }, [pagination.currentPage, changeFilter]);
 
-
+    console.log(productsAPI);
 
     const fetchProducts = () => {
         //sabiendo q tengo searchCollection
+        setLoading(true);
         let url = '';
         if (searchCategory && !searchCollection) {
             url = `${apiUrl}/categories/category?categoryId=${searchCategory}&page=${pagination.currentPage}&limit=${limit}`;
         } else if (searchCollection && !searchCategory) {
             url = `${apiUrl}/collections/group_collection?page=${pagination.currentPage}&limit=${limit}`;
-        } else if(!searchCategory && !searchCollection){
+        } else if (!searchCategory && !searchCollection) {
             url = `${apiUrl}/products?page=${pagination.currentPage}&limit=${limit}`;
+            
         }
         axios.get(url)
             .then(res => {
-                const { total, currentPage, totalPages, products } = res.data;
-                setPagination({ total, currentPage, totalPages });                
-                setProductsAPI(products);
+                const { total, currentPage, totalPages, products } = res.data;                
+                setPagination({ total, currentPage, totalPages });
+                setProductsAPI(products);                
                 localStorage.setItem('everchic_stored_products', JSON.stringify(products));
                 dispatch(addProductStore(products));
             })
             .catch(err => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     };
 
     // ################### Function handle pagination ########################## 
@@ -115,7 +121,7 @@ const Products = () => {
                             collections={collections}
 
                             setSearchCategory={setSearchCategory}
-                            setSearchCollection={setSearchCollection}                            
+                            setSearchCollection={setSearchCollection}
 
                             setPagination={setPagination}
                             filterOptionsCategory={filterOptionsCategory}
@@ -142,10 +148,10 @@ const Products = () => {
                                                 </div>
                                             )))
                                     }
-                                    
+
                                     {
                                         searchCategory && !searchCollection && (
-                                            productsAPI?.map((product, index) => (                                                
+                                            productsAPI?.map((product, index) => (
                                                 <div className="product_card_product_container" key={index}>
                                                     <CardProduct product={product} />
                                                 </div>
@@ -155,12 +161,12 @@ const Products = () => {
 
                                     {
                                         searchCollection && searchCategory == '' && (
-                                            productsAPI?.map((collection, index) => {                                                
+                                            productsAPI?.map((collection, index) => {
                                                 if (collection?.products?.length > 0) {
                                                     return (
-                                                        <div className="carousel_container" key={index}>
+                                                        <Box WidthFull  key={index}>
                                                             <ProductCarousel products={collection.products} nameCollection={collection.collectionName} />
-                                                        </div>
+                                                        </Box>
                                                     )
                                                 }
                                             })
@@ -185,6 +191,15 @@ const Products = () => {
                     </div>
                 </div>
             </motion.div>
+            <Backdrop
+                
+                sx={{ color: '#fff',
+                      zIndex: (theme) => theme.zIndex.drawer + 1                       
+                    }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     );
 };
