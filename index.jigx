@@ -1,6 +1,0 @@
-name: ase
-title: AS
-category: communications
-widgets:
-  - size: 1x1 # choose size of the widget on the home hub
-    jigId: myfirstjig
