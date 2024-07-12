@@ -10,7 +10,11 @@ import { setUpdateDataUser } from '../store/slices/user.slice';
 const AddCustomer = () => {
     const dispatch = useDispatch();
     const apiUrl = import.meta.env.VITE_API_URL;
+<<<<<<< HEAD
     const user = useSelector(state => state.user) || '';
+=======
+    const user = useSelector(state => state.user.token) || '';
+>>>>>>> 60c6ebfe1fd66476f6c2777f043d9182743f1e9a
     const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: {
             dni: '',
@@ -34,7 +38,11 @@ const AddCustomer = () => {
         }
     }, [user.token, dispatch, apiUrl]);
 
+<<<<<<< HEAD
     console.log(user);
+=======
+
+>>>>>>> 60c6ebfe1fd66476f6c2777f043d9182743f1e9a
 
     useEffect(() => {
         if (user) {

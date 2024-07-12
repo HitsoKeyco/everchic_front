@@ -68,8 +68,11 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                     showConfirmButton: false,                    
                     timer: 1500
                 })
+<<<<<<< HEAD
                 
 
+=======
+>>>>>>> 60c6ebfe1fd66476f6c2777f043d9182743f1e9a
             }
         }
 
