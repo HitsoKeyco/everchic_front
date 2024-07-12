@@ -212,30 +212,33 @@ const Cart = () => {
                         timer: 1500,
                     });
                 } else {
-                    const createOrderResponse = await axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth());
-                    if (createOrderResponse.data) {
-                        console.log(createOrderResponse);
-                        localStorage.removeItem('everchic_cart_free');
-                        localStorage.removeItem('everchic_cart');
-                        dispatch(deleteAllProducts());
-                        navigate('/');
+                    axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth())
+                        .then(res => {
+                            localStorage.removeItem('everchic_cart_free');
+                            localStorage.removeItem('everchic_cart');
+                            dispatch(deleteAllProducts());
+                            navigate('/');
+                            setLoading(false);
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                text: res.data.message,
+                                showConfirmButton: true,
+                            });
+                        })
+                        .catch(err => {
+                            setLoading(false);
+                            return Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: "Error al enviar la orden",
+                                text: err.response.data.message,
+                                showConfirmButton: true,
+                            });
+                        })
 
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            text: "Orden enviada con éxito, no olvides verificar tu cuenta para seguir tu pedido.",
-                            showConfirmButton: true,
-                        });
 
-                    } else {
-                        setLoading(false);
-                        return Swal.fire({
-                            position: "center",
-                            icon: "error",
-                            title: "Error al enviar la orden",
-                            showConfirmButton: true,
-                        });
-                    }
+
                 }
             } else {
                 setLoading(false);
@@ -262,7 +265,9 @@ const Cart = () => {
                     title: "Hubo un error la procesar la solicitud",
                     showConfirmButton: true
                 });
-            } else if (err.response.data.result.cartJoinFiltered.length > 0) {
+            }
+
+            if (err.response.data.result.cartJoinFiltered.length > 0) {
                 Swal.fire({
                     position: "center",
                     icon: "info",

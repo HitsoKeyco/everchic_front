@@ -48,6 +48,10 @@ function validateEmail(email) {
         'ec', 'com.ec', 'net.ec', 'fin.ec', 'med.ec', 'edu.ec', 'gob.ec'
     ];
 
+    if (!email || email.trim() === "") {
+        return 'El correo electrónico es requerido.';
+    }
+
     if (!emailRegex.test(email)) {
         return 'Tu email tiene un formato no adecuado';
     }

@@ -25,16 +25,6 @@ const AddCustomer = () => {
         }
     });
 
-    useEffect(() => {
-        if (user.token) {
-            axios.get(`${apiUrl}/users/${user.user.id}`)
-                .then(res => {
-                    dispatch(setUpdateDataUser(res.data));
-                })
-                .catch(err => console.log(err));
-        }
-    }, [user.token, dispatch, apiUrl]);
-
     
 
     useEffect(() => {
@@ -199,7 +189,7 @@ const AddCustomer = () => {
                                 />
                             </div>
                             {
-                                user.token == null &&
+                                !user.user.isVerify &&
                                 <>
                                     <span className='add_customer_register_title'>Registro:</span>
 

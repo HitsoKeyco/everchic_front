@@ -80,6 +80,7 @@
     width: max-content;
     margin-left: 0;
     padding-top: 5px;
+    gap: 10px;
 }
 
 .bx-minus,
@@ -87,10 +88,12 @@
 .bxs-trash {
     font-size: 1.3em;
     cursor: pointer;
+    
 }
 
 .bxs-trash {
     color: var(--colorText_a);
+    padding-left: 10px;
 }
 
 
