@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     padding: 0 10px;
-    background-color: var(--bgBodyPage);
+    padding-bottom: 50px;    
 }
 
 .cart_product_container {
@@ -29,7 +29,8 @@
 
 .add_customer_info_user_container {
     border: 2px solid var(--borderContainer);
-    border-radius: 10px !important;
+    border-radius: 5px;
+    
 }
 
 
@@ -39,7 +40,7 @@
     min-height: 200px;
     border: 2px solid var(--borderContainer);
     background-color: var(--bgCardContainerProduct);
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 5px;
 
     display: flex;
@@ -70,9 +71,9 @@
 
 .cart_detail_title {
     text-align: center;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--colorText_a);
-    font-size: 1.2em;
+    font-size: 1em;
     margin: 0;
 }
 
@@ -99,7 +100,7 @@
 .cart_info_total_text {
     margin-top: 10px;
     margin-left: 0;
-    font-size: 1.2em;
+    font-size: 1em;
     color: var(--colorText_a);
 
 }
@@ -145,7 +146,7 @@
 
 .cart_product_title,
 .cart_product_offer {
-    margin: 0;
+    margin: 0;    
     font-weight: 400;
 }
 
@@ -156,7 +157,7 @@
     text-align: center;
     border-radius: 5px;
     padding: 5px 0;
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 .cart_product_title {
@@ -166,9 +167,6 @@
 
 }
 
-.cart_detail_buy_container {
-    background-color: var(--bgCardContainerProduct);
-}
 
 /* -------------------Free------------------*/
 .cart_info_unit_free {
@@ -264,10 +262,10 @@
 }
 
 .cart_detail_shipping_form {
-    background-color: var(--bgCardContainer);
+    
     width: 100%;
     height: max-content;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 20px 10px;
     border: 2px solid var(--borderContainer);
     display: flex;
@@ -297,6 +295,9 @@
     color: var(--colorText_a);
 }
 
+.cart_info_weight{
+    color: var(--colorText_a);
+}
 /* ------------------------------------- */
 
 @media (min-width: 600px) {
@@ -315,6 +316,9 @@
 
     .cart_promo_container {
         margin: 0;
+    }
+    .cart_product_offer {
+        font-size: 1em;
     }
 
 }

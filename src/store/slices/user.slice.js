@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Obtener el tema guardado en localStorage
 
 
 // Obtener el usuario guardado en localStorage
@@ -11,17 +10,12 @@ const user = userString ? JSON.parse(userString) : {};
 const tokenString  = localStorage.getItem('token');
 const token = tokenString
 
-//Obtener tema del usuario
-const themeString  = localStorage.getItem('theme');
-const theme = themeString ? themeString : 'light';
-
-
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: user,
         token: token,
-        theme: theme,
+        theme: 'lightTheme',
     },
     reducers: {
         setUser: (state, action) => {

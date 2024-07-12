@@ -1,20 +1,27 @@
 .noMatch_container{
     width: 100%;
-    height: 500px; /* Por el momento*/
-    
+    height: calc(100vh - 200px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    padding-top: 60px;
 }
 
-.noMatch_button{
-    margin-top: 25px;
-    padding: 0 15px;
+.no_match_image_container{
+    padding: 50px 50px;
 }
+
 .noMatch_title{
     color: var(--colorText_a);
     font-weight: 400;
     font-size: 2em;
+}
+
+.not_found_image{
+     max-width: 300px;
+}
+
+.not_match_button{
+    min-width: 250px;
 }

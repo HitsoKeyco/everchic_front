@@ -11,7 +11,7 @@ const darkTheme = createTheme({
         },
         background: {
             default: '#121212',
-            paper: '#1e1e1e',
+            paper: '#0a0a0b',
         },
         text: {
             primary: '#ffffff',
@@ -22,8 +22,7 @@ const darkTheme = createTheme({
         MuiAutocomplete: {
             styleOverrides: {
                 root: {
-                    color: '#ffffff',
-                    backgroundColor: '#1e1e1e',
+                    color: '#2e2e2e',                                        
                 },
                 paper: {
                     backgroundColor: '#2e2e2e',
@@ -33,16 +32,42 @@ const darkTheme = createTheme({
                 },
                 option: {
                     '&[aria-selected="true"]': {
-                        backgroundColor: '#3e3e3e',
+                        backgroundColor: '#3e3d3e',
                     },
                     '&:hover': {
                         backgroundColor: '#3e3e3e',
                     },
                 },
+
             },
         },
-    },
+        MuiAccordionSummary: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '15px',
+
+                },
+                content: {
+                    color: '#ffffff',
+                },
+
+            }
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#080808',
+                    borderRadius: '15px',
+                },
+                content: {
+                    color: '#ffffff',
+                }
+            }
+        }
+        
+    }
 });
+
 
 const lightTheme = createTheme({
     palette: {

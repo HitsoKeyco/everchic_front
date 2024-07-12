@@ -34,6 +34,7 @@
     display: flex;
     flex-direction: column;
     
+    
 }
 
 .home_products_container{
@@ -83,11 +84,9 @@
 
 .home_main_button{
     margin: 15px 0;
-    transition: 0.3s ease-in-out;
-    width: 300px;
-    font-size: 1.2em;
-    
-    
+    width: 350px;
+    font-size: 1.3em;
+    color: var(--colorText_a);
 }
 
 
@@ -348,7 +347,7 @@
 }
 
 .home_products_new_container{
-    padding: 0 35px;
+    padding: 0 5px;
     width: 100%;
     max-width: 1280px;
 }
@@ -556,8 +555,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        background-color: var(--bgBodyPage);
+        align-items: center;        
         padding: 0 10px;
         padding-top: 140px;
         

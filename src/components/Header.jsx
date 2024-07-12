@@ -61,8 +61,11 @@ const Header = () => {
     // Agrega o elimina la clase 'darkTheme' en función del tema del usuario
     if (userTheme === 'darkTheme') {
       document.body.classList.add('darkTheme');
+      document.body.classList.remove('lightTheme');
+
     } else {
       document.body.classList.remove('darkTheme');
+      document.body.classList.add('lightTheme');
     }
   }, [userTheme, dispatch]);
 

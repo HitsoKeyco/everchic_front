@@ -3,15 +3,26 @@ import './css/AddCustomer.css';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, ThemeProvider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { setUpdateDataUser } from '../store/slices/user.slice';
 
-const AddCustomer = ({ setNewDataShipping }) => {
+const AddCustomer = () => {
     const dispatch = useDispatch();
-    const apiUrl = import.meta.env.VITE_API_URL;    
-    const user = useSelector(state => state.user) || null;
-    const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm();
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const user = useSelector(state => state.user.token) || '';
+    const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm({
+        defaultValues: {
+            dni: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone_first: '',
+            phone_second: '',
+            address: '',
+            city: ''
+        }
+    });
 
     useEffect(() => {
         if (user.token) {
@@ -23,7 +34,7 @@ const AddCustomer = ({ setNewDataShipping }) => {
         }
     }, [user.token, dispatch, apiUrl]);
 
-    
+
 
     useEffect(() => {
         if (user) {
@@ -37,29 +48,41 @@ const AddCustomer = ({ setNewDataShipping }) => {
         }
     }, [user, setValue]);
 
-    const handleFormChange = () => {
-        const subscription = watch((data) => {
-            setNewDataShipping(data);
+    // Recuperar datos de localStorage al montar el componente
+    useEffect(() => {
+        const savedValues = localStorage.getItem('formData');
+        if (savedValues) {
+            const parsedValues = JSON.parse(savedValues);
+            for (const [key, value] of Object.entries(parsedValues)) {
+                setValue(key, value);
+            }
+        }
+    }, [setValue]);
+
+    // Guardar datos en localStorage al cambiar los valores del formulario
+    useEffect(() => {
+        const subscription = watch((values) => {
+            localStorage.setItem('formData', JSON.stringify(values));
         });
         return () => subscription.unsubscribe();
-    };
+    }, [watch]);
 
-    useEffect(handleFormChange, [watch, setNewDataShipping]);
+
 
     const [isShowPass, setIsShowPass] = useState(false)
     const handleShowHiddenPass = () => {
         setIsShowPass(!isShowPass)
     }
 
-
     return (
         <>
+
             <Accordion>
                 <AccordionSummary id="panel-header" aria-controls="panel-content" expandIcon={<ExpandMoreIcon />}>
-                    <h3 className='add_customer_title'>Información de envío</h3>
+                    <p className='add_customer_title'>Información de usuario - Envío</p>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <form className="add_customer_container" onChange={handleFormChange}>
+                <AccordionDetails  >
+                    <form className="add_customer_container" >
                         <div className='add_customer_info_shipping'>
                             <div className='add_customer_elements_container'>
                                 <label className="add_customer_label" htmlFor="dni">
@@ -170,15 +193,15 @@ const AddCustomer = ({ setNewDataShipping }) => {
                                     id="address"
                                     name="address"
                                     autoComplete='on'
-                                    placeholder='Escriba su dirección y alguna referencia de su vivienda como: color, plantas, decoración. etc.'
                                     className={`add_customer_textarea ${errors.address ? 'input-error' : ''}`}
                                     {...register('address', { required: 'Este campo es obligatorio' })}
                                 />
                             </div>
                             {
-                                user.token == '' &&
+                                user == '' &&
                                 <>
-                                <span className='add_customer_register_title'>Registro:</span>
+                                    <span className='add_customer_register_title'>Registro:</span>
+
                                     <div className="add_customer_elements_container">
                                         <label className="add_customer_label" htmlFor="email" >E-mail:</label>
                                         <input className="add_customer_input" type="text" autoComplete="off"

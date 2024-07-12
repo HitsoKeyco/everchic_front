@@ -18,7 +18,19 @@ const AuthModal = ({ setIsModalAuth }) => {
     const token = useSelector(state => state.user.user.token)
 
     const handleModalContentClick = () => {        
-        setIsModalAuth(false);
+        Swal.fire({
+            title: '¿Salir del modal?',            
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, salir',
+            cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setIsModalAuth(false);
+                }
+            })            
     };
 
     const handleContainerClick = (e) => {        

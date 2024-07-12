@@ -191,6 +191,7 @@ const CardProduct = ({ product, isSlider }) => {
                     </div>
                     <div className='card_product_by_container'>
                         {
+                            //product.stock == 0 || solOut?
                             product.stock == 0 || solOut?
                                 (
                                     <div className="card_product_stock">

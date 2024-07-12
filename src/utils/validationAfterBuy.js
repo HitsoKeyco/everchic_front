@@ -1,24 +1,28 @@
 
-const validationAfterBuy = (newDataShipping) => {
-    
+const validationAfterBuy = ( userData ) => {
     const errors = {};
-
-    if (newDataShipping) {
-        errors.dni = validateDNI(newDataShipping.dni);
-        errors.firstName = validateFirstName(newDataShipping.firstName);
-        errors.lastName = validateLastName(newDataShipping.lastName);
-        errors.phone_1 = validatePhone(newDataShipping.phone_first);
-        if (newDataShipping.phone_second) {
-            errors.phone_2 = validatePhone2(newDataShipping.phone_second);
+    
+    if (userData) {
+        errors.dni = validateDNI(userData.dni);
+        errors.firstName = validateFirstName(userData.firstName);
+        errors.lastName = validateLastName(userData.lastName);
+        errors.phone_1 = validatePhone(userData.phone_first);
+        if (userData.phone_second) {
+            errors.phone_2 = validatePhone2(userData.phone_second);
         }
-        errors.city = validateCity(newDataShipping.city);
-        errors.address = validateAddress(newDataShipping.address);        
-        if (newDataShipping.email) {
-            errors.email = validateEmail(newDataShipping.email);
+        errors.city = validateCity(userData.city);
+        errors.address = validateAddress(userData.address);        
+        if (userData.email) {
+            errors.email = validateEmail(userData.email);
         }
-        if (newDataShipping.password) {
-            errors.password = validatePassword(newDataShipping.password);
+        if (userData.password) {
+            errors.password = validatePassword(userData.password);
         }
+    }
+    
+    if (userData == null){
+        errors.userData = "Por favor, llene su información de usuario.";
+        
     }
 
     // Filtrar errores no nulos
@@ -38,9 +42,10 @@ export default validationAfterBuy;
 function validateEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const validDomains = [
-        'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com',
+        'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'hotmail.es',
         'aol.com', 'icloud.com', 'mail.com', 'zoho.com',
-        'yandex.com', 'protonmail.com', 'gmx.com'
+        'yandex.com', 'protonmail.com', 'gmx.com',
+        'ec', 'com.ec', 'net.ec', 'fin.ec', 'med.ec', 'edu.ec', 'gob.ec'
     ];
 
     if (!emailRegex.test(email)) {
@@ -48,7 +53,7 @@ function validateEmail(email) {
     }
     const domain = email.split('@')[1];
     if(!validDomains.includes(domain)){
-        return `Este tipo de dominio ${domain}, no es valido, sorry. Puedes usar: gmail, yahoo, hotmail, outlook, aol, icloud, mail, zoho, yandex, protonmail, gmx`
+        return `Verifica tu correo por favor: ${email} `
     }
 
     return null;
@@ -81,7 +86,7 @@ function validateDNI(dni) {
     } else if (!dniRegex.test(dni)) {
         return "El número de cédula solo debe contener dígitos numéricos.";
     } else if (dni.length !== 10 && !(dni.length === 13 && dni.endsWith("001"))) {
-        return "El número de cédula debe tener 10 dígitos o 13 dígitos terminando en '001'.";
+        return "El número de cédula debe tener 10 dígitos o 13 dígitos 'RUC'.";
     }
 
     return null;

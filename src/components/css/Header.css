@@ -165,13 +165,14 @@
     height: 18px;
     border-radius: 50%;
     font-size: 0.9em;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--colorText_a);
-    color: var(--bgBodyPage);
+    color: var(--colorText_e)
+    
 }
 
 .header_info_promo_container {

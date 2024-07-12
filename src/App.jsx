@@ -17,17 +17,15 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
 
-
-
-
 function App() {
 
-  const theme = useSelector(state => state.user.user.theme);
+  const theme = useSelector(state => state.user.theme);
   const userVerify = useSelector(state => state.user.user.isVerify)
   
+
   return (
     <>
-      <ThemeProvider theme={theme == 'lightTheme' ? lightTheme : darkTheme}>
+      <ThemeProvider theme={ theme=='lightTheme' ? lightTheme : darkTheme }>
         <CssBaseline />
         <Header />
         <Routes>

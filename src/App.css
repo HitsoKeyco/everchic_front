@@ -7,51 +7,33 @@
     list-style: none;
     padding: 0;
     user-select: none;
-    font-size: 14px;
-    margin: 0
+    margin: 0;
+    font-size: 16px;
 }
+
 
 .swal2-popup {
-    background-color: #0d1117;
+    /* background-color: #0d1117; */
     border: 1px solid var(--borderContainer);
     color: var(--colorText_a);
-}
-
-.MuiPaper-root {
-    background-color: var(--bgCardContainer) !important;
-    box-shadow: none !important;
-    border-radius: 6px !important;
-    
-}
-.swal2-shown, .swal2-height-auto{
-    width: 100% !important;
-    overflow-x: hidden !important;
-    padding: 0 !important;
-}
-
-.MuiAccordionDetails-root,
-.MuiList-root {
-    background-color: var(--bgCardContainer);
-    padding: 10px !important;
-    border-radius: 0 0 10px 10px !important;
-}
-
-.MuiButtonBase-root,
-.MuiList-root {
-    background-color: var(--bgCardContainerProduct) !important;
-    border-radius: 10px !important;
 
 }
 
-.MuiButtonBase-root {
-    background-color: rgba(0, 0, 0, 0) !important;
+.swal2-title {
+    font-size: 1.2em !important;
+    font-weight: 400;
 }
 
 :root {
 
     /*Input*/
-    --colorOutlineFocus: rgb(151, 147, 147);
-    --bgInput: #e9e9e9;
+    --colorOutlineFocus: rgb(206, 206, 206);
+    --bgInput: #fefffc;
+
+    /* BannerPromo */
+    --bgPromo: rgb(159, 145, 251);
+    --colorTextPromo: white;
+
     /*Texto*/
     --colorText_a: #1d1c23;
     --colorTextHoverButtom: #13C296;
@@ -60,7 +42,7 @@
     --colorTextButtonHomeHover: rgb(29, 28, 28);
     --colorText_c: #bfbfbf;
     --colorText_d: red;
-    --colorText_e: rgb(18, 17, 17);
+    --colorText_e: white;
     --colorText_b: white;
     --colorText_f: rgb(3, 6, 19);
     --colorText_hover: rgb(232, 232, 232);
@@ -73,8 +55,8 @@
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.263);
-    --colorBorderButton: #374151;
-    --colorBorderInput: #2650735a;
+    --colorBorderButton: #cacaca;
+    --colorBorderInput: #8a8a8a5a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
 
     /*barScrollColor*/
@@ -82,8 +64,6 @@
     --colorbar_b: rgba(33, 34, 33, 0.115);
     --bgScrollbar: #edf0f3;
 
-    /*ChatBg*/
-    --bgChatContainer: rgb(17, 17, 27);
 
     /*Background Body*/
     --bgBodyPage: #f3f3f3;
@@ -109,7 +89,7 @@
     --colorButton: #ebebed;
     --bgButtonHover: #e5e5e5;
     --colorButtonHome: #c09319;
-    --bgButtonHoverHome:  #c39925;
+    --bgButtonHoverHome: #c39925;
 
     /* Scrollbar*/
     --bgBar: black;
@@ -125,7 +105,9 @@
     color: var(--colorText_a);
 }
 
-.MuiDialog-container, .MuiDialog-scrollPaper, .css-hz1bth-MuiDialog-container{
+.MuiDialog-container,
+.MuiDialog-scrollPaper,
+.css-hz1bth-MuiDialog-container {
     overflow: hidden;
 }
 
@@ -133,9 +115,11 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: visible !important;
 }
 
-.swal2-shown, .swal2-height-auto{
+.swal2-shown,
+.swal2-height-auto {
     z-index: 9999999999999 !important;
     overflow-x: hidden;
 }
@@ -168,9 +152,7 @@ a {
     background-color: var(--bgBarThumb);
 }
 
-body {
-    overflow-y: visible !important
-}
+
 
 .active {
     text-decoration: underline;
@@ -207,6 +189,7 @@ body {
     background-color: var(--colorButton);
     margin: 0;
     border-radius: 5px;
+
 }
 
 .button_home {
@@ -217,9 +200,10 @@ body {
     color: var(--colorText_a);
     background-color: var(--colorButton);
     margin: 0;
-    border-radius: 25px;
+    border-radius: 10px;
 }
 
+.button_home:hover,
 .button:hover {
     background-color: var(--bgButtonHover);
     transform: scale(1.01);
@@ -239,13 +223,13 @@ textarea {
     width: 100%;
     border: 1px solid var(--colorBorderInput);
     padding: 20px 10px 3px 10px;
-    font-size: 1.2em;
     color: var(--colorText_a);
 }
 
 
+textarea:focus,
 input:focus {
-    outline: 2px solid var(--colorOutlineFocus);
+    outline: 1px solid var(--colorOutlineFocus);
 }
 
 input:-webkit-autofill,
@@ -267,7 +251,6 @@ textarea {
     height: 100px;
     border-radius: 5px;
     background-color: var(--bgInput);
-    border: 1px solid var(--colorBorderInput);
 
     font-size: 1.2em;
     outline-color: var(--bgButtonHover);
@@ -281,7 +264,7 @@ textarea {
     --bgInput: #1b1b1b;
 
     /* BannerPromo */
-    --bgPromo: #f28d3ad9;
+    --bgPromo: rgb(159, 145, 251);
     --colorTextPromo: white;
 
     /* Slider */
@@ -290,7 +273,7 @@ textarea {
 
     /* CardProduct */
     --bgCardProduct: #1e2631;
-    --bgCardContainerProduct: #0d1117;
+    --bgCardContainerProduct: #0a0a0b;
     --bgModalProduct: #f9f9f9;
     --bgCardContainer: #161b22;
     --bgCardContainerHover: #1f242b;
@@ -301,9 +284,9 @@ textarea {
 
     /* Boton */
     --colorButton: #181918;
-    --bgButtonHover: #2c3333;
+    --bgButtonHover: #202323;
     --colorButtonHome: #c09319;
-    --bgButtonHoverHome:  #c39925;
+    --bgButtonHoverHome: #c39925;
 
 
     /* Input */
@@ -330,7 +313,7 @@ textarea {
 
     /*border*/
     --borderContainer: rgba(154, 151, 151, 0.263);
-    --colorBorderButton: #515252;
+    --colorBorderButton: #363737;
     --colorBorderInput: #2650735a;
     --borderCardproduct: rgba(154, 151, 151, 0.141);
 
@@ -339,8 +322,6 @@ textarea {
     --colorbar_b: rgba(33, 34, 33, 0.115);
     --bgScrollbar: #edf0f3;
 
-    /*ChatBg*/
-    --bgChatContainer: rgb(17, 17, 27);
 
     /*Background Body*/
     --bgBodyPage: #010409;
@@ -358,7 +339,7 @@ textarea {
     --bgColorInput: #efeff0;
 
     /* BannerPromo */
-    --bgPromo: #f28d3ad9;
+    --bgPromo: rgb(159, 145, 251);
     --colorTextPromo: white;
 
     /* Slider */
@@ -366,9 +347,9 @@ textarea {
     --colorTextCollection: white;
 
     /* CardProduct */
-    --bgCardProduct: #e2e2e4;    
+    --bgCardProduct: #e2e2e4;
     --bgModalProduct: #010000;
-    --bgCardContainer: #171717;
+    --bgCardContainer: #141313;
     --bgCardContainerHover: #eee9f7;
     --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
     --colorTag: #2D9596;

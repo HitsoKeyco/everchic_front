@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './css/Cart.css';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { accessFreeProduct, addPriceShippingStore, deleteAllProducts } from '../store/slices/cart.slice';
+import { accessFreeProduct, addPriceShippingStore, addStoreCart, addStoreCartFree, adjustLowStockThunk, deleteAllProducts } from '../store/slices/cart.slice';
 import ProductItem from '../components/ProductItem';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -14,7 +13,7 @@ import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
 import validationAfterBuy from '../utils/validationAfterBuy';
-import RegisterCart from '../components/RegisterCart';
+
 
 
 
@@ -35,10 +34,11 @@ const Cart = () => {
     const cart = useSelector(state => state.cart.storedCart);
     const cartFree = useSelector(state => state.cart.storedCartFree)
     const quantityProductCart = cart.reduce((acc, product) => acc + product.quantity, 0);
-    const priceUnit = cart.length > 0 ? cart[0].priceUnit : 0;
+    const priceUnit = cart.length > 0 ? Number((cart[0].priceUnit).toFixed(2)) : 0;
     const freeProducts = useSelector(state => state.cart.quantityProductsFree)
     const quantityProductCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
     const quantityProducts = quantityProductCart + quantityProductCartFree;
+
 
     // Verifica si la cantidad total de productos gratuitos está dentro del rango deseado
     const handleFreeButton = () => {
@@ -157,7 +157,7 @@ const Cart = () => {
     }
     const priceTotalStore = useSelector(state => state.cart.stateTotalCart)
     const priceShippingStore = useSelector(state => state.cart.stateShippingCart)
-    const total = (priceTotalStore + priceShippingStore).toFixed(2)
+    const total = Number((Number((priceTotalStore).toFixed(2)) + priceShippingStore).toFixed(2))
 
     const user = useSelector(state => state.user);
     const token = useSelector(state => state.user.token);
@@ -166,106 +166,145 @@ const Cart = () => {
     /* ------- Hcapcha solo se monta 1 vez --------------*/
     const theme = useSelector(state => state.user.theme);
     const captchaRef = useRef(null);
-    const [newUser, setNewUser] = useState();
-    const [newDataShipping, setNewDataShipping] = useState([])
-
-
-    const handleNewUser = (userData) => {
-        setNewUser(userData);
-    };
-
-    const handleNewDataShipping = (dataShipping) => {
-        setNewDataShipping(dataShipping)
-    }
 
     const onLoad = () => {
         captchaRef.current.execute();
     }
 
+    const submit = async () => {
+        setLoading(true);
+        const userDataString = localStorage.getItem('formData');
+        const userData = JSON.parse(userDataString);
+        const errors = validationAfterBuy(userData);
+        const data = { cart, cartFree, userData, price_unit: priceUnit, total: total, isPriceShipping };
 
+        try {
+            if (cart.length === 0) {
+                setLoading(false);
+                return Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "No tienes ningún producto agregado",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
 
-    const submit = () => {
-        setLoading(true)
-        let userActive = {}
-        if (newDataShipping.length > 0) {
-            userActive = newDataShipping
-        } else {
-            userActive = user?.user
-        }
-        const errors = validationAfterBuy(userActive);
-        const data = { cart, cartFree, userActive, price_unit: priceUnit, total: total };
+            if (Object.keys(errors).length > 0) {
+                setLoading(false);
+                return Swal.fire({
+                    position: "center",
+                    icon: "info",
+                    text: errors.dni || errors.firstName || errors.email || errors.password || errors.lastName || errors.phone_1 || errors.phone_2 || errors.city || errors.address || errors.userData,
+                    showConfirmButton: true,
+                });
+            }
 
-        //token de Hcaptcha
-        if (cart.length === 0) {
-            Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "No tienes ningun producto agregado",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            setLoading(false)
-        } else {
-            if (Object.keys(errors).length === 0) {
-                axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
-                    .then(res => {
-                        if (res && userActive) {
-                            axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth())
-                                .then(res => {
-                                    if (res.data) {
-                                        Swal.fire({
-                                            position: "center",
-                                            icon: "success",
-                                            text: "Orden enviada con exito",
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        });
-                                        localStorage.removeItem('everchic_cart_free')
-                                        localStorage.removeItem('everchic_cart')
-                                        dispatch(deleteAllProducts())
-                                        navigate('/profile');
-                                    }
-                                })
-                                .catch(err => {
-                                    if (err) {
-                                        Swal.fire({
-                                            icon: "error",
-                                            title: "Oops...",
-                                            text: "Algo salio mal!",
-                                        });
-                                    }
-                                })
-                                .finally(
-                                    () => {
-                                        setLoading(false)
-                                    }
-                                )
-                        }
-
-                    })
-                    .catch(err => {
-                        // Manejo de errores: mostrar un mensaje al usuario
-                        if (err) {
-                            Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                text: "Error al verificar el captcha",
-                                showConfirmButton: true
-                            });
-                        }
-                        setLoading(false)
+            if (tokenCaptcha) {
+                const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
+                if (!verifyCaptchaResponse) {
+                    setLoading(false);
+                    return Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Captcha no válido",
+                        showConfirmButton: true,
+                        timer: 1500,
                     });
+                } else {
+                    const createOrderResponse = await axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth());
+                    if (createOrderResponse.data) {
+                        console.log(createOrderResponse);
+                        localStorage.removeItem('everchic_cart_free');
+                        localStorage.removeItem('everchic_cart');
+                        dispatch(deleteAllProducts());
+                        navigate('/');
+
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            text: "Orden enviada con éxito, no olvides verificar tu cuenta para seguir tu pedido.",
+                            showConfirmButton: true,
+                        });
+
+                    } else {
+                        setLoading(false);
+                        return Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Error al enviar la orden",
+                            showConfirmButton: true,
+                        });
+                    }
+                }
             } else {
-                Swal.fire({
+                setLoading(false);
+                return Swal.fire({
                     position: "center",
                     icon: "error",
-                    text: errors.dni || errors.firstName || errors.email || errors.password || errors.lastName || errors.phone_1 || errors.phone_2 || errors.city || errors.address,
+                    title: "Completa el Captcha",
+                    showConfirmButton: true,
+                });
+            }
+        } catch (err) {
+            // Obtener el mensaje de error general
+            let message = `${err.response.data.message}\n\nEl stock se ha agotado para los siguientes productos:\n`;
+
+            // Iterar sobre el array de productos cuyo stock ha cambiado
+            err.response.data.result.cartJoinFiltered.forEach(product => {
+                message += `| ${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
+            });
+
+            if (err.response.data.result.failOperation) {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "Hubo un error la procesar la solicitud",
                     showConfirmButton: true
                 });
-                setLoading(false)
+            } else if (err.response.data.result.cartJoinFiltered.length > 0) {
+                Swal.fire({
+                    position: "center",
+                    icon: "info",
+                    title: "Información de stock agotado",
+                    text: message,
+                    showConfirmButton: true
+                });
             }
+
+            // Arreglo temporal para gestionar productos encontrados en cart y cartFree
+            let productsInCart = [];
+
+            // Actualizar las cantidades en cart
+            let updatedCart = cart.map(productCart => {
+                const product = err.response.data.result.cartJoinFiltered.find(p => p.productId === productCart.productId);
+                if (product) {
+                    productsInCart.push(product.productId);
+                    return { ...productCart, quantity: product.stock, stock: product.stock };
+                }
+                return productCart;
+            }).filter(productCart => productCart.quantity > 0); // Eliminar productos con cantidad 0
+
+            // Actualizar el carrito gratuito (cartFree)
+            let updatedCartFree = cartFree.filter(productFree => {
+                return !productsInCart.includes(productFree.productId);
+            });
+
+            // Guardar los carritos actualizados en localStorage
+            localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
+            localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
+
+            // Despachar las acciones para actualizar el estado global de carritos en la aplicación
+            dispatch(addStoreCart(updatedCart));
+            dispatch(addStoreCartFree(updatedCartFree));
+        } finally {
+            setLoading(false);
         }
     };
+
+
+
+
 
     return (
         <>
@@ -282,9 +321,12 @@ const Cart = () => {
                             <div className="cart_items_container">
                                 {
                                     cart?.length > 0 ? (
-                                        cart.map((product) => (
-                                            <ProductItem key={product.productId} product={product} />
-                                        ))
+                                        cart.map((product) => {
+                                            if (product) {
+                                                return <ProductItem key={product.productId} product={product} />
+                                            }
+                                            return null
+                                        })
                                     ) : (
                                         <div className="cart_product_msj_alert">
                                             <p className='cart_product_messaje'>¡No ha agregado productos 🧦!</p>
@@ -301,11 +343,12 @@ const Cart = () => {
 
                             <div className="cart_products_free">
                                 {
+
                                     freeProducts > 0 ?
                                         <div className="cart_free_container">
                                             <div className="cart_alert_button_free">
                                                 {
-                                                    freeProducts !== quantityProductCartFree && (
+                                                    (freeProducts > 0 && freeProducts > quantityProductCartFree) && (
                                                         <button
                                                             className='cart_product_free_alert button'
                                                             onClick={handleFreeButton}
@@ -341,15 +384,8 @@ const Cart = () => {
                     <div className='cart_details_info_buy_container'>
                         {/*----------------------------------------*/}
                         <div className='add_customer_info_user_container'>
-                            <AddCustomer setNewDataShipping={handleNewDataShipping} />
+                            <AddCustomer />
                         </div>
-                        {
-                            user?.user.token ?
-                                <div className='cart_register_user_container'>
-                                    <RegisterCart setNewUser={handleNewUser} />
-                                </div>
-                                : ''
-                        }
                         <form
                             className="cart_detail_shipping_form"
                             action=""
@@ -358,7 +394,7 @@ const Cart = () => {
                             onSubmit={handleSubmit(submit)}
                         >
                             <div className='cart_detail_method_shipping_container'>
-                                <FormControl fullWidth error={!!errors.shippingOption}>
+                                <FormControl fullWidth error={!!errors.shippingOption} theme={theme}>
                                     <InputLabel id="shipping-select-label">Seleccionar método de envío</InputLabel>
                                     <Select
                                         labelId="shipping-select-label"
@@ -368,7 +404,7 @@ const Cart = () => {
                                         label="Seleccionar método de envío"
                                     >
                                         {shippingOptions.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
+                                            <MenuItem key={option.value} value={option.value} >
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -383,7 +419,7 @@ const Cart = () => {
                                 </div>
                                 <ul className='cart_info_message_container'>
                                     <li className='cart_info_message'>{quantityProductCart} pares{quantityProductCartFree > 0 && ` y ${quantityProductCartFree} de obsequio`}. 🧦</li>
-                                    <li className='cart_info_weight'>Peso aproximado: {weightTotal} Kg</li>
+                                    <li className='cart_info_weight'>Peso: {weightTotal} Kg</li>
                                 </ul>
                                 <div className="cart_info_buy_container">
                                     <div className="cart_info_title_container">
@@ -433,6 +469,7 @@ const Cart = () => {
                                 >
                                     Enviar al vendedor
                                 </button>
+
 
                             </div>
                         </form>

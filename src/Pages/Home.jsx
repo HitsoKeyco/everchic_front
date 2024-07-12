@@ -14,28 +14,23 @@ import getConfigAuth from '../utils/getConfigAuth';
 
 
 const Home = () => {
-
-
   const navigate = useNavigate()
   const handdleBuyButton = () => {
     navigate('/products');
   }
 
-  const [products, setIsNewProducts] = useState([]);
-  const url = import.meta.env.VITE_API_URL;
+  const [products, setIsNewProducts] = useState([]);  
+  const apiUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
-    axios.get(`${url}/products/new_product`, getConfigAuth())
+    axios.get(`${apiUrl}/products/new_product`)
       .then(res => {
         setIsNewProducts(res.data);
       })
       .catch(err => console.log(err));
   }, [])
 
-  const apiUrl = import.meta.env.VITE_API_URL
   const { isLoged, loginUser, logOut, logOutTime } = useAuth()
-
-
 
   useEffect(() => {
     axios.get(`${apiUrl}/users/valid_session`, getConfigAuth())
@@ -46,10 +41,6 @@ const Home = () => {
           logOutTime();
         }
       });
-
-    return () => {
-      // Opcional: Limpieza si es necesario
-    };
   }, []);
 
 

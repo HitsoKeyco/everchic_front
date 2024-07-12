@@ -47,8 +47,7 @@ const Products = () => {
         fetchProducts();
     }, [pagination.currentPage, changeFilter]);
 
-    console.log(productsAPI);
-
+    
     const fetchProducts = () => {
         //sabiendo q tengo searchCollection
         setLoading(true);

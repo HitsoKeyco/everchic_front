@@ -12,7 +12,7 @@ const storedCartFree = storedCartFreeString ? JSON.parse(storedCartFreeString) :
 const storedProductsString = localStorage.getItem('everchic_stored_products');
 const storedProducts = storedProductsString ? JSON.parse(storedProductsString) : [];
 
-const quantityProductCart =  storedCart.reduce((acc, product) => product.quantity + acc, 0 )    
+const quantityProductCart = storedCart.reduce((acc, product) => product.quantity + acc, 0)
 const priceUpgrade = parseFloat(((quantityProductCart) / 12).toFixed(0))
 localStorage.setItem('everchic_cart_quantity_free', priceUpgrade);
 
@@ -44,13 +44,13 @@ const cartSlice = createSlice({
         stateShippingCart: 0,
         stateTotalCart: totalCartPrice,
         stateFreeToCart: false,
-        
+
 
     },
     reducers: {
         deleteAllProducts: (state, action) => {
             state.storedCart = [];
-            state.storedCartFree = [];            
+            state.storedCartFree = [];
             state.stateShippingCart = 0;
             state.stateTotalCart = 0;
             state.stateFreeToCart = false;
@@ -63,9 +63,14 @@ const cartSlice = createSlice({
         addProductStore: (state, action) => {
             state.storedProducts = action.payload
         },
-
+        addStoreCart: (state, action) => {
+            state.storedCart = action.payload
+        },
+        addStoreCartFree: (state, action) => {
+            state.storedCartFree = action.payload
+        },
         addProduct: (state, action) => {
-            const { productId } = action.payload            
+            const { productId } = action.payload
 
             //buscamos el producto en la store general
             const existingStoreProductIndex = state.storedProducts.findIndex(item => item.id === productId);
@@ -104,10 +109,8 @@ const cartSlice = createSlice({
                         Swal.fire({
                             position: "center",
                             icon: "warning",
-                            title: "Lo sentimos, stock agotado!",
-                            text: `La cantidad en el carrito ha sido ajustada debido a la disponibilidad de stock.`,
-                            showConfirmButton: false,
-                            timer: 1500,
+                            title: "No dispodemos de mas unidades!",
+                            showConfirmButton: true,
                         });
                     }
                 } else {
@@ -141,10 +144,10 @@ const cartSlice = createSlice({
 
             state.storedCart.forEach(product => {
                 product.priceUnit = priceUnit;
-                
+
             });
 
-            state.stateTotalCart = priceUnit * units
+            state.stateTotalCart = Number((priceUnit).toFixed(2)) * units
 
             if (units >= 12 && state.storedCart.length > 0 && units % 12 === 0) {
                 state.quantityProductsFree += 1;
@@ -200,7 +203,7 @@ const cartSlice = createSlice({
                         }
                     } else {
 
-                        if (state.storedProducts[existingStoreProductIndex].stock > (cartFreeQuantity + cartQuantity)) {                            
+                        if (state.storedProducts[existingStoreProductIndex].stock > (cartFreeQuantity + cartQuantity)) {
                             //si la suma de quantity de cartStore y freeProduct < storeProduct es posible agregar el producto gratuito
                             const newProduct = {
                                 productId: productId,
@@ -228,7 +231,7 @@ const cartSlice = createSlice({
                             Swal.fire({
                                 position: "center",
                                 icon: "warning",
-                                title: "Lo sentimos, stock agotado!",                                
+                                title: "Lo sentimos, stock agotado!",
                                 showConfirmButton: false,
                                 timer: 1500,
                             });
@@ -243,11 +246,11 @@ const cartSlice = createSlice({
 
                 const unitsFree = state.quantityProductsFree
                 const unitsProductsFree = state.storedCartFree.reduce((acc, item) => acc + item.quantity, 0)
-                if (unitsFree === unitsProductsFree){
+                if (unitsFree === unitsProductsFree) {
                     state.stateFreeToCart = false
                 }
 
-                
+
 
                 localStorage.setItem('everchic_cart_quantity_free', JSON.stringify(state.quantityProductsFree));
                 localStorage.setItem('everchic_cart_free', JSON.stringify(state.storedCartFree));
@@ -284,10 +287,10 @@ const cartSlice = createSlice({
 
                     //establecemos los nuevoas precios
                     state.storedCart.forEach(product => {
-                        product.priceUnit = priceUnit;                        
+                        product.priceUnit = priceUnit;
 
                     });
-                    state.stateTotalCart = priceUnit * units
+                    state.stateTotalCart = Number((priceUnit).toFixed(2)) * units
                     //hacemos el calculo de cuantas unidades gratuitas tiene
                     if (units % 12 === 0) {
                         state.quantityProductsFree += 1
@@ -297,7 +300,7 @@ const cartSlice = createSlice({
                     localStorage.setItem('everchic_cart_quantity_free', JSON.stringify(state.quantityProductsFree));
                     localStorage.setItem('everchic_cart', JSON.stringify(state.storedCart));
 
-                } else {                    
+                } else {
                     Swal.fire({
                         position: "center",
                         icon: "warning",
@@ -371,13 +374,13 @@ const cartSlice = createSlice({
 
                 }
 
-             
-    
+
+
                 state.storedCart.forEach(product => {
                     product.priceUnit = priceUnit;
                 });
 
-                state.stateTotalCart = priceUnit * units
+                state.stateTotalCart = Number((priceUnit).toFixed(2)) * units
 
                 // if (existingProductFreeIndex !== -1) {
                 //     if (state.storedCartFree[existingProductFreeIndex].quantity > 1) {
@@ -406,20 +409,20 @@ const cartSlice = createSlice({
         deleteProduct: (state, action) => {
             const { productId } = action.payload;
             const existingProductIndex = state.storedCart.findIndex(item => item.productId === productId);
-        
+
             if (existingProductIndex !== -1) {
                 // Eliminar el producto del carrito principal
                 state.storedCart.splice(existingProductIndex, 1);
                 const units = state.storedCart.reduce((acc, product) => acc + product.quantity, 0);
                 const priceUnit = calculatePriceUnit(units);
                 const unitsFree = Math.floor(units / 12);
-        
+
                 // Ajustar el contador de productos gratuitos en función de las docenas completas
                 state.quantityProductsFree = unitsFree;
-        
+
                 // Comparar con la cantidad actual en storeCartFree
                 const currentFreeUnits = state.storedCartFree.reduce((acc, product) => acc + product.quantity, 0);
-        
+
                 // Ajustar storeCartFree según sea necesario
                 if (currentFreeUnits > unitsFree) {
                     // Excedente de unidades en storeCartFree, ajustar
@@ -431,29 +434,24 @@ const cartSlice = createSlice({
                         }
                     }
                 }
-        
+
                 // Limpiar storeCartFree eliminando productos con cantidad 0
                 state.storedCartFree = state.storedCartFree.filter(product => product.quantity > 0);
-                
-                
-                
 
-                
-        
                 // Actualizar el precio unitario en cada producto del carrito principal
                 state.storedCart.forEach(product => {
                     product.priceUnit = priceUnit;
                 });
 
-                state.stateTotalCart = priceUnit * units
-        
+                state.stateTotalCart = Number((priceUnit).toFixed(2)) * units
+
                 localStorage.setItem('everchic_cart_quantity_free', JSON.stringify(state.quantityProductsFree));
                 localStorage.setItem('everchic_cart_free', JSON.stringify(state.storedCartFree));
                 localStorage.setItem('everchic_cart', JSON.stringify(state.storedCart));
             }
         },
-        
-        
+
+
 
         deleteProductFree: (state, action) => {
             const { productId } = action.payload;
@@ -462,21 +460,20 @@ const cartSlice = createSlice({
             const units = state.storedCart.reduce((acc, product) => acc + product.quantity, 0);
             const priceUnit = calculatePriceUnit(units);
             const unitsFree = Math.floor(units / 12);
-            
+
 
             if (existingProductFreeIndex !== -1) {
                 state.storedCartFree.splice(existingProductFreeIndex, 1);
                 localStorage.setItem('everchic_cart_free', JSON.stringify(state.storedCartFree));
             }
 
-            state.stateTotalCart = priceUnit * units
+            state.stateTotalCart = Number((priceUnit).toFixed(2)) * units
         },
 
         accessFreeProduct: (state, action) => {
             state.stateFreeToCart = action.payload;
-
-            
         },
+
 
     }
 });
@@ -497,11 +494,84 @@ const calculatePriceUnit = (units) => {
 };
 
 
-
-export const { deleteAllProducts, addPriceShippingStore, addProductStore, addProduct, plusProduct, minusProduct, deleteProduct, addProductFree, accessFreeProduct, deleteProductFree } = cartSlice.actions;
+export const { addStoreCart, addStoreCartFree, deleteAllProducts, addPriceShippingStore, addProductStore, addProduct, plusProduct, minusProduct, deleteProduct, addProductFree, accessFreeProduct, deleteProductFree } = cartSlice.actions;
 
 
 
 export default cartSlice.reducer;
 
 
+
+export const adjustLowStockThunk = (productId, stock, quantity_missing) => (dispatch) => {
+    // Si quantity_missing es negativo, convertimos a positivo
+    const absQuantityMissing = Math.abs(quantity_missing);
+
+    // Busca el producto en cartFree
+    const existingProductFreeIndex = storedCartFree.findIndex(item => item.productId === productId);
+    const existingProductCartIndex = storedCart.findIndex(item => item.productId === productId);
+
+    // Verifica si hay suficiente stock disponible para la cantidad que falta
+    if (stock >= absQuantityMissing) {
+        // Si el producto existe en cartFree
+        if (existingProductFreeIndex !== -1) {
+            // Si la cantidad del producto en cartFree es mayor o igual a la cantidad que falta
+            if (storedCartFree[existingProductFreeIndex].quantity >= absQuantityMissing) {
+                // Resta la cantidad que falta
+                storedCartFree[existingProductFreeIndex].quantity -= absQuantityMissing;
+
+                // Si la cantidad se reduce a 0, elimina el producto de cartFree
+                if (storedCartFree[existingProductFreeIndex].quantity === 0) {
+                    const updatedCartFree = storedCartFree.filter(item => item.productId !== productId);  
+                    dispatch(addStoreCartFree(updatedCartFree));
+                    localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
+                }
+            } else {
+                // Si no hay suficiente en cartFree, busca en cart
+                const remainingQuantity = absQuantityMissing - storedCartFree[existingProductFreeIndex].quantity;
+
+                // Eliminar el producto de cartFree
+                const updatedCartFree = storedCartFree.filter(item => item.productId !== productId);
+                dispatch(addStoreCartFree(updatedCartFree));
+                localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
+
+                // Si hay suficiente en cart para cubrir el resto
+                if (existingProductCartIndex !== -1) {
+                    if (storedCart[existingProductCartIndex].quantity >= remainingQuantity) {
+                        storedCart[existingProductCartIndex].quantity -= remainingQuantity;
+
+                        // Si la cantidad en cart se reduce a 0, elimina el producto de cart
+                        if (storedCart[existingProductCartIndex].quantity === 0) {
+                            const updatedCart = storedCart.filter(item => item.productId !== productId);
+                            dispatch(addStoreCart(updatedCart));
+                            localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
+                        }
+                    } else {
+                        // Si no hay suficiente en cart, elimina el producto
+                        const updatedCart = storedCart.filter(item => item.productId !== productId);
+                        dispatch(addStoreCart(updatedCart));
+                        localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
+
+                        console.log('No hay suficiente stock disponible para cubrir la cantidad faltante.');
+                    }
+                }
+            }
+        } else {
+            // Si el producto no existe en cartFree, maneja esta situación según la lógica de tu aplicación
+            console.log('El producto no está en cartFree.');
+        }
+    } else {
+        // Si no hay suficiente stock disponible, elimina el producto
+        if (existingProductFreeIndex !== -1) {
+            const updatedCartFree = storedCartFree.filter(item => item.productId !== productId);
+            dispatch(addStoreCartFree(updatedCartFree));
+            localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
+        }
+        if (existingProductCartIndex !== -1) {
+            const updatedCart = storedCart.filter(item => item.productId !== productId);
+            dispatch(addStoreCart(updatedCart));
+            localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
+        }
+
+        console.log('No hay suficiente stock disponible para cubrir la cantidad faltante.');
+    }
+};

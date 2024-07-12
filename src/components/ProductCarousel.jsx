@@ -11,6 +11,7 @@ const ProductCarousel = ({ products, nameCollection = '' }) => {
     dots: true,
     infinite: false, // No infinitas vueltas para evitar repetición incómoda
     speed: 500,
+    arrows: false,
     slidesToShow: Math.min(6, products.length), // Mostrar el número de productos disponibles o 3 si hay más
     slidesToScroll: Math.min(6, products.length), // Desplazarse según el número de productos disponibles
 
