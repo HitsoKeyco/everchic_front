@@ -1,0 +1,23 @@
+.info_promo_container{    
+    background-color: #7337db;
+    height: 30px;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    
+}
+.info_promo_text{    
+    color: var(--colorText_b);
+}
+
+
+.info_promo_close{
+    position: absolute;    
+    right: 0;    
+    color: var(--colorText_b);
+    margin-right: 0;
+}
+.home_text_oferta{
+    font-size: 1em;
+}

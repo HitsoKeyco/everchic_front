@@ -1,0 +1,138 @@
+.modal_product_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    background-color: var(--bgBackdrop);
+    backdrop-filter: blur(3px);
+    padding: 25px;
+}
+
+
+.modal_container {
+    width: 100%;
+    max-width: 500px;
+    height: max-content;
+    background-color: var(--bgCardContainerProduct);
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid var(--borderContainer);
+    margin: 5px;
+}
+
+.modal_description_ul_container{
+    padding: 10px;
+}
+
+.modal_product_container_img {
+    aspect-ratio: 1/1;
+    width: 100%;
+    position: relative;
+
+}
+
+.modal_product_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px 12px 0 0;
+}
+
+.left_action_modal {
+    position: absolute;
+    left: 10px;
+    top: calc(50% - 10px);
+    padding: 3px;    
+    border-radius: 50%;
+    color: var(--colorText_e);
+    z-index: 99;    
+    font-size: 50px;
+
+}
+
+.right_action_modal {
+    position: absolute;
+    padding: 3px;
+    right: 10px;
+    top: calc(50% - 10px);
+    z-index: 99;    
+    color: var(--colorText_f);
+    font-size: 50px;
+    border-radius: 50%;
+
+}
+
+
+
+.modal_button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;    
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--colorButton);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--colorBorderButton);
+    color: var(--colorText_a);
+}
+
+.modal_button:hover {
+    background-color: var(--colorButtonHover);
+    scale: 1.1;
+}
+
+
+.modal_description_poduct_title {
+    font-size: 1.2em;
+    padding: 5px;
+    color: var(--colorText_a);
+}
+
+.modal_description_poduct_description {
+    font-size: 1em;
+    padding-left: 5px;
+    color: var(--colorText_a);
+}
+
+.modal_description_poduct_size {
+    font-size: 1em;
+    margin: 5px;
+    background-color: var(--bgCollection);
+    width: max-content;
+    color: var(--colorText_a);
+    padding: 0 5px;
+    border-radius: 5px;
+
+}
+
+.modal_icon_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 99;
+    color: var(--colorbar_b);
+    border-radius: 12px;
+    border: 3px solid rgb(231, 225, 225);
+    
+}
+
+.modal_product_stock{
+    font-size: 1em;
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+    background-color: var(--colorSoldOut);
+    padding: 0 5px;
+    border-radius: 3px;
+
+}

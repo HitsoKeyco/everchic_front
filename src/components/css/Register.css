@@ -1,0 +1,94 @@
+
+
+.register_form {    
+    padding: 20px 20px 0 20px;      
+    height: max-content;
+    width: 100%;
+    max-width: 400px;
+    
+    margin: 10px;
+    border-radius: 10px;    
+    background-color: var(--bgCardContainer);
+}
+
+.register_items_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.register_items_button_container{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.register_items_container_pass {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Para controlar la vision del pass*/
+}
+
+.register_show_hidden_pass{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
+.register_input_pass{
+    padding-right: 40px;
+}
+
+.register_show_hidden_pass_icon{
+    font-size: 20px;
+    color: var(--colorText_a);
+}
+
+.register_title {    
+    font-size: 1.5em;    
+    font-weight: 400;
+    color: var(--colorText_a);
+}
+
+.register_input_pass {    
+    padding-right: 60px;
+}
+
+.register_label {
+    margin-left: 0;
+    position: relative;
+    top: 23px;
+    left: 10px;
+    color: var(--colorText_a);
+    font-size: 0.9em;
+}
+.register_items_links_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 25px;
+    padding-bottom: 15px;
+
+}
+
+.register_recover_pass_link, .register_register_link{        
+    font-size: 1em;
+    color: var(--colorText_a);
+    cursor: pointer;    
+}
+
+.register_recover_pass_link:hover, .register_register_link:hover{        
+    color: var(--colorTextHover);
+}
+
+
+.register_button {    
+    width: 100%;    
+    
+}
+

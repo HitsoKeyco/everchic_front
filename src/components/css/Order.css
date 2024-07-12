@@ -1,0 +1,61 @@
+.orders_main_container {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    padding-top: 35px;
+    gap: 15px;
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden; /* Asegura que el contenido oculto no sea visible */
+    position: relative;
+    transition:  0.3s ease-in-out; /* Transición suave de la altura */
+    background-color: var(--bgCardContainerProduct);
+    border: 1px solid  var(--borderContainer);
+}
+
+.orders_main_container_hidden {
+    max-height: 0; /* Oculta el contenido estableciendo la altura máxima a 0 */
+}
+
+.profile_title_shipping{
+    padding-left: 25px;
+    
+}
+
+.order_main_header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    border-radius: 5px 5px 0 0;
+    width: 100%;
+    background-color: var(--bgCardContainerProduct);
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+
+.order_main_total, .chevron_hidden_down, .chevron_hidden_up, .order_main_date {
+    color: var(--colorText_a);
+    margin: 0;
+}
+
+.orders_main_right_elements_container{
+    display: flex;
+    margin-right: 0;
+}
+
+.chevron_hidden_down, .chevron_hidden_up {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.chevron_hidden_up {
+    display: none; /* Oculta el icono de "arriba" por defecto */
+}
+
+.chevron_visible {
+    display: block; /* Muestra el icono de "arriba" cuando el contenedor está oculto */
+}

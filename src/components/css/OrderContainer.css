@@ -1,0 +1,9 @@
+.order_product_container{
+    margin: 0;
+    width: 100%;
+    overflow-y: hidden;
+    background-color: var(--bgCardContainerProduct);
+    border: 1px solid  var(--borderContainer);
+    border-radius: 5px;
+}
+

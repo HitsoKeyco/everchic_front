@@ -1,0 +1,167 @@
+.register_cart_container {    
+    width: 100%;
+    max-width: 800px;    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.register_cart_register_container{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--borderContainer);
+    border-radius: 10px;
+    background-color: var(--bgCardContainer);
+}
+
+.register_cart_title {
+    font-weight: 500;
+    color: var(--colorText_a);
+    font-size: 1.2em;
+    padding-bottom: 5px;
+    
+}
+
+.register_cart_form {
+    width: 100%;
+    max-width: 1280px;
+    
+}
+
+.register_cart_elements_container {    
+    position: relative;
+    margin: 0;
+}
+
+.register_cart_register_container {
+    margin: 0;
+}
+
+.register_cart_option_container{
+    margin-top: 30px;
+}
+
+.register_cart_buttons_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 0;
+    
+}
+
+
+
+.register_cart_button {
+    width: 100%;
+}
+
+.register_cart_info_shipping {
+    
+    display: flex;
+    width: 100%;   
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.register_cart_label {
+    color: var(--colorText_a);
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.register_cart_radio_container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    
+    height: 30px;
+    
+
+}
+
+.register_cart_input_radio {
+    width: 20px;
+    margin: 0;
+}
+
+.register_cart_label_radio {
+    margin: 0;
+}
+
+.register_cart_title_register{
+    font-weight: 500;
+    color: var(--colorText_a);
+    font-size: 1.4em;
+    padding-top: 25px;
+}
+
+.register_cart_register_container_element{
+    position: relative;
+    margin: 0;
+}
+
+.register_cart_show_hidden_pass{
+    position: absolute;
+    top: 14px;
+    right: 15px;
+}
+.bx-show, .bx-hide{
+    font-size: 2em;
+    color: var(--colorText_a);
+    cursor: pointer;
+}
+.register_cart_input_paddingbx {
+    padding-right: 50px;    
+}
+
+.register_cart_cancel {
+    background-color: var(--bgButtonCancel);
+}
+
+.register_cart_cancel:hover {
+    background-color: var(--bgButtonCancelHover);
+}
+
+.register_cart_recaptcha{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    padding: 15px;
+    
+}
+
+
+.input-error{
+    border: 2px solid rgb(247, 79, 79);
+}
+
+.register_cart_register_title{
+    font-size: 1.4em;
+    font-weight: 400;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin: 0;
+    color: var(--colorText_a);
+}
+
+.register_cart_register_user_container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.register_cart_spinner{
+    width: 100%;
+    display: flex;
+    padding: 20px;
+}
+@media (min-width:600px) {
+    
+}

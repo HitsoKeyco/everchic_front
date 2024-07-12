@@ -1,0 +1,28 @@
+.recover_account_update_container{    
+    height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.recover_account_update_title{
+    font-size: 18px;
+    color: var(--colorText_a);
+    font-weight: 400;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+.recover_account_update_button{
+    width: 100%;
+    margin: 15px 0;
+    
+}
+.recover_account_update_input{
+    padding: 5px 10px;
+}
+
+.recover_account_update_elements_container{
+    position: relative;
+}
