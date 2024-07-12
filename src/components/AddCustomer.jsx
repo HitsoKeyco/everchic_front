@@ -11,6 +11,7 @@ const AddCustomer = () => {
     const dispatch = useDispatch();
     const apiUrl = import.meta.env.VITE_API_URL;
     const user = useSelector(state => state.user) || '';
+    console.log(user);
     const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: {
             dni: '',
@@ -198,7 +199,7 @@ const AddCustomer = () => {
                                 />
                             </div>
                             {
-                                user == '' &&
+                                user.token == null &&
                                 <>
                                     <span className='add_customer_register_title'>Registro:</span>
 

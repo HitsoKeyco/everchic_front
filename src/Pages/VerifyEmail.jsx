@@ -12,7 +12,8 @@ const VerifyEmail = () => {
         const verifyEmail = async () => {
             try {
                 const url = import.meta.env.VITE_API_URL;
-                const response = await axios.put(`${url}/users/verify/${verificationToken}`);
+                const response = await axios.put(`${url}/users/verify/${verificationToken}`).catch(err => console.log(err));
+                
                 if (response.status === 200) {
                     setVerificationStatus('¡Correo electrónico verificado con éxito!');
                 } else {
