@@ -8,10 +8,6 @@ import SliderHomeMovil from '../components/SliderHomeMovil';
 import imagesProcessBuy from '../utils/imagesProcessBuy';
 import BannerHome from '../components/BannerHome';
 import ProductCarousel from '../components/ProductCarousel';
-import useAuth from '../hooks/useAuth';
-import getConfigAuth from '../utils/getConfigAuth';
-
-
 
 const Home = () => {
   const navigate = useNavigate()
@@ -26,22 +22,9 @@ const Home = () => {
     axios.get(`${apiUrl}/products/new_product`)
       .then(res => {
         setIsNewProducts(res.data);
-      })
-      .catch(err => console.log(err));
+      })      
   }, [])
 
-  const { isLoged, loginUser, logOut, logOutTime } = useAuth()
-
-  useEffect(() => {
-    axios.get(`${apiUrl}/users/valid_session`, getConfigAuth())
-      .then(res => {
-      })
-      .catch(err => {
-        if (err.response) {
-          logOutTime();
-        }
-      });
-  }, []);
 
 
   return (
@@ -133,6 +116,8 @@ const Home = () => {
                   </div>
                 </div>
               ))}
+            </div>
+            <div>            
             </div>
           </main>
         </div>

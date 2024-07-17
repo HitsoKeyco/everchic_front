@@ -12,9 +12,12 @@ import { Backdrop, CircularProgress } from '@mui/material';
 
 const Profile = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const keySite = '187e0876-793a-422a-b2da-d11e9eea6d2a';
-  const [loading, setLoading] = useState(false); // Estado de carga
+  const keyHcaptcha = import.meta.env.VITE_HCAPTCHA_KEY_SITE;
 
+
+
+  const [loading, setLoading] = useState(false); // Estado de carga
+  const [isEditable, setIsEditable] = useState(false);
   const { register, setValue, handleSubmit, formState: { errors } } = useForm();
 
   const [tokenCaptcha, setTokenCaptcha] = useState("");
@@ -29,16 +32,28 @@ const Profile = () => {
 
   }
 
-  const user = useSelector(state => state.user.user);
+  const user = useSelector(state => state.user.userData?.user);
   useEffect(() => {
     if (user) {
       loadDataUser();
     }
   }, [user])
 
+  const handleEditClick = () => {
+    setIsEditable(true);
+  };
+
+  const handleSaveClick = () => {
+    setIsEditable(false);
+  };
+
+
   /* Actualizar datos */
   const submit = (data) => {
+    console.log(data);
     setLoading(true);
+
+
     axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
       .then(res => {
         axios.put(`${apiUrl}/users/${user.id}`, data, getConfigAuth())
@@ -58,7 +73,7 @@ const Profile = () => {
               Swal.fire({
                 position: "center",
                 icon: "success",
-                text: "Opps.. hay algun error..",
+                text: "Opps.. No se ha podido actualizar.. intentalo nuevamente",
                 showConfirmButton: false,
                 timer: 1500
               })
@@ -72,16 +87,17 @@ const Profile = () => {
         if (err) {
           Swal.fire({
             position: "center",
-            icon: "success",
-            text: "Opps.. hay algun error..",
+            icon: "error",
+            text: "Captcha inválido",
             showConfirmButton: false,
             timer: 1500
           })
         }
       })
       .finally(() => {
-        setLoader(false)
+        setLoading(false)
         captchaRef.current.resetCaptcha();
+        handleSaveClick();
       })
 
 
@@ -132,7 +148,7 @@ const Profile = () => {
           </div>
 
           <div className="profile_data_customer_container">
-            <div className="profile_container_orders">              
+            <div className="profile_container_orders">
               <Orders />
             </div>
 
@@ -147,10 +163,12 @@ const Profile = () => {
                   Cédula ó RUC:
                 </label>
                 <input
-                  type="text" // Cambiado a tipo "text" para permitir una entrada de longitud variable
+                  type="text"
                   id="dni"
                   name="dni"
-                  className={`profile_input ${errors.dni ? 'input-error' : ''}`}
+                  className={`profile_input ${errors.dni ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
+                  autoComplete='on'
                   {...register('dni', {
                     required: 'Este campo es obligatorio',
                     minLength: {
@@ -160,11 +178,13 @@ const Profile = () => {
                       value: 13,
                     },
                     pattern: {
-                      value: /^\d+$/, // Expresión regular para permitir solo números                                        
+                      value: /^[0-9]{10,13}$/,
+                      message: 'La cédula/RUC debe ser un número entre 10 y 13 dígitos',
                     }
                   })}
                 />
               </div>
+              {errors.dni && <p className="error_message">{errors.dni.message}</p>}
 
               {/*------------------------------\\ FirstName //-----------------------------------*/}
               <div className="profile_elements_container">
@@ -176,10 +196,19 @@ const Profile = () => {
                   id="firstName"
                   name="firstName"
                   autoComplete="off"
-                  className={`profile_input ${errors.firstName ? 'input-error' : ''}`}
-                  {...register('firstName', { required: 'Este campo es obligatorio' })}
+                  className={`profile_input ${errors.firstName ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
+                  {...register('firstName', {
+                    required: {
+                      value: true,
+                      message: 'Este campo es requerido',
+                    },
+                    maxLength: 25,
+                  })}
                 />
               </div>
+              {errors.firstName && <p className="error_message">{errors.firstName.message}</p>}
+
               {/*------------------------------\\ LastName //-----------------------------------*/}
               <div className="profile_elements_container">
                 <label className="profile_label" htmlFor="lastName">
@@ -189,10 +218,15 @@ const Profile = () => {
                   type="text"
                   id="lastName"
                   name="lastName"
-                  className={`profile_input ${errors.lastName ? 'input-error' : ''}`}
-                  {...register('lastName', { required: 'Este campo es obligatorio' })}
+                  className={`profile_input ${errors.lastName ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
+                  {...register('lastName', {
+                    required: 'Este campo es obligatorio'
+                  })}
                 />
               </div>
+              {errors.lastName && <p className="error_message">{errors.lastName.message}</p>}
+
               {/*------------------------------\\ Phone 1//-----------------------------------*/}
               <div className="profile_elements_container">
                 <label className="profile_label" htmlFor="phone_first">
@@ -203,16 +237,22 @@ const Profile = () => {
                   id="phone_first"
                   name="phone_first"
                   placeholder='09XXXXXXXX'
-                  className={`profile_input ${errors.phone_first ? 'input-error' : ''}`}
+                  className={`profile_input ${errors.phone_first ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
                   {...register('phone_first', {
-                    required: 'Este campo es obligatorio',
+                    required: {
+                      value: true,
+                      message: 'Este campo es requerido',
+                    },
                     pattern: {
                       value: /^0\d{9}$/,
-                    }
+                    },
+                    minLength: 10,
+                    maxLength: 10,
                   })}
                 />
-
               </div>
+              {errors.phone_first && <p className="error_message">{errors.phone_first.message}</p>}
 
               {/*------------------------------\\ Phone 2//-----------------------------------*/}
               <div className="profile_elements_container">
@@ -220,12 +260,22 @@ const Profile = () => {
                   Teléfono 2:
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="phone_second"
                   name="phone_second"
-                  className='profile_input'
+                  className={`profile_input ${!isEditable ? 'disabled-input' : ''}`}
                   placeholder='Este campo es opcional'
-                  {...register('phone_second')}
+                  disabled={!isEditable}
+                  {...register('phone_second', {
+                    required: {
+                      value: false,
+                    },
+                    pattern: {
+                      value: /^0\d{9}$/,
+                    },
+                    minLength: 10,
+                    maxLength: 10,
+                  })}
                 />
               </div>
 
@@ -238,10 +288,18 @@ const Profile = () => {
                   type="text"
                   id='city'
                   name='city'
-                  className={`profile_input ${errors.city ? 'input-error' : ''}`}
-                  {...register('city', { required: 'Este campo es obligatorio' })}
+                  className={`profile_input ${errors.city ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
+                  {...register('city', {
+                    required: {
+                      value: true,
+                      message: 'Este campo es requerido'
+                    },
+                  })}
                 />
               </div>
+              {errors.city && <p className="error_message">{errors.city.message}</p>}
+
               {/*------------------------------\\ Address //-----------------------------------*/}
               <div className="profile_elements_container">
                 <label className="profile_label" htmlFor="address">
@@ -251,16 +309,22 @@ const Profile = () => {
                   id="address"
                   name="address"
                   autoComplete='on'
-                  placeholder='Escriba su dirección y alguna referencia de su vivienda como: color, plantas, decoración. etc.'
-                  className={`profile_textarea ${errors.address ? 'input-error' : ''}`}
-                  {...register('address', { required: 'Este campo es obligatorio' })}
+                  className={`profile_input ${errors.address ? 'input-error' : ''} ${!isEditable ? 'disabled-input' : ''}`}
+                  disabled={!isEditable}
+                  {...register('address', {
+                    required: {
+                      value: true,
+                      message: 'Este campo es requerido'
+                    },
+                    maxLength: 60,
+                  })}
                 />
-
               </div>
+              {errors.address && <p className="error_message">{errors.address.message}</p>}
 
               <div className={`add_customer_recaptcha`}>
                 <HCaptcha
-                  sitekey={keySite}
+                  sitekey={keyHcaptcha}
                   onLoad={onLoad}
                   onVerify={(tokenCaptcha) => setTokenCaptcha(tokenCaptcha)}
                   onError={(err) => setError(err)}
@@ -268,8 +332,13 @@ const Profile = () => {
                   theme={theme == 'darkTheme' ? 'dark' : 'light'}
                 />
               </div>
-              <button className='button'>Actualizar datos</button>
+              <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <button className='button' style={{ flex: '1' }} >Actualizar datos</button>
+                <button className='button' style={{ flex: '1' }} type="button" onClick={isEditable ? handleSaveClick : handleEditClick}>
+                  {isEditable ? 'Deshabilitar  edición' : 'Editar datos'}
 
+                </button>
+              </div>
             </form>
 
             <Backdrop

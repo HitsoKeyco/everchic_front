@@ -12,6 +12,7 @@
     background-color: var(--bgBackdrop);
     backdrop-filter: blur(3px);
     
+    
 }
 
 .auth_modal_register, .auth_modal_login, .auth_modal_recover{
@@ -21,6 +22,7 @@
     align-items: center;        
     width: 350px;    
     height: max-content;
+    
     
 }
 

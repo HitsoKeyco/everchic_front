@@ -1,11 +1,11 @@
 
-const validatePasswordRegister = ( data ) => {
+const validatePasswordRegister = (data) => {
     const errors = {}
     if (data) {
-        errors.email = validateEmail(data.email);
-        errors.password = validatePassword(data.password)
-        errors.firstName = validateFirstName(data.firstName);
-        errors.lastName = validateLastName(data.lastName);
+        // errors.email = validateEmail(data.email);
+        // errors.password = validatePassword(data.password)
+        // errors.firstName = validateFirstName(data.firstName);
+        // errors.lastName = validateLastName(data.lastName);
     }
 
     // Filtrar errores no nulos
@@ -21,22 +21,22 @@ const validatePasswordRegister = ( data ) => {
 export default validatePasswordRegister
 
 
-function validatePassword(password) {
-    const minLength = 6;
-    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+// function validatePassword(password) {
+//     const minLength = 6;
+//     const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
-    if (typeof password !== 'string' || password.trim() === "") {
-        return 'La contraseña es requerida.';
-    }
-    if (password.length < minLength) {
-        return `La contraseña debe tener al menos ${minLength} caracteres.`;
-    }
-    if (!specialCharRegex.test(password)) {
-        return 'La contraseña debe contener al menos un carácter especial como: ! % & @ *';
-    }
+//     if (typeof password !== 'string' || password.trim() === "") {
+//         return 'La contraseña es requerida.';
+//     }
+//     if (password.length < minLength) {
+//         return `La contraseña debe tener al menos ${minLength} caracteres.`;
+//     }
+//     if (!specialCharRegex.test(password)) {
+//         return 'La contraseña debe contener al menos un carácter especial como: ! % & @ *';
+//     }
 
-    return null;
-}
+//     return null;
+// }
 
 
 function validateEmail(email) {
@@ -46,6 +46,10 @@ function validateEmail(email) {
         'aol.com', 'icloud.com', 'mail.com', 'zoho.com',
         'yandex.com', 'protonmail.com', 'gmx.com'
     ];
+
+    if (typeof email !== 'string' || email.trim() === "") {
+        return 'El email es requerido.';
+    }
 
     if (!emailRegex.test(email)) {
         return 'Tu email tiene un formato no adecuado';
@@ -59,21 +63,21 @@ function validateEmail(email) {
 
 }
 
-function validateFirstName(firstName) {
-    if (!firstName || typeof firstName !== 'string' || firstName.trim() === "") {
-        return "Su nombre es requerido para efectuar el pedido.";
-    } else if (!/^[a-zA-Z\s]+$/.test(firstName)) {
-        return "El nombre no debe contener caracteres especiales ni números.";
-    }
-    return null;
-}
+// function validateFirstName(firstName) {
+//     if (!firstName || typeof firstName !== 'string' || firstName.trim() === "") {
+//         return "Su nombre es requerido para efectuar el pedido.";
+//     } else if (!/^[a-zA-Z\s]+$/.test(firstName)) {
+//         return "El nombre no debe contener caracteres especiales ni números.";
+//     }
+//     return null;
+// }
 
 
-function validateLastName(lastName) {
-    if (!lastName || typeof lastName !== 'string' || lastName.trim() === "") {
-        return "Sus apellidos son requerido para efectuar el pedido.";
-    } else if (!/^[a-zA-Z\s]+$/.test(lastName)) {
-        return "El nombre no debe contener caracteres especiales ni números.";
-    }
-    return null;
-}
+// function validateLastName(lastName) {
+//     if (!lastName || typeof lastName !== 'string' || lastName.trim() === "") {
+//         return "Sus apellidos son requerido para efectuar el pedido.";
+//     } else if (!/^[a-zA-Z\s]+$/.test(lastName)) {
+//         return "El nombre no debe contener caracteres especiales ni números.";
+//     }
+//     return null;
+// }

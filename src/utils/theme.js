@@ -19,33 +19,10 @@ const darkTheme = createTheme({
         },
     },
     components: {
-        MuiAutocomplete: {
-            styleOverrides: {
-                root: {
-                    color: '#2e2e2e',                                        
-                },
-                paper: {
-                    backgroundColor: '#2e2e2e',
-                },
-                listbox: {
-                    backgroundColor: '#2e2e2e',
-                },
-                option: {
-                    '&[aria-selected="true"]': {
-                        backgroundColor: '#3e3d3e',
-                    },
-                    '&:hover': {
-                        backgroundColor: '#3e3e3e',
-                    },
-                },
-
-            },
-        },
         MuiAccordionSummary: {
             styleOverrides: {
                 root: {
-                    borderRadius: '15px',
-
+                    backgroundColor: '#121212',
                 },
                 content: {
                     color: '#ffffff',
@@ -63,8 +40,24 @@ const darkTheme = createTheme({
                     color: '#ffffff',
                 }
             }
-        }
-        
+        },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    color: '#ffffff',
+                    backgroundColor: '#121212',
+
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                notchedOutline: {
+                    borderWidth: '2px',
+                    borderColor: '#8a8a8a5a',
+                },
+            },
+        },
     }
 });
 
@@ -88,26 +81,27 @@ const lightTheme = createTheme({
         },
     },
     components: {
-        MuiAutocomplete: {
+        MuiAccordionSummary: {
             styleOverrides: {
-                root: {
+                root: {                    
+                    backgroundColor: '#f1f1f1f1',                    
+                },
+                content: {
                     color: '#000000',
-                    backgroundColor: '#ffffff',
+
                 },
-                paper: {
-                    backgroundColor: '#ffffff',
-                },
-                listbox: {
-                    backgroundColor: '#ffffff',
-                },
-                option: {
-                    '&[aria-selected="true"]': {
-                        backgroundColor: '#f0f0f0',
+
+
+
+            }
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {                
+                    notchedOutline: {
+                        borderWidth: '2px',
+                        borderColor: '#8a8a8a5a',
                     },
-                    '&:hover': {
-                        backgroundColor: '#f0f0f0',
-                    },
-                },
+               
             },
         },
     },

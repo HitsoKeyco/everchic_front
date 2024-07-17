@@ -474,6 +474,13 @@ const cartSlice = createSlice({
             state.stateFreeToCart = action.payload;
         },
 
+        updateCartFreeQuantity: (state, action) => {
+            state.quantityProductsFree = action.payload
+            state.stateFreeToCart = false
+        },
+
+
+
 
     }
 });
@@ -494,7 +501,22 @@ const calculatePriceUnit = (units) => {
 };
 
 
-export const { addStoreCart, addStoreCartFree, deleteAllProducts, addPriceShippingStore, addProductStore, addProduct, plusProduct, minusProduct, deleteProduct, addProductFree, accessFreeProduct, deleteProductFree } = cartSlice.actions;
+export const {
+    addStoreCart,
+    addStoreCartFree,
+    deleteAllProducts,
+    addPriceShippingStore,
+    addProductStore,
+    addProduct,
+    plusProduct,
+    minusProduct,
+    deleteProduct,
+    addProductFree,
+    accessFreeProduct,
+    deleteProductFree,
+    updateCartFreeQuantity
+
+} = cartSlice.actions;
 
 
 
@@ -521,7 +543,7 @@ export const adjustLowStockThunk = (productId, stock, quantity_missing) => (disp
 
                 // Si la cantidad se reduce a 0, elimina el producto de cartFree
                 if (storedCartFree[existingProductFreeIndex].quantity === 0) {
-                    const updatedCartFree = storedCartFree.filter(item => item.productId !== productId);  
+                    const updatedCartFree = storedCartFree.filter(item => item.productId !== productId);
                     dispatch(addStoreCartFree(updatedCartFree));
                     localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
                 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './css/Cart.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { accessFreeProduct, addPriceShippingStore, addStoreCart, addStoreCartFree, adjustLowStockThunk, deleteAllProducts } from '../store/slices/cart.slice';
+import { accessFreeProduct, addPriceShippingStore, addStoreCart, addStoreCartFree, adjustLowStockThunk, deleteAllProducts, updateCartFreeQuantity } from '../store/slices/cart.slice';
 import ProductItem from '../components/ProductItem';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -9,21 +9,25 @@ import Swal from 'sweetalert2';
 import AddCustomer from '../components/AddCustomer';
 import { Backdrop, CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
-import validationAfterBuy from '../utils/validationAfterBuy';
-
-
+import { setresponseCartUserUpdate, setUpdateUser, setUser } from '../store/slices/user.slice';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const Cart = () => {
+
     const apiUrl = import.meta.env.VITE_API_URL;
+    const keyHcaptcha = import.meta.env.VITE_HCAPTCHA_KEY_SITE;
     const [loading, setLoading] = useState(false); // Estado de carga
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const user = useSelector(state => state.user.userData?.user);
+    const token = useSelector(state => state.user.userData?.token);
 
-    const { register, handleSubmit, reset, formState: { errors }, watch } = useForm()
+    const { control, register, setValue, formState: { errors }, handleSubmit, watch, getValues } = useForm();
+
+
 
     const [selectedOptionShipping, setSelectedOptionShipping] = useState(() => {
         // Recuperar la selección de envío almacenada en localStorage o sessionStorage
@@ -34,7 +38,7 @@ const Cart = () => {
     const cart = useSelector(state => state.cart.storedCart);
     const cartFree = useSelector(state => state.cart.storedCartFree)
     const quantityProductCart = cart.reduce((acc, product) => acc + product.quantity, 0);
-    const priceUnit = cart.length > 0 ? Number((cart[0].priceUnit).toFixed(2)) : 0;
+    const priceUnit = cart.length > 0 ? Number(cart[0].priceUnit) : 0;
     const freeProducts = useSelector(state => state.cart.quantityProductsFree)
     const quantityProductCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
     const quantityProducts = quantityProductCart + quantityProductCartFree;
@@ -74,11 +78,12 @@ const Cart = () => {
     const handleOptionChange = (event) => {
         setSelectedOptionShipping(event.target.value);
         localStorage.setItem('selectedShippingOption', event.target.value);
+
     };
 
     useEffect(() => {
-        calculateShippingCost()
-    }, [quantityProductCart, cartFree, isPriceShipping, selectedOptionShipping])
+        calculateShippingCost();
+    }, [quantityProductCart, cartFree, selectedOptionShipping]);
 
 
     const calculateShippingCost = () => {
@@ -106,7 +111,7 @@ const Cart = () => {
                     const factorRepeated = Math.floor(factorVolumetricOffset / volumetricWeightBaseTolerance);
 
                 }
-                const priceBase = 6;
+                const priceBase = 6.00;
                 if ((weightTotal <= 2 && weightTotal > 0)) {
                     setIsPriceShipping(parseFloat((priceBase).toFixed(2)))
                     dispatch(addPriceShippingStore(parseFloat((priceBase).toFixed(2))))
@@ -115,9 +120,10 @@ const Cart = () => {
                     dispatch(addPriceShippingStore((isWeightOffset * 0.874) + priceBase))
                 }
             } else if (selectedOptionShipping == 'cooperativa') {
-                // dispatch(addPriceShippingStore(5.50))20000
+                dispatch(addPriceShippingStore(5.50))
                 setIsPriceShipping(5.50)
             } else if (selectedOptionShipping == 'servientrega galapagos') {
+                dispatch(addPriceShippingStore(12.32))
                 const basePrice = 12.32;
                 const weightLimit = 2;
                 const factorWeightPrice = 0.00345;
@@ -132,9 +138,10 @@ const Cart = () => {
                 setIsPriceShipping(basePrice + additionalCost);
 
             } else if (selectedOptionShipping == 'delivery') {
-                setIsPriceShipping(2.50)
                 dispatch(addPriceShippingStore(2.50))
+                setIsPriceShipping(2.50)
             } else if (selectedOptionShipping == 'servientrega galapagos isabela') {
+                dispatch(addPriceShippingStore(19.50))
                 const basePrice = 19.50;
                 const weightLimit = 2;
                 const factorWeightPrice = 0.00547;
@@ -155,12 +162,12 @@ const Cart = () => {
 
         }
     }
+
     const priceTotalStore = useSelector(state => state.cart.stateTotalCart)
     const priceShippingStore = useSelector(state => state.cart.stateShippingCart)
     const total = Number((Number((priceTotalStore).toFixed(2)) + priceShippingStore).toFixed(2))
 
-    const user = useSelector(state => state.user);
-    const token = useSelector(state => state.user.token);
+
 
     /* ----------------  Captcha --------------------- */
     /* ------- Hcapcha solo se monta 1 vez --------------*/
@@ -171,103 +178,118 @@ const Cart = () => {
         captchaRef.current.execute();
     }
 
-    const submit = async () => {
+    const onSubmit = async (data) => {
         setLoading(true);
-        const userDataString = localStorage.getItem('formData');
-        const userData = JSON.parse(userDataString);
-        const errors = validationAfterBuy(userData);
-        const data = { cart, cartFree, userData, price_unit: priceUnit, total: total, isPriceShipping };
+        const dataCart = { cart, cartFree, token, userCartData: data, price_unit: priceUnit, total: total, isPriceShipping };
+
+        if (Object.keys(errors).length > 0) {
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: "Debes completar la información de usuario",
+                showConfirmButton: true,
+            }).then(() => {
+                setLoading(false);
+                captchaRef.current.resetCaptcha();
+            });
+            return;
+        }
 
         try {
+
             if (cart.length === 0) {
                 setLoading(false);
-                return Swal.fire({
+                Swal.fire({
                     position: "center",
                     icon: "warning",
                     title: "No tienes ningún producto agregado",
                     showConfirmButton: false,
                     timer: 1500,
-                });
-            }
-
-            if (Object.keys(errors).length > 0) {
-                setLoading(false);
-                return Swal.fire({
-                    position: "center",
-                    icon: "info",
-                    text: errors.dni || errors.firstName || errors.email || errors.password || errors.lastName || errors.phone_1 || errors.phone_2 || errors.city || errors.address || errors.userData,
-                    showConfirmButton: true,
-                });
-            }
-
-            if (tokenCaptcha) {
-                const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
-                if (!verifyCaptchaResponse) {
+                }).then(() => {
                     setLoading(false);
-                    return Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "Captcha no válido",
-                        showConfirmButton: true,
-                        timer: 1500,
-                    });
-                } else {
-                    axios.post(`${apiUrl}/orders/create_order`, data, getConfigAuth())
-                        .then(res => {
-                            localStorage.removeItem('everchic_cart_free');
-                            localStorage.removeItem('everchic_cart');
-                            dispatch(deleteAllProducts());
-                            navigate('/');
-                            setLoading(false);
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                text: res.data.message,
-                                showConfirmButton: true,
-                            });
-                        })
-                        .catch(err => {
-                            setLoading(false);
-                            return Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                title: "Error al enviar la orden",
-                                text: err.response.data.message,
-                                showConfirmButton: true,
-                            });
-                        })
+                    captchaRef.current.resetCaptcha();
+                });
+                return;
+            }
 
-
-
-                }
-            } else {
-                setLoading(false);
-                return Swal.fire({
+            // //Verification Hcaptcha
+            const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
+            if (!verifyCaptchaResponse) {
+                Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "Completa el Captcha",
+                    title: "Captcha no válido",
                     showConfirmButton: true,
+                    timer: 1500,
+                }).then(() => {
+                    setLoading(false);
+                    captchaRef.current.resetCaptcha();
                 });
+                return
             }
-        } catch (err) {
-            // Obtener el mensaje de error general
-            let message = `${err.response.data.message}\n\nEl stock se ha agotado para los siguientes productos:\n`;
 
-            // Iterar sobre el array de productos cuyo stock ha cambiado
-            err.response.data.result.cartJoinFiltered.forEach(product => {
-                message += `| ${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
+            // Crear la orden
+            // Realizar la solicitud para crear la orden
+            const response = await axios.post(`${apiUrl}/orders/create_order`, dataCart);
+            console.log("Respuesta de creación de orden:", response.data);
+
+            //Upgrade state Redux user
+            if (response) {
+                const user = response.data?.user;
+                dispatch(setresponseCartUserUpdate(user));
+            }
+
+            // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
+            localStorage.removeItem('everchic_cart_free');
+            localStorage.removeItem('everchic_cart');
+
+            // localStorage.setItem("userCartData", JSON.stringify(response.data.user)); // Considera si realmente necesitas guardar userCartData en localStorage aquí
+            dispatch(deleteAllProducts());
+            navigate('/');
+
+            // Mostrar mensaje de éxito
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                text: "Orden enviada con éxito",
+                showConfirmButton: true,
             });
 
-            if (err.response.data.result.failOperation) {
+
+        } catch (err) {
+            console.log(err);
+            const info = err.response?.data?.message;
+
+
+            if (err) {
                 Swal.fire({
                     position: "center",
                     icon: "warning",
                     title: "Hubo un error la procesar la solicitud",
+                    text: info,
                     showConfirmButton: true
                 });
+
             }
 
-            if (err.response.data.result.cartJoinFiltered.length > 0) {
+            if (err.response?.data?.result?.failOperation) {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "Hubo un error la procesar la solicitudoo",
+                    text: info,
+                    showConfirmButton: true
+                });
+
+            }
+
+
+            let message
+            err.response?.data?.result?.cartJoinFiltered?.forEach(product => {
+                message = `${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
+            });
+
+            if (err.response?.data?.result?.cartJoinFiltered?.length > 0) {
                 Swal.fire({
                     position: "center",
                     icon: "info",
@@ -275,38 +297,46 @@ const Cart = () => {
                     text: message,
                     showConfirmButton: true
                 });
+
+                // Arreglo temporal para gestionar productos encontrados en cart y cartFree
+                let productsInCart = [];
+
+                // Actualizar las cantidades en cart
+                let updatedCart = cart.map(productCart => {
+                    const product = err.response?.data?.result?.cartJoinFiltered?.find(p => p.productId === productCart.productId);
+                    if (product) {
+                        return { ...productCart, quantity: product.stock, stock: product.stock };
+                    }
+                    return productCart;
+                }).filter(productCart => productCart.quantity > 0);
+
+                const quantityProducts = updatedCart.reduce((acc, product) => product.quantity + acc, 0)
+
+
+                // Guardar los carritos actualizados en localStorage
+                const productFree = Math.floor(quantityProducts / 12);
+
+
+                localStorage.setItem('everchic_cart_free', JSON.stringify([]));
+                dispatch(addStoreCartFree([]));
+                dispatch(updateCartFreeQuantity(0))
+
+                localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
+                dispatch(addStoreCartFree(updatedCart));
+
+
+
             }
 
-            // Arreglo temporal para gestionar productos encontrados en cart y cartFree
-            let productsInCart = [];
 
-            // Actualizar las cantidades en cart
-            let updatedCart = cart.map(productCart => {
-                const product = err.response.data.result.cartJoinFiltered.find(p => p.productId === productCart.productId);
-                if (product) {
-                    productsInCart.push(product.productId);
-                    return { ...productCart, quantity: product.stock, stock: product.stock };
-                }
-                return productCart;
-            }).filter(productCart => productCart.quantity > 0); // Eliminar productos con cantidad 0
 
-            // Actualizar el carrito gratuito (cartFree)
-            let updatedCartFree = cartFree.filter(productFree => {
-                return !productsInCart.includes(productFree.productId);
-            });
 
-            // Guardar los carritos actualizados en localStorage
-            localStorage.setItem('everchic_cart_free', JSON.stringify(updatedCartFree));
-            localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
 
-            // Despachar las acciones para actualizar el estado global de carritos en la aplicación
-            dispatch(addStoreCart(updatedCart));
-            dispatch(addStoreCartFree(updatedCartFree));
         } finally {
-            setLoading(false);
+            setLoading(false); // Asegurar que se limpie el estado de carga
+            captchaRef.current.resetCaptcha();
         }
     };
-
 
 
 
@@ -386,20 +416,18 @@ const Cart = () => {
                             </div>
                         }
                     </div>
+
                     <div className='cart_details_info_buy_container'>
                         {/*----------------------------------------*/}
-                        <div className='add_customer_info_user_container'>
-                            <AddCustomer />
-                        </div>
                         <form
                             className="cart_detail_shipping_form"
                             action=""
                             method="post"
                             id="shipping_form"
-                            onSubmit={handleSubmit(submit)}
+                            onSubmit={handleSubmit(onSubmit)}
                         >
                             <div className='cart_detail_method_shipping_container'>
-                                <FormControl fullWidth error={!!errors.shippingOption} theme={theme}>
+                                <FormControl fullWidth theme={theme}>
                                     <InputLabel id="shipping-select-label">Seleccionar método de envío</InputLabel>
                                     <Select
                                         labelId="shipping-select-label"
@@ -407,6 +435,7 @@ const Cart = () => {
                                         value={selectedOptionShipping}
                                         onChange={handleOptionChange}
                                         label="Seleccionar método de envío"
+                                        IconComponent={ExpandMoreIcon}
                                     >
                                         {shippingOptions.map(option => (
                                             <MenuItem key={option.value} value={option.value} >
@@ -416,6 +445,10 @@ const Cart = () => {
                                     </Select>
                                     {errors.shippingOption && <FormHelperText>{errors.shippingOption}</FormHelperText>}
                                 </FormControl>
+                            </div>
+
+                            <div className='add_customer_info_user_container'>
+                                <AddCustomer register={register} control={control} errors={errors} watch={watch} setValue={setValue} getValues={getValues} />
                             </div>
                             {/*-----------------Resumen de compra-----------------------*/}
                             <div className='cart_detail_buy_container'>
@@ -459,7 +492,7 @@ const Cart = () => {
 
                                 <div className={`add_customer_recaptcha`}>
                                     <HCaptcha
-                                        sitekey="187e0876-793a-422a-b2da-d11e9eea6d2a"
+                                        sitekey={keyHcaptcha}
                                         onLoad={onLoad}
                                         onVerify={(tokenCaptcha) => setTokenCaptcha(tokenCaptcha)}
                                         onError={(err) => setError(err)}
@@ -477,7 +510,7 @@ const Cart = () => {
 
 
                             </div>
-                        </form>
+                        </form >
                     </div>
                 </div>
             </div>

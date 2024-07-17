@@ -79,8 +79,8 @@ const Header = () => {
   const cart = useSelector((state) => state.cart.storedCart);
   const quantity = cart.reduce((acc, product) => acc + product.quantity, 0);
 
-  const userLog = useSelector((state) => state.user.user)
-  const userVerify = useSelector(state => state.user.user.isVerify)
+  const user = useSelector((state) => state.user.userData?.user)
+  const token = useSelector(state => state.user.userData?.token)
   return (
     <>
 
@@ -96,8 +96,8 @@ const Header = () => {
 
             <div className="header_social_networks_container">
               {
-                userLog?.firstName ?
-                  <p className='header_info_user'>{`Bienvenid@ ${userLog?.firstName}`}</p>
+                user?.isVerify ?
+                  <p className='header_info_user'>{`Bienvenid@ ${user?.firstName}`}</p>
                   :
                   ''
               }
@@ -125,7 +125,7 @@ const Header = () => {
               </li>
               {
                 routes.map((route, index) => {
-                  if (route.private && userVerify == null) return null
+                  if (route.private && !token) return null
                   return (
                     <li className="nav_item_link_element" key={index}>
                       <NavLink
@@ -180,7 +180,7 @@ const Header = () => {
 
           </div>
 
-          {isMenu && <Menu setIsMenu={setIsMenu} userLog={userLog} />}
+          {isMenu && <Menu setIsMenu={setIsMenu} />}
 
           {isModalAuth && <AuthModal setIsModalAuth={setIsModalAuth} />}
         </div>

@@ -103,7 +103,7 @@ const CardProduct = ({ product, isSlider }) => {
     }
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
-    const userId = useSelector(state => state.user?.user?.id) || null;
+    const userId = useSelector(state => state.user.userData?.user?.id) || null;
 
     const { updateLikeProducts, getLikeProducts } = likeService()
 

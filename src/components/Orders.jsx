@@ -12,8 +12,8 @@ const Orders = () => {
     const [error, setError] = useState(null);
 
     const apiUrl = import.meta.env.VITE_API_URL;
-    const userId = useSelector(state => state.user.user.id);
-
+    const userId = useSelector(state => state.user.userData?.user?.id);
+    
     useEffect(() => {
         if (userId) {
             const fetchOrders = async () => {

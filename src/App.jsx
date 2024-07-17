@@ -18,10 +18,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
 
 function App() {
-
-  const theme = useSelector(state => state.user.theme);
-  const userVerify = useSelector(state => state.user.user.isVerify)
   
+  const theme = useSelector(state => state.user.theme);
+  const token = useSelector(state => state.user.userData?.token)
 
   return (
     <>
@@ -35,7 +34,7 @@ function App() {
           <Route path='/faqs' element={<Faqs />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/checkout' element={<Checkout />} />
-          <Route path='/profile' element={userVerify ? <Profile /> : <Home />} />
+          <Route path='/profile' element={token ? <Profile /> : <Home />} />
           <Route path='/verify/:verificationToken' element={<VerifyEmail />} />
           <Route path='/recover_account/:verificationToken' element={<RecoverAccount />} />
           <Route path='*' element={<NoMatch />} />

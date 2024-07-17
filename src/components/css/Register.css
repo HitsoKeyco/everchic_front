@@ -92,3 +92,32 @@
     
 }
 
+.register_items_container_agreeToTerms{
+    width: 100%;
+    height: max-content;
+    flex-direction: column;
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_items_agreeToTerms{    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.register_input_chekbox{
+    height: 20px;
+    width: 20px;
+    margin: 0px;
+
+}
+
+.register_label_agreeToTerms{
+    font-size: 0.8em;
+    text-decoration: underline;
+    cursor: pointer;
+}

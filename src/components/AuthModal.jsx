@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Login from './Login';
 import './css/AuthModal.css';
 import Register from './Register';
 import Recover from './Recover';
-import Swal from 'sweetalert2';
-import { useSelector } from 'react-redux';
 
 const AuthModal = ({ setIsModalAuth }) => {
     const [isModalLogin, setIsModalLogin] = useState(true);
@@ -15,23 +13,31 @@ const AuthModal = ({ setIsModalAuth }) => {
         e.stopPropagation();
     };
 
-    const token = useSelector(state => state.user.user.token)
-
-
-    const handleModalContentClick = () => {               
-            setIsModalAuth(false);
+    const handleModalContentClick = (e) => {        
+        setIsModalAuth(false);        
+        document.body.classList.remove('overflow-hidden');
     }
 
-
-
-    const handleContainerClick = (e) => {        
+    const handleContainerClick = (e) => {
         e.stopPropagation()
 
     };
 
+    useEffect(() => {
+
+        if(isModalRegister || isModalRecover){
+            document.body.classList.add('overflow-hidden');
+        }
+
+        if(isModalLogin){
+            document.body.classList.add('overflow-hidden');
+        }
+
+    }, [isModalLogin, isModalRegister, isModalRecover])
+
     return (
 
-        <div className="auth_modal_container" onClick={handleModalContentClick}>
+        <div className="auth_modal_container"  onClick={handleModalContentClick}>
             <div className={`auth_modal_login ${isModalLogin ? '' : 'hidden'}`} onClick={handleContainerClick}>
                 {isModalLogin && (
                     <Login

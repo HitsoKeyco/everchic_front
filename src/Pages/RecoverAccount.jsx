@@ -4,6 +4,7 @@ import './css/RecoverAccount.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 
 const RecoverAccount = () => {
@@ -12,6 +13,7 @@ const RecoverAccount = () => {
     const navigate = useNavigate()
 
     const [isShowPass, setIsShowPass] = useState(false)
+    const [loading, setLoading] = useState(false); // Estado de carga
 
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
@@ -19,6 +21,7 @@ const RecoverAccount = () => {
     }
 
     const submit = async (data) => {
+        setLoading(true)
         const urlApi = import.meta.env.VITE_API_URL;
         const newData = { token: verificationToken, password: data.password }
         try {
@@ -29,9 +32,11 @@ const RecoverAccount = () => {
                 icon: "success",
                 button: "OK",
             });
+            setLoading(false)
             reset(); // Restablecer el formulario
             navigate("/"); // Redireccionar a la página de inicio de sesión
         } catch (error) {
+            setLoading(false)
             console.error("Error al actualizar la contraseña:", error);
             Swal.fire({
                 title: "Error",
@@ -47,7 +52,7 @@ const RecoverAccount = () => {
     return (
         <div className='recover_account_update_container'>
             <form className='recover_form' onSubmit={handleSubmit(submit)}>
-            <h1 className="recover_account_update_title">Recuperación de cuenta:</h1>
+                <h1 className="recover_account_update_title">Recuperación de cuenta:</h1>
                 <div className='recover_account_update_elements_container'>
                     <input
                         className="recover_account_update_input"
@@ -68,8 +73,17 @@ const RecoverAccount = () => {
                         }
                     </div>
                 </div>
-                <button type="submit" className="recover_account_update_button">Actualizar Contraseña</button>
+                <button type="submit" className="recover_account_update_button button">Actualizar Contraseña</button>
             </form>
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1
+                }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 }

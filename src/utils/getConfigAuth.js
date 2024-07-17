@@ -1,7 +1,9 @@
 const getConfigAuth = () => {
+    const tokenLS = JSON.parse(localStorage.getItem("userData"));
+    const token = tokenLS ? tokenLS.token : null;
     return {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${token}`
         }
     };
 };

@@ -6,25 +6,40 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 
 const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
-    const { register, handleSubmit, formState: { } } = useForm()
-
-    const navigate = useNavigate()
-
-    const userVerify = useSelector(state => state.user.user)
-
-
-
+    const navigate = useNavigate();
+    const user = useSelector(state => state.user.userData?.user);
 
     const [isShowPass, setIsShowPass] = useState(false)
+    const [loading, setLoading] = useState(false); // Estado de carga
+    const storedValues = JSON.parse(localStorage.getItem("formLogin")) || {};
+
+    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            email: storedValues.email || '',
+        }
+    });
+
+    const emailValue = watch('email')
+
+
+    useEffect(() => {
+        const formDataLogin = {
+            email: emailValue,
+        }
+        localStorage.setItem('formLogin', JSON.stringify(formDataLogin))
+
+    }, [emailValue])
+
+
+
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
         setIsShowPass(!isShowPass)
     }
-
-
 
     //Funcion que controla modal registro
     const handleModalRegister = () => {
@@ -50,50 +65,57 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
 
     const [isResendEmail, setIsResendEmail] = useState(false);
 
-    const onSubmit = async (data) => {  
-                 
-            if(isResendEmail){                             
-                await reSendEmail(data.email);
-                setIsResendEmail(false)                                      
-            }else{
+    const onSubmit = async (data) => {
+        setLoading(true)
+        try {
+            await loginUser(data);
+            setLoading(false)
+        } catch (err) {
+            setLoading(false)
+        }
+    }
 
-            const result = await loginUser(data);           
-            if(result.state == 'notVerified'){
-                setIsResendEmail(true)
-            }else if(result.state == 'success'){
+    const handleResendEmail = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        const email = e.target.form.email.value;
+
+        try {
+            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+            const res = await axios.post(url, { email });
+            if (res.data.message == "Se ha enviado un correo de verificación") {
                 Swal.fire({
-                    position: 'center',
                     icon: 'success',
-                    title: 'Bienvenido',
-                    showConfirmButton: false,                    
-                    timer: 1500
-                })               
-
+                    title: 'Correo electrónico enviado',
+                    text: 'Revisa tu correo electrónico para activar tu cuenta',
+                });
+                setLoading(false)
+                setIsResendEmail(false);
             }
+
+        } catch (err) {
+            console.log(err);
+            if (err.response.data.message = "Usuario no encontrado") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email invalido',
+                    text: 'Opps.. algo salio mal.. !!',
+                });
+                setLoading(false)
+            }
+
+
         }
 
-
     }
-
-    const reSendEmail = async (email) => {
-        const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
-        const res = await axios.post(url, { email });
-        if (res.data.message == "Se ha enviado un correo de verificación") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Correo electrónico enviado',
-                text: 'Revisa tu correo electrónico para activar tu cuenta',
-            });
-            setIsResendEmail(false);   
-        }
-    }
-
-
     //manejador de logOut
     const onLogOut = () => {
+        setLoading(true)
         logOut();
         navigate('/')
-        handleModalContentClick()
+        handleModalContentClick();
+        setLoading(false)
+
     }
 
 
@@ -102,11 +124,12 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         <>
 
             {
-                userVerify?.isVerify ?
+                user?.isVerify ?
                     (
 
                         <form className="login_form_logout" action="" onSubmit={handleSubmit(onLogOut)}>
-                            <h3 className='login_form_info_user'>Hola {userVerify?.firstName}</h3>
+                            <h3 className='login_form_info_user'> {`Hola`}</h3>
+                            <h3 className='login_form_info_user_firstName'> {`${user?.firstName}`}</h3>
                             <button className='login_button_logout button'>Cerrar sesión</button>
                         </form>
                     )
@@ -116,15 +139,41 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                             <h1 className='login_title'>Iniciar sesión</h1>
                             <div className="login_items_container">
                                 <label className="login_label" htmlFor="email" >E-mail:</label>
-                                <input className="login_input" type="text" autoComplete="off"
-                                    {...register('email', { required: 'Este campo es obligatorio' })}
+                                <input
+                                    className={`login_input ${errors.email && 'input_error'}`}
+                                    type="text" autoComplete="on"
+                                    {...register('email', {
+                                        required: {
+                                            value: true,
+                                            message: 'El campo es requerido'
+                                        },
+                                        pattern: {
+                                            value: /[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}/,
+                                            message: 'Formato de correo inválido.'
+                                        }
+                                    })}
                                 />
+                                {errors.email && <p className="error_message">{errors.email.message}</p>}
                             </div>
                             <div className="login_items_container">
                                 <label className="login_label" htmlFor="password" >Contraseña:</label>
-                                <input className="login_input_pass" type={isShowPass ? 'text' : 'password'} id='password' name='password' autoComplete="off"
-                                    {...register('password', { required: 'Este campo es obligatorio' })}
+                                <input
+                                    className={`login_input_pass ${errors.password && 'input_error'}`}
+                                    type={isShowPass ? 'text' : 'password'}
+                                    id='password' name='password' autoComplete="off"
+                                    {...register('password', {
+                                        required: {
+                                            value: true,
+                                            message: 'El campo es requerido'
+                                        },
+                                        minLength: {
+                                            value: 6,
+                                            message: 'La contraseña debe tener al menos 6 caracteres'
+                                        }
+                                    })}
                                 />
+                                {errors.password && <p className="error_message">{errors.password.message}</p>}
+
                                 <div className="login_show_hidden_pass" onClick={handleShowHiddenPass}>
                                     {
                                         isShowPass ?
@@ -136,36 +185,42 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                             </div>
                             <div className="login_items_button_container">
                                 <button
-                                    className="g-recaptcha login_button button"
-                                    data-sitekey="6Lfu16IpAAAAAIuKKGjZSATdGSh6PNkndSQ-9wwB"
-                                    data-callback="onSubmit"
-                                    data-action="submit"
+                                    className="login_button button"
                                 >
                                     Acceder
                                 </button>
-                                {
-                                    isResendEmail && (
-                                        <button
-                                            className="g-recaptcha login_button button"
-                                            data-sitekey="6Lfu16IpAAAAAIuKKGjZSATdGSh6PNkndSQ-9wwB"
-                                            data-callback="onSubmit"
-                                            data-action="submit"
-                                        >
-                                            Reenviar email
-                                        </button>
-                                    )
-                                }
+
                             </div>
-                            <div className='login_messaje'>
-                            </div>
+                            {
+                                isResendEmail && (
+                                    <button
+                                        className="login_button button"
+                                        onClick={handleResendEmail}
+                                    >
+                                        Reenviar email
+                                    </button>
+                                )
+                            }
                             <div className="login_items_links_container">
                                 <span className="login_register_link" onClick={handleModalRegister}>Registrarse</span>
                                 <span className="login_recover_pass_link" onClick={handleModalRecover}>¿Recuperar contraseña?</span>
                             </div>
+
+
                         </form>
                     )
             }
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1
+                }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
+
     )
 }
 

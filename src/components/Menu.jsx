@@ -9,7 +9,7 @@ const Menu = ({ setIsMenu }) => {
     }
 
 
-    const userLog = useSelector((state) => state.user.user)
+    const userVerify = useSelector((state) => state.user?.userData?.user?.isVerify) || false
 
     return (
         <>
@@ -20,7 +20,7 @@ const Menu = ({ setIsMenu }) => {
                 <ul className='menu_items_left'>
                     <li onClick={handleMenu}><Link className='menu_item_products' to='/'>Home</Link></li>
                     {
-                        userLog?.isVerify ? <li onClick={handleMenu}><Link className='menu_item_products' to='/profile'>Mi Perfil</Link></li> : null
+                        userVerify ? <li onClick={handleMenu}><Link className='menu_item_products' to='/profile'>Mi Perfil</Link></li> : null
                     }
                     <li onClick={handleMenu}><Link className='menu_item_products' to='/products'>Productos</Link></li>
                     {/* <li onClick={handleMenu}><Link className='menu_item_products' to='/galery'>Galeria</Link></li> */}
