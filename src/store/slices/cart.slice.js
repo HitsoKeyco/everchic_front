@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Decimal from "decimal.js";
 import Swal from 'sweetalert2'
 
 // Función para calcular el precio unitario basado en el número de unidades
@@ -13,32 +14,42 @@ const storedProductsString = localStorage.getItem('everchic_stored_products');
 const storedProducts = storedProductsString ? JSON.parse(storedProductsString) : [];
 
 const quantityProductCart = storedCart.reduce((acc, product) => product.quantity + acc, 0)
-const priceUpgrade = parseFloat(((quantityProductCart) / 12).toFixed(0))
-localStorage.setItem('everchic_cart_quantity_free', priceUpgrade);
 
+const calculateDozens = (quantityProductCart) => {
+    const dozens = new Decimal(quantityProductCart).div(12);
+    return dozens.toDecimalPlaces(0, Decimal.ROUND_HALF_UP).toNumber(); // Redondea a entero
+};
 
-const calculatePriceCart = (quantityProductCart) => {
+const unitsFree = calculateDozens(quantityProductCart);
+
+localStorage.setItem('everchic_cart_quantity_free', unitsFree);
+
+const calculatePriceCart = (quantityProductCart) => {   
+    let price;
+
     if (quantityProductCart < 3) {
-        return quantityProductCart * 5;
+        price = new Decimal(quantityProductCart).times(5);
     } else if (quantityProductCart >= 3 && quantityProductCart < 6) {
-        return (13 / 3) * quantityProductCart;
+        price = new Decimal(13).div(3).times(quantityProductCart);
     } else if (quantityProductCart >= 6 && quantityProductCart < 12) {
-        return (20 / 6) * quantityProductCart;
+        price = new Decimal(20).div(6).times(quantityProductCart);
     } else if (quantityProductCart >= 12 && quantityProductCart < 60) {
-        return (36 / 12) * quantityProductCart;
+        price = new Decimal(36).div(12).times(quantityProductCart);
     } else if (quantityProductCart >= 60) {
-        return (165 / 60) * quantityProductCart;
+        price = new Decimal(165).div(60).times(quantityProductCart);
     }
+
+    // Redondear a dos decimales
+    return price.toDecimalPlaces(2).toNumber();
 };
 
 const totalCartPrice = calculatePriceCart(quantityProductCart)
-
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         storedCart: storedCart,
-        quantityProductsFree: priceUpgrade,
+        quantityProductsFree: unitsFree,
         storedCartFree,
         storedProducts: storedProducts,
         stateShippingCart: 0,
@@ -56,6 +67,7 @@ const cartSlice = createSlice({
             state.stateFreeToCart = false;
             state.quantityProductsFree = 0
         },
+
         addPriceShippingStore: (state, action) => {
             state.stateShippingCart = action.payload
         },
@@ -63,12 +75,15 @@ const cartSlice = createSlice({
         addProductStore: (state, action) => {
             state.storedProducts = action.payload
         },
+
         addStoreCart: (state, action) => {
             state.storedCart = action.payload
         },
+        
         addStoreCartFree: (state, action) => {
             state.storedCartFree = action.payload
         },
+
         addProduct: (state, action) => {
             const { productId } = action.payload
 
@@ -156,7 +171,6 @@ const cartSlice = createSlice({
             localStorage.setItem('everchic_cart_quantity_free', JSON.stringify(state.quantityProductsFree));
             localStorage.setItem('everchic_cart', JSON.stringify(state.storedCart));
         },
-
 
         addProductFree: (state, action) => {
             if (state.stateFreeToCart) {
@@ -451,8 +465,6 @@ const cartSlice = createSlice({
             }
         },
 
-
-
         deleteProductFree: (state, action) => {
             const { productId } = action.payload;
             const existingProductFreeIndex = state.storedCartFree.findIndex(item => item.productId === productId);
@@ -478,26 +490,27 @@ const cartSlice = createSlice({
             state.quantityProductsFree = action.payload
             state.stateFreeToCart = false
         },
-
-
-
-
     }
 });
 
 
 const calculatePriceUnit = (units) => {
+    let price;
+
     if (units < 3) {
-        return 5;
+        price = new Decimal(5);
     } else if (units >= 3 && units < 6) {
-        return 13 / 3;
+        price = new Decimal(13).div(3);
     } else if (units >= 6 && units < 12) {
-        return 20 / 6;
+        price = new Decimal(20).div(6);
     } else if (units >= 12 && units < 60) {
-        return 36 / 12;
+        price = new Decimal(36).div(12);
     } else if (units >= 60) {
-        return 165 / 60;
+        price = new Decimal(165).div(60);
     }
+
+    // Redondear a dos decimales y convertir a número
+    return price.toDecimalPlaces(2).toNumber(); // Cambia aquí
 };
 
 

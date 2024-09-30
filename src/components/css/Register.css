@@ -43,8 +43,10 @@
 }
 
 .register_show_hidden_pass_icon{
+    position: relative;    
     font-size: 20px;
     color: var(--colorText_a);
+    
 }
 
 .register_title {    

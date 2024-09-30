@@ -13,6 +13,7 @@ import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
 import { setresponseCartUserUpdate, setUpdateUser, setUser } from '../store/slices/user.slice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Decimal from 'decimal.js';
 
 
 const Cart = () => {
@@ -24,15 +25,14 @@ const Cart = () => {
     const navigate = useNavigate()
     const user = useSelector(state => state.user.userData?.user);
     const token = useSelector(state => state.user.userData?.token);
-
-    const { control, register, setValue, formState: { errors }, handleSubmit, watch, getValues } = useForm();
-
-
+    const [isCompleteInfoUser, setIscompleteInfoUser] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     const [selectedOptionShipping, setSelectedOptionShipping] = useState(() => {
         // Recuperar la selección de envío almacenada en localStorage o sessionStorage
         return localStorage.getItem('selectedShippingOption') || 'servientrega a domicilio';
     });
+
 
     // Obtener el carrito actual desde la tienda de Redux
     const cart = useSelector(state => state.cart.storedCart);
@@ -55,7 +55,6 @@ const Cart = () => {
         }
     }
 
-
     const infoFree = {
         value: true
     }
@@ -67,13 +66,18 @@ const Cart = () => {
     const [isVolumetricProduct, setIsVolumetricProduct] = useState(0)
 
 
-    const weightCartTotal = cart.reduce((acc, product) => acc + (parseFloat(product.weight) * product.quantity), 0);
-    const weightCartFreeTotal = cartFree.reduce((acc, product) => acc + (parseFloat(product.weight) * product.quantity), 0);
-    const weightTotal = parseFloat((weightCartTotal + weightCartFreeTotal).toFixed(2)); // Peso total en kg (decimal) 
+    const weightCartTotal = cart.reduce((acc, product) => {
+        // Utiliza Decimal para calcular el peso total de productos normales
+        return acc.plus(new Decimal(product.weight).times(product.quantity));
+    }, new Decimal(0)); // Asegúrate de comenzar con un valor Decimal
 
+    const weightCartFreeTotal = cartFree.reduce((acc, product) => {
+        // Utiliza Decimal para calcular el peso total de productos gratuitos
+        return acc.plus(new Decimal(product.weight).times(product.quantity));
+    }, new Decimal(0)); // Asegúrate de comenzar con un valor Decimal
 
-    let volumetricWeightBase = parseFloat(20000 / 6000);
-    let volumetricWeightBaseTolerance = parseFloat(8000 / 6000);
+    // Suma ambos pesos y redondea a dos decimales
+    const weightTotal = weightCartTotal.plus(weightCartFreeTotal).toDecimalPlaces(2).toNumber(); // Convierte a número primitivo
 
     const handleOptionChange = (event) => {
         setSelectedOptionShipping(event.target.value);
@@ -85,7 +89,8 @@ const Cart = () => {
         calculateShippingCost();
     }, [quantityProductCart, cartFree, selectedOptionShipping]);
 
-
+    let volumetricWeightBase = parseFloat(20000 / 6000);
+    let volumetricWeightBaseTolerance = parseFloat(8000 / 6000);
     const calculateShippingCost = () => {
         if (cart.length > 0) {
 
@@ -163,14 +168,15 @@ const Cart = () => {
         }
     }
 
-    const priceTotalStore = useSelector(state => state.cart.stateTotalCart)
-    const priceShippingStore = useSelector(state => state.cart.stateShippingCart)
-    const total = Number((Number((priceTotalStore).toFixed(2)) + priceShippingStore).toFixed(2))
+    const totalToPay = new Decimal(quantityProductCart)
+        .times(priceUnit)
+        .plus(isPriceShipping || 0) // Asegúrate de que isPriceShipping sea un número, puedes usar || 0 para manejar valores falsy.
+        .toDecimalPlaces(2)
 
-
+    const total = totalToPay.toNumber(); // Convierte a número al final.
 
     /* ----------------  Captcha --------------------- */
-    /* ------- Hcapcha solo se monta 1 vez --------------*/
+    /* ------- Hcapcha solo se monta 1 vez ------------*/
     const theme = useSelector(state => state.user.theme);
     const captchaRef = useRef(null);
 
@@ -178,10 +184,33 @@ const Cart = () => {
         captchaRef.current.execute();
     }
 
-    const onSubmit = async (data) => {
-        setLoading(true);
-        const dataCart = { cart, cartFree, token, userCartData: data, price_unit: priceUnit, total: total, isPriceShipping };
+    const validaUserData = () => {
+        //destructurar  user y validar que todos los capos tengan valores
+        if (user) {                       
+            const { phone_first, firstName, email, dni, city, address } = user;
+            if ( phone_first && firstName && email && dni && city && address) {
+                return true;
+            }
+        }
+    }
 
+    const onSubmit = async (data) => {
+        // Verificar que el usuario haya completado la información
+        if (!validaUserData()) {
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: "Debes completar la información de usuario",
+                showConfirmButton: true,
+            }).then(() => {
+                captchaRef.current.resetCaptcha();
+            });
+            return;
+        }
+
+        setLoading(true);
+
+        const dataCart = { cart, cartFree, token, userCartData: user, price_unit: priceUnit, total: total, isPriceShipping };
         if (Object.keys(errors).length > 0) {
             Swal.fire({
                 position: "center",
@@ -231,13 +260,7 @@ const Cart = () => {
             // Crear la orden
             // Realizar la solicitud para crear la orden
             const response = await axios.post(`${apiUrl}/orders/create_order`, dataCart);
-            console.log("Respuesta de creación de orden:", response.data);
 
-            //Upgrade state Redux user
-            if (response) {
-                const user = response.data?.user;
-                dispatch(setresponseCartUserUpdate(user));
-            }
 
             // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
             localStorage.removeItem('everchic_cart_free');
@@ -283,7 +306,6 @@ const Cart = () => {
 
             }
 
-
             let message
             err.response?.data?.result?.cartJoinFiltered?.forEach(product => {
                 message = `${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
@@ -298,9 +320,6 @@ const Cart = () => {
                     showConfirmButton: true
                 });
 
-                // Arreglo temporal para gestionar productos encontrados en cart y cartFree
-                let productsInCart = [];
-
                 // Actualizar las cantidades en cart
                 let updatedCart = cart.map(productCart => {
                     const product = err.response?.data?.result?.cartJoinFiltered?.find(p => p.productId === productCart.productId);
@@ -310,33 +329,20 @@ const Cart = () => {
                     return productCart;
                 }).filter(productCart => productCart.quantity > 0);
 
-                const quantityProducts = updatedCart.reduce((acc, product) => product.quantity + acc, 0)
-
-
-                // Guardar los carritos actualizados en localStorage
-                const productFree = Math.floor(quantityProducts / 12);
-
-
                 localStorage.setItem('everchic_cart_free', JSON.stringify([]));
                 dispatch(addStoreCartFree([]));
                 dispatch(updateCartFreeQuantity(0))
 
                 localStorage.setItem('everchic_cart', JSON.stringify(updatedCart));
                 dispatch(addStoreCartFree(updatedCart));
-
-
-
             }
-
-
-
-
 
         } finally {
             setLoading(false); // Asegurar que se limpie el estado de carga
             captchaRef.current.resetCaptcha();
         }
     };
+
 
 
 
@@ -419,6 +425,11 @@ const Cart = () => {
 
                     <div className='cart_details_info_buy_container'>
                         {/*----------------------------------------*/}
+
+                        <div className={isCompleteInfoUser ? 'add_customer_info_user_container':'add_customer_info_user_container alertComplete'}>
+                            <AddCustomer  isCompleteInfoUser={isCompleteInfoUser} setIscompleteInfoUser={setIscompleteInfoUser}/> 
+                        </div>
+
                         <form
                             className="cart_detail_shipping_form"
                             action=""
@@ -447,9 +458,6 @@ const Cart = () => {
                                 </FormControl>
                             </div>
 
-                            <div className='add_customer_info_user_container'>
-                                <AddCustomer register={register} control={control} errors={errors} watch={watch} setValue={setValue} getValues={getValues} />
-                            </div>
                             {/*-----------------Resumen de compra-----------------------*/}
                             <div className='cart_detail_buy_container'>
                                 <div className="cart_detail_buy_title_container">
@@ -482,7 +490,7 @@ const Cart = () => {
                             </div>
                             <div className="cart_info_total_container">
                                 <ul className='cart_info_total'>
-                                    <li className='cart_info_total_text'>Total a pagar: $ {((quantityProductCart * priceUnit) + isPriceShipping).toFixed(2)}</li>
+                                    <li className='cart_info_total_text'>Total a pagar: $ {totalToPay.toNumber()}</li>
                                 </ul>
                             </div>
 

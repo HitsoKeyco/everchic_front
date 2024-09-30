@@ -25,8 +25,7 @@ const userSlice = createSlice({
             state.theme = action.payload;
         },
         setresponseCartUserUpdate: (state, action) => {
-            const responseCartUserUpdate = action.payload;
-            console.log(responseCartUserUpdate);
+            const responseCartUserUpdate = action.payload;            
             state.userData = {
                 ...state.userData,  
                 user: responseCartUserUpdate,  
