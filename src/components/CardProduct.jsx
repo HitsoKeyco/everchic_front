@@ -55,6 +55,8 @@ const CardProduct = ({ product, isSlider }) => {
     const unitCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
     const navigate = useNavigate()
     const handleBuy = () => {
+        console.log('clic');
+        
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
 
@@ -191,7 +193,7 @@ const CardProduct = ({ product, isSlider }) => {
                     </div>
                     <div className='card_product_by_container'>
                         {
-                            //product.stock == 0 || solOut?
+                            
                             product.stock == 0 || solOut?
                                 (
                                     <div className="card_product_stock">
@@ -204,7 +206,7 @@ const CardProduct = ({ product, isSlider }) => {
                                         className='card_product_button_cart button'
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleBuy()
+                                            handleBuy();
                                         }}
                                     >
                                         <i className='bx bx-plus card_button_plus'></i>

@@ -9,15 +9,16 @@ import { useForm } from 'react-hook-form';
 
 import axios from 'axios';
 import getConfigAuth from '../utils/getConfigAuth';
+import { Link } from 'react-router-dom';
 
 
-const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
+const AddCustomer = ({ isCompleteInfoUser, setIscompleteInfoUser }) => {
     const { register, setValue, reset, clearErrors, formState: { errors }, handleSubmit, watch } = useForm();
     const apiUrl = import.meta.env.VITE_API_URL;
     const user = useSelector(state => state.user.userData?.user || {});
     const [isEditable, setIsEditable] = useState(false);
     const [loading, setLoading] = useState(false);
-    
+
 
     const [isShowPass, setIsShowPass] = useState({
         password: false,
@@ -40,7 +41,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
             email: user.email
         });
     }, [reset, user]);
-    
+
 
     const handleShowHiddenPass = () => {
         setIsShowPass({ ...isShowPass, password: !isShowPass.password })
@@ -86,48 +87,48 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
         });
         setIsEditable(false); // Asegúrate de desactivar el modo editable
     };
-    
+
 
 
     const submit = async (data) => {
-        setIscompleteInfoUser(false)                        
-        if (Object.keys(errors).length == 0) {       
-        setLoading(true);
-        axios.put(`${apiUrl}/users/${user.id}`, data, getConfigAuth())
-            .then(res => {
-                dispatch(setUpdateUser(res.data));
-                setIsEditable(false)
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    text: "Actualización completada",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
-            .catch(err => {
-                console.log(err);
-                // Handle error appropriately
-                setValue('dni', user.dni);
-                setValue('firstName', user.firstName);
-                setValue('lastName', user.lastName);
-                setValue('phone_first', user.phone_first);
-                setValue('phone_second', user.phone_second);
-                setValue('city', user.city);
-                setValue('address', user.address);
+        setIscompleteInfoUser(false)
+        if (Object.keys(errors).length == 0) {
+            setLoading(true);
+            axios.put(`${apiUrl}/users/${user.id}`, data, getConfigAuth())
+                .then(res => {
+                    dispatch(setUpdateUser(res.data));
+                    setIsEditable(false)
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        text: "Actualización completada",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    // Handle error appropriately
+                    setValue('dni', user.dni);
+                    setValue('firstName', user.firstName);
+                    setValue('lastName', user.lastName);
+                    setValue('phone_first', user.phone_first);
+                    setValue('phone_second', user.phone_second);
+                    setValue('city', user.city);
+                    setValue('address', user.address);
 
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    text: "Opps.. No se ha podido actualizar.. intentalo nuevamente",
-                    showConfirmButton: false,
-                    timer: 1500
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        text: "Opps.. No se ha podido actualizar.. intentalo nuevamente",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-        }else{
+        } else {
             handleShowAlert();
         }
     };
@@ -142,7 +143,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                     <p className='add_customer_title'>Información de usuario - Envío</p>
                 </AccordionSummary>
                 <AccordionDetails  >
-                    <form className='add_customer_info_shipping' onSubmit={handleSubmit(submit)}>                        
+                    <form className='add_customer_info_shipping' onSubmit={handleSubmit(submit)}>
                         {/*------------------------------\\ dni //-----------------------------------*/}
                         <div className='add_customer_elements_container'>
                             <label className="add_customer_label" htmlFor="dni">
@@ -154,16 +155,16 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 name="dni"
                                 className={`add_customer_input ${errors.dni ? 'input-error' : ''}`}
                                 autoComplete='on'
-                                disabled={!isEditable}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('dni', {
                                     required: 'Este campo es obligatorio',
                                     minLength: { value: 10 },
                                     maxLength: { value: 13 },
                                     pattern: {
-                                      value: /^[0-9]{10,13}$/,
-                                      message: 'La cédula/RUC debe ser un número entre 10 y 13 dígitos',
+                                        value: /^[0-9]{10,13}$/,
+                                        message: 'La cédula/RUC debe ser un número entre 10 y 13 dígitos',
                                     }
-                                  })}
+                                })}
                             />
                         </div>
                         {errors.dni && <p className="error_message">{errors.dni.message}</p>}
@@ -179,11 +180,11 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 name="firstName"
                                 autoComplete="on"
                                 className={`add_customer_input ${errors.firstName ? 'input-error' : ''}`}
-                                disabled={!isEditable}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('firstName', {
                                     required: { value: true, message: 'Este campo es requerido' },
                                     maxLength: 25,
-                                  })}
+                                })}
                             />
                         </div>
                         {errors.firstName && <p className="error_message">{errors.firstName.message}</p>}
@@ -198,8 +199,8 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 id="lastName"
                                 name="lastName"
                                 autoComplete="on"
-                                className={`add_customer_input ${errors.lastName ? 'input-error': ''}`}
-                                disabled={!isEditable}
+                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''}`}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('lastName', {
                                     required: {
                                         value: true,
@@ -221,8 +222,8 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 id="phone_first"
                                 name="phone_first"
                                 placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_first ? 'input-error': ''}`}
-                                disabled={!isEditable}
+                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''}`}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('phone_first', {
                                     required: {
                                         value: true,
@@ -249,7 +250,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 name="phone_second"
                                 placeholder='09XXXXXXXX'
                                 className={`add_customer_input ${errors.phone_second ? 'input-error' : ''}`}
-                                disabled={!isEditable}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('phone_second', {
                                     required: {
                                         value: false,
@@ -273,8 +274,8 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 type="text"
                                 id='city'
                                 name='city'
-                                className={`add_customer_input ${errors.city ? 'input-error': ''}`}
-                                disabled={!isEditable}
+                                className={`add_customer_input ${errors.city ? 'input-error' : ''}`}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 {...register('city', {
                                     required: {
                                         value: true,
@@ -286,14 +287,14 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                         {errors.city && <p className="error_message">{errors.city.message}</p>}
 
                         {
-                            user.email &&
+                            user?.email &&
                             <>
                                 <div className="add_customer_elements_container">
                                     <label className="add_customer_label" htmlFor="email" >E-mail:</label>
                                     <input
                                         className='add_customer_input disabled-input'
                                         type="text"
-                                        value={user.email}
+                                        value={user?.email}
                                         disabled={true}
                                     />
                                 </div>
@@ -309,7 +310,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 id="address"
                                 name="address"
                                 autoComplete='on'
-                                disabled={!isEditable}
+                                disabled={user?.isVerify ? !isEditable : isEditable}
                                 className={`add_customer_textarea ${errors.address ? 'input-error' : ''}`}
                                 {...register('address', {
                                     required: {
@@ -321,38 +322,42 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                             />
                         </div>
                         {errors.address && <p className="error_message">{errors.address.message}</p>}
-
-                        <div className='profile_buttons_container'>
-                            <Button className="profile_button" type="button" 
-                                onClick={() => {
-                                    setIsEditable(prev => !prev);
-                                    if (isEditable) {
-                                        cancelEditForm();
-                                    }                                    
+                        {
+                            user?.isVerify 
+                            ?
+                            <div className='profile_buttons_container'>
+                                <Button className="profile_button" type="button"
+                                    onClick={() => {
+                                        setIsEditable(prev => !prev);
+                                        if (isEditable) {
+                                            cancelEditForm();
+                                        }
                                     }}>
-                                {isEditable ? 'Cancelar' : 'Editar'}
-                            </Button>
-                            {isEditable && (
-                                <Button
-                                    className="profile_button"
-                                    type="submit" 
-                                >
-                                    Actualizar
+                                    {isEditable ? 'Cancelar' : 'Editar'}
                                 </Button>
-                            )}
+                                {isEditable && (
+                                    <Button
+                                        className="profile_button"
+                                        type="submit"
+                                    >
+                                        Actualizar
+                                    </Button>
+                                )}
 
-                        </div>
+                            </div>
+                            :''
+                        }
 
                         {/*------------------------------\\ Usuario Nuevo //-----------------------------------*/}
                         {
-                            !user?.email &&
+                            !user?.isVerify &&
                             <>
                                 <span className='add_customer_title'>Registro:</span>
                                 {/*------------------------------\\ Email //-----------------------------------*/}
                                 <div className="add_customer_elements_container">
                                     <label className="add_customer_label" htmlFor="email" >E-mail:</label>
                                     <input
-                                        className={`add_customer_input  ${errors.email ? 'input_error': ''}`}
+                                        className={`add_customer_input  ${errors.email ? 'input_error' : ''}`}
                                         type="text"
                                         autoComplete="on"
                                         {...register('email', {
@@ -369,7 +374,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 </div>
                                 {errors.email && <p className="error_message">{errors.email.message}</p>}
 
-                                {/*------------------------------\\ Password //-----------------------------------*/}                                
+                                {/*------------------------------\\ Password //-----------------------------------*/}
                                 <div className="add_customer_elements_container">
                                     <label className="add_customer_label" htmlFor="password" >Contraseña:</label>
                                     <input
@@ -397,13 +402,13 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                         }
                                     </div>
                                     {errors.password && <p className="error_message">{errors.password.message}</p>}
-                                </div>                                
+                                </div>
 
                                 {/*------------------------------\\ Password Confirmation //-----------------------------------*/}
                                 <div className="add_customer_elements_container">
                                     <label className="add_customer_label" htmlFor="repeat_password" >Repita contraseña:</label>
                                     <input
-                                        className={`add_customer_input ${errors.repeat_password ? 'input_error': ''}`}
+                                        className={`add_customer_input ${errors.repeat_password ? 'input_error' : ''}`}
                                         type={isShowPass.repeat_password ? 'text' : 'password'}
                                         id='repeat_password' name='repeat_password'
                                         autoComplete="off"
@@ -434,7 +439,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                 <div className="add_customer_items_container_agreeToTerms">
                                     <div className='add_customer_items_agreeToTerms'>
                                         <input
-                                            className={`add_customer_input_chekbox ${errors.agreeToTerms ? 'input_error': ''}`}
+                                            className={`add_customer_input_chekbox ${errors.agreeToTerms ? 'input_error' : ''}`}
                                             type="checkbox"
                                             id='agreeToTerms'
                                             name='agreeToTerms'
@@ -445,8 +450,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                                                 }
                                             })}
                                         />
-                                        <a className="add_customer_label_agreeToTerms" htmlFor="agreeToTerms" >Acepto los términos y condiciones.</a>
-
+                                        <Link to='/terms'>Acepto los términos y condiciones.</Link>                                       
                                     </div>
                                     {errors.agreeToTerms && <p className="error_message">{errors.agreeToTerms.message}</p>}
                                 </div>
@@ -455,7 +459,7 @@ const AddCustomer = ( { isCompleteInfoUser, setIscompleteInfoUser }) => {
                         }
                     </form>
                 </AccordionDetails>
-                
+
             </Accordion>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

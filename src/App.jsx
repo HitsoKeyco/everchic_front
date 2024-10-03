@@ -16,15 +16,16 @@ import { useSelector } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
+import TermsAndConditions from './Pages/TermsAndConditions';
 
 function App() {
   
-  const theme = useSelector(state => state.user.theme);
+  const theme = useSelector(state => state?.user.theme);
   const token = useSelector(state => state.user.userData?.token)
 
   return (
     <>
-      <ThemeProvider theme={ theme=='lightTheme' ? lightTheme : darkTheme }>
+      <ThemeProvider theme={ theme === 'lightTheme' ? lightTheme : darkTheme }>
         <CssBaseline />
         <Header />
         <Routes>
@@ -34,6 +35,7 @@ function App() {
           <Route path='/faqs' element={<Faqs />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/checkout' element={<Checkout />} />
+          <Route path='/terms' element={<TermsAndConditions/>} />
           <Route path='/profile' element={token ? <Profile /> : <Home />} />
           <Route path='/verify/:verificationToken' element={<VerifyEmail />} />
           <Route path='/recover_account/:verificationToken' element={<RecoverAccount />} />

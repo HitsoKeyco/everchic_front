@@ -7,7 +7,7 @@ import { darkTheme, lightTheme } from '../utils/theme';
 const App = () => {
     
     return (
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Products />
         </ThemeProvider>

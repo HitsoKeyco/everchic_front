@@ -156,7 +156,7 @@ const Header = () => {
 
               <li>
                 <i
-                  className="bx bx-moon"
+                  className={ userTheme === "darkTheme" ? "bx bx-brightness" : "bx bx-moon"}
                   onClick={handleDarkMode}
                 ></i>
               </li>

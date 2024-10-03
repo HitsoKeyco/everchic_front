@@ -133,7 +133,8 @@
 }
 
 .bx-moon,
-.bx-cart-alt {
+.bx-cart-alt,
+.bx-brightness {
     font-size: 1.8em;
     user-select: none;
     touch-action: none;

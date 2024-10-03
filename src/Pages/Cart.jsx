@@ -24,6 +24,8 @@ const Cart = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(state => state.user.userData?.user);
+    
+    
     const token = useSelector(state => state.user.userData?.token);
     const [isCompleteInfoUser, setIscompleteInfoUser] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
