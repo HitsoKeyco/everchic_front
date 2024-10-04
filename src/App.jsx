@@ -17,6 +17,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
 import TermsAndConditions from './Pages/TermsAndConditions';
+import Verifyforzoho from './Pages/verifyforzoho';
+
 
 function App() {
   
@@ -37,6 +39,7 @@ function App() {
           <Route path='/checkout' element={<Checkout />} />
           <Route path='/terms' element={<TermsAndConditions/>} />
           <Route path='/profile' element={token ? <Profile /> : <Home />} />
+          <Route path='/verifyforzoho/verifyforzoho.html' element={<Verifyforzoho/>} />
           <Route path='/verify/:verificationToken' element={<VerifyEmail />} />
           <Route path='/recover_account/:verificationToken' element={<RecoverAccount />} />
           <Route path='*' element={<NoMatch />} />
