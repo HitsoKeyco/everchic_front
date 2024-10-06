@@ -81,11 +81,11 @@ const Products = () => {
 
 
     // ################### Fetch categories ##########################    
+    
     useEffect(() => {
-        axios.get(`${apiUrl}/categories`)
-            .then(res => {
+        axios.get(`${apiUrl}/categories`)        
+        .then(res => {                
                 setCategories(res.data);
-
             })
             .catch(err => {
                 console.log('No se han encontrado categorías', err);
