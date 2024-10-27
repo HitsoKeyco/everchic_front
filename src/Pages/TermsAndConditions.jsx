@@ -56,7 +56,7 @@ const TermsAndConditions = () => {
           <strong>15. Cambios en los Términos:</strong> Nos reservamos el derecho de modificar estos términos en cualquier momento.
         </li>
         <li className="terms-and-conditions-list-item">
-          <strong>16. Contacto:</strong> Para cualquier duda o inquietud sobre el uso de tus datos, puedes contactarnos en soporte@everchic.com.
+          <strong>16. Contacto:</strong> Para cualquier duda o inquietud sobre el uso de tus datos, puedes contactarnos en soporte@everchic.ec.
         </li>
         <li className="terms-and-conditions-list-item">
           <strong>17. Suspensión del Servicio:</strong> Podemos suspender temporalmente nuestros servicios por razones técnicas o mantenimiento.

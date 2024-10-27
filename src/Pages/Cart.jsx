@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './css/Cart.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { accessFreeProduct, addPriceShippingStore, addStoreCart, addStoreCartFree, adjustLowStockThunk, deleteAllProducts, updateCartFreeQuantity } from '../store/slices/cart.slice';
+import { accessFreeProduct, addPriceShippingStore, addStoreCartFree, deleteAllProducts, updateCartFreeQuantity } from '../store/slices/cart.slice';
 import ProductItem from '../components/ProductItem';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -11,7 +11,6 @@ import { Backdrop, CircularProgress, FormControl, InputLabel, MenuItem, Select }
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
-import { setresponseCartUserUpdate, setUpdateUser, setUser } from '../store/slices/user.slice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Decimal from 'decimal.js';
 
@@ -261,7 +260,7 @@ const Cart = () => {
 
             // Crear la orden
             // Realizar la solicitud para crear la orden
-            const response = await axios.post(`${apiUrl}/orders/create_order`, dataCart);
+            await axios.post(`${apiUrl}/orders/create_order`, dataCart);
 
 
             // Limpiar localStorage y otros estados solo si la orden se creó exitosamente

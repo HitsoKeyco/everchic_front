@@ -15,6 +15,7 @@ import likeService from '../utils/likeService';
 
 
 const CardProduct = ({ product, isSlider }) => {
+console.log(product);
 
     const [isModal, setIsModal] = useState(false);
     const [isPositionInitial, setIsPositionInitial] = useState({ x: 0 })
@@ -64,34 +65,34 @@ const CardProduct = ({ product, isSlider }) => {
 
             if (!isFree && product) {
                 dispatch(addProduct({
-                    productId: product.id,
-                    price: product.sell_price,
-                    productName: product.collection?.name,
-                    stock: product.stock,
-                    category: product.category.name,
-                    tittle: product.tittle,
-                    size: product.size.size,
-                    weight: product.weight,
+                    productId: product?.id,
+                    price: product?.sell_price,
+                    productName: product?.collection?.name,
+                    stock: product?.stock,
+                    category: product?.category?.name,
+                    tittle: product?.tittle,
+                    size: product?.size?.size,
+                    weight: product?.weight,
                     image: {
-                        url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
-                        alt: product.title
+                        url: product?.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
+                        alt: product?.title
                     }
                 }));
 
             } else {
                 if (!(freeProducts === unitCartFree)) {
                     dispatch(addProductFree({
-                        productId: product.id,
-                        price: product.sell_price,
-                        productName: product.collection.name,
-                        stock: product.stock,
-                        weight: product.weight,
-                        category: product.category.name,
-                        tittle: product.tittle,
-                        size: product.size.size,
+                        productId: product?.id,
+                        price: product?.sell_price,
+                        productName: product?.collection?.name,
+                        stock: product?.stock,
+                        weight: product?.weight,
+                        category: product?.category?.name,
+                        tittle: product?.tittle,
+                        size: product?.size?.size,
                         image: {
-                            url: product.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
-                            alt: product.title
+                            url: product?.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
+                            alt: product?.title
                         }
                     }));
 
@@ -179,7 +180,7 @@ const CardProduct = ({ product, isSlider }) => {
 
 
                     <LazyLoad  >
-                        <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" loading="lazy" />
+                        <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" />
                     </LazyLoad>
 
 
