@@ -15,7 +15,7 @@ import likeService from '../utils/likeService';
 
 
 const CardProduct = ({ product, isSlider }) => {
-console.log(product);
+//console.log(product);
 
     const [isModal, setIsModal] = useState(false);
     const [isPositionInitial, setIsPositionInitial] = useState({ x: 0 })
