@@ -49,6 +49,7 @@ const Products = () => {
 
     
     const fetchProducts = () => {
+        
         //sabiendo q tengo searchCollection
         setLoading(true);
         let url = '';

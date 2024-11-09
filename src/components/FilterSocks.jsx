@@ -45,7 +45,7 @@ const FilterSocks = ({ categories, collections, filterOptionsCategory, setSearch
     <>
       <Tabs value={activeTab} onChange={handleTabChange}>
         <Tab label="Categoría" />
-        <Tab label="Agrupar" />
+        <Tab label="Colecciones" />
       </Tabs>
       {activeTab === 0 && (
         <Autocomplete

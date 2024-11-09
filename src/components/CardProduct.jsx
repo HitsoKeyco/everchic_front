@@ -8,12 +8,6 @@ import 'react-medium-image-zoom/dist/styles.css'
 import LazyLoad from 'react-lazyload';
 import likeService from '../utils/likeService';
 
-
-
-
-
-
-
 const CardProduct = ({ product, isSlider }) => {
 //console.log(product);
 
