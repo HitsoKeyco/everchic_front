@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 const ProductCarousel = ({ products, nameCollection = '' }) => {
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     arrows: false,
     slidesToShow: Math.min(6, products.length),
