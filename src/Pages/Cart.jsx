@@ -186,18 +186,22 @@ const Cart = () => {
     }
 
     const validaUserData = () => {
-        //destructurar  user y validar que todos los capos tengan valores
-        if (user) {                       
+        // Desestructurar user y validar que todos los campos tengan valores
+        if (user) {
             const { phone_first, firstName, email, dni, city, address } = user;
-            if ( phone_first && firstName && email && dni && city && address) {
-                return true;
+            if (phone_first && firstName && email && dni && city && address) {
+                return false;
             }
         }
-    }
+        return true;
+    };
+    
 
     const onSubmit = async (data) => {
         // Verificar que el usuario haya completado la información
-        if (!validaUserData()) {
+        const stateDataUser = validaUserData();
+        
+        if (stateDataUser) {
             Swal.fire({
                 position: "center",
                 icon: "info",
