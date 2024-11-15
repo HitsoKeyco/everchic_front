@@ -11,30 +11,13 @@ import { Backdrop, CircularProgress } from '@mui/material'
 
 const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
     const navigate = useNavigate();
-    const user = useSelector(state => state.user.userData?.user);
+    const user = useSelector(state => state.user?.userData);
 
     const [isShowPass, setIsShowPass] = useState(false)
     const [loading, setLoading] = useState(false); // Estado de carga
-    const storedValues = JSON.parse(localStorage.getItem("formLogin")) || {};
+    
 
-    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm({
-        defaultValues: {
-            email: storedValues.email || '',
-        }
-    });
-
-    const emailValue = watch('email')
-
-
-    useEffect(() => {
-        const formDataLogin = {
-            email: emailValue,
-        }
-        localStorage.setItem('formLogin', JSON.stringify(formDataLogin))
-
-    }, [emailValue])
-
-
+    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm();
 
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
@@ -103,8 +86,6 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                 });
                 setLoading(false)
             }
-
-
         }
 
     }
@@ -117,19 +98,18 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         setLoading(false)
 
     }
-
-
+   
 
     return (
         <>
 
             {
-                user?.isVerify ?
+                user?.token ?
                     (
 
                         <form className="login_form_logout" action="" onSubmit={handleSubmit(onLogOut)}>
                             <h3 className='login_form_info_user'> {`Hola`}</h3>
-                            <h3 className='login_form_info_user_firstName'> {`${user?.firstName}`}</h3>
+                            <h3 className='login_form_info_user_firstName'> {`${user.user?.firstName}`}</h3>
                             <button className='login_button_logout button'>Cerrar sesión</button>
                         </form>
                     )

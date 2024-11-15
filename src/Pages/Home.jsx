@@ -86,7 +86,7 @@ const Home = () => {
 
               <div className="home_models_info">
                 <img className='home_models_img' src="./img/models.png" alt="models" />
-                <span className='home_quantity_model'> + de <span className='home_quantity_models_number'>300</span>  Modelos</span>
+                <span className='home_quantity_model'>  + de <span className='home_quantity_models_number'>500</span>  Modelos</span>
               </div>
             </div>
             <div className='home_banner_container'>
@@ -94,9 +94,6 @@ const Home = () => {
                 <BannerHome />
               }
             </div>
-
-
-
 
             <div className='home_products_new_container'>
               <ProductCarousel products={products} />

@@ -65,6 +65,7 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
                 handleModalContentClick(false);
                 reset();
                 setLoading(false);
+                localStorage.removeItem("formRegister");
             }
         } catch (err) {            
             setLoading(false);

@@ -28,9 +28,11 @@
 }
 
 .add_customer_info_user_container {
-    border: 2px solid var(--borderContainer);
+    border: 2px solid var(--borderContainer) !important;
     border-radius: 5px;
     height: max-content;
+    margin-bottom: 10px;
+    
 }
 
 .alertComplete{
@@ -349,6 +351,9 @@
     }
     .cart_details_info_buy_container{
         max-width: 450px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
 }

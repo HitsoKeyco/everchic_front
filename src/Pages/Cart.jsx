@@ -13,6 +13,7 @@ import axios from 'axios';
 import shippingOptions from '../utils/shippingOption';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Decimal from 'decimal.js';
+import { setUpdateUser } from '../store/slices/user.slice';
 
 
 const Cart = () => {
@@ -20,15 +21,18 @@ const Cart = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const keyHcaptcha = import.meta.env.VITE_HCAPTCHA_KEY_SITE;
     const [loading, setLoading] = useState(false); // Estado de carga
+    
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(state => state.user.userData?.user);
     
     
     const token = useSelector(state => state.user.userData?.token);
-    const [isCompleteInfoUser, setIscompleteInfoUser] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [isCompleteInfoUser, setIscompleteInfoUser] = useState(false);    
 
+    const { register, setValue, reset, clearErrors, formState: { errors }, handleSubmit, watch } = useForm();
+
+    
     const [selectedOptionShipping, setSelectedOptionShipping] = useState(() => {
         // Recuperar la selección de envío almacenada en localStorage o sessionStorage
         return localStorage.getItem('selectedShippingOption') || 'servientrega a domicilio';
@@ -184,38 +188,65 @@ const Cart = () => {
     const onLoad = () => {
         captchaRef.current.execute();
     }
+    console.log(user);
 
-    const validaUserData = () => {
-        // Desestructurar user y validar que todos los campos tengan valores
+    useEffect(() => {
+        // Resetea el formulario con los datos actuales del usuario cuando `user` cambia
         if (user) {
-            const { phone_first, firstName, email, dni, city, address } = user;
-            if (phone_first && firstName && email && dni && city && address) {
-                return false;
-            }
+            reset({
+                dni: user.dni || '',
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                phone_first: user.phone_first || '',
+                phone_second: user.phone_second || '',
+                city: user.city || '',
+                address: user.address || '',
+                email: user.email || '',               
+            });
         }
-        return true;
-    };
+    }, [user, reset]);
+    
+    useEffect(() => {
+        const subscription = watch((data) => {
+            const updatedFields = {};
+    
+            // Compara cada campo con el valor actual del usuario y añade los cambios a updatedFields
+            if (data.dni !== user?.dni) updatedFields.dni = data.dni;
+            if (data.firstName !== user?.firstName) updatedFields.firstName = data.firstName;
+            if (data.lastName !== user?.lastName) updatedFields.lastName = data.lastName;
+            if (data.phone_first !== user?.phone_first) updatedFields.phone_first = data.phone_first;
+            if (data.phone_second !== user?.phone_second) updatedFields.phone_second = data.phone_second;
+            if (data.email !== user?.email) updatedFields.email = data.email;
+            if (data.city !== user?.city) updatedFields.city = data.city;
+            if (data.address !== user?.address) updatedFields.address = data.address;
+    
+            // Solo realiza la actualización si hay cambios en updatedFields
+            if (Object.keys(updatedFields).length > 0) {
+                const userData = {
+                    token: token, // Asegura que el token se mantenga en cada actualización
+                    user: {
+                        ...user,          // Mantiene todos los campos existentes de user, incluyendo id
+                        ...updatedFields  // Sobrescribe solo los campos modificados
+                    }
+                };
+    
+                dispatch(setUpdateUser(userData));
+            }
+        });
+    
+        return () => subscription.unsubscribe(); // Limpieza de suscripción al desmontar
+    }, [watch, user, dispatch]);
+    
     
 
-    const onSubmit = async (data) => {
-        // Verificar que el usuario haya completado la información
-        const stateDataUser = validaUserData();
-        
-        if (stateDataUser) {
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: "Debes completar la información de usuario",
-                showConfirmButton: true,
-            }).then(() => {
-                captchaRef.current.resetCaptcha();
-            });
-            return;
-        }
 
+    const onSubmitForm = async (data) => {
+        
         setLoading(true);
 
-        const dataCart = { cart, cartFree, token, userCartData: user, price_unit: priceUnit, total: total, isPriceShipping };
+        const dataCart = { cart, cartFree, token, userCartData: data, price_unit: priceUnit, total: total, isPriceShipping };
+
+        // Validar que el usuario haya completado la información
         if (Object.keys(errors).length > 0) {
             Swal.fire({
                 position: "center",
@@ -229,22 +260,23 @@ const Cart = () => {
             return;
         }
 
-        try {
-
-            if (cart.length === 0) {
+        //Si no tiene ningun producto agregado al cart
+        if (cart.length === 0) {
+            setLoading(false);
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "No tienes ningún producto agregado",
+                showConfirmButton: false,
+                timer: 1500,
+            }).then(() => {
                 setLoading(false);
-                Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: "No tienes ningún producto agregado",
-                    showConfirmButton: false,
-                    timer: 1500,
-                }).then(() => {
-                    setLoading(false);
-                    captchaRef.current.resetCaptcha();
-                });
-                return;
-            }
+                captchaRef.current.resetCaptcha();
+            });
+            return;
+        }
+
+        try {
 
             // //Verification Hcaptcha
             const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
@@ -261,17 +293,18 @@ const Cart = () => {
                 });
                 return
             }
-
+            
             // Crear la orden
             // Realizar la solicitud para crear la orden
             await axios.post(`${apiUrl}/orders/create_order`, dataCart);
-
-
+            
+            
             // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
             localStorage.removeItem('everchic_cart_free');
             localStorage.removeItem('everchic_cart');
-
-            // localStorage.setItem("userCartData", JSON.stringify(response.data.user)); // Considera si realmente necesitas guardar userCartData en localStorage aquí
+            localStorage.removeItem('userData');
+            dispatch(setUpdateUser({ token: null, user: {} }));
+            
             dispatch(deleteAllProducts());
             navigate('/');
 
@@ -279,17 +312,32 @@ const Cart = () => {
             Swal.fire({
                 position: "center",
                 icon: "success",
-                text: "Orden enviada con éxito",
+                text: `Orden enviada con éxito 🎉, ${!user?.token ? 'No olvides verificar tu cuenta !!':''}`,
                 showConfirmButton: true,
             });
-
-
+            
+            
         } catch (err) {
             console.log(err);
+            let message 
+
             const info = err.response?.data?.message;
 
+            if (info) {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: '¡Aviso!',
+                    text: info,
+                    showConfirmButton: true
+                });
 
-            if (err) {
+                return;
+
+            }
+
+
+            if (err.response?.data?.result?.failOperation) {
                 Swal.fire({
                     position: "center",
                     icon: "warning",
@@ -300,18 +348,6 @@ const Cart = () => {
 
             }
 
-            if (err.response?.data?.result?.failOperation) {
-                Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: "Hubo un error la procesar la solicitudoo",
-                    text: info,
-                    showConfirmButton: true
-                });
-
-            }
-
-            let message
             err.response?.data?.result?.cartJoinFiltered?.forEach(product => {
                 message = `${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
             });
@@ -320,7 +356,7 @@ const Cart = () => {
                 Swal.fire({
                     position: "center",
                     icon: "info",
-                    title: "Información de stock agotado",
+                    title: "Producto con stock agotado",
                     text: message,
                     showConfirmButton: true
                 });
@@ -347,9 +383,6 @@ const Cart = () => {
             captchaRef.current.resetCaptcha();
         }
     };
-
-
-
 
 
     return (
@@ -430,18 +463,28 @@ const Cart = () => {
 
                     <div className='cart_details_info_buy_container'>
                         {/*----------------------------------------*/}
-
+                        <form
+                            onSubmit={handleSubmit(onSubmitForm)}
+                        >
                         <div className={isCompleteInfoUser ? 'add_customer_info_user_container':'add_customer_info_user_container alertComplete'}>
-                            <AddCustomer  isCompleteInfoUser={isCompleteInfoUser} setIscompleteInfoUser={setIscompleteInfoUser}/> 
+                            <AddCustomer  
+                                register={register} 
+                                setValue={setValue} 
+                                reset={reset} 
+                                clearErrors={clearErrors}                                                                 
+                                watch={watch}
+                                errors={errors}                                
+                            /> 
                         </div>
 
-                        <form
+                        <div 
                             className="cart_detail_shipping_form"
                             action=""
                             method="post"
                             id="shipping_form"
-                            onSubmit={handleSubmit(onSubmit)}
+                            
                         >
+
                             <div className='cart_detail_method_shipping_container'>
                                 <FormControl fullWidth theme={theme}>
                                     <InputLabel id="shipping-select-label">Seleccionar método de envío</InputLabel>
@@ -523,6 +566,7 @@ const Cart = () => {
 
 
                             </div>
+                        </div >
                         </form >
                     </div>
                 </div>

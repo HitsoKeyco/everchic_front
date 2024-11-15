@@ -2,9 +2,10 @@ import axios from "axios"
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { setUser } from "../store/slices/user.slice";
+import { setUpdateUser, setUser } from "../store/slices/user.slice";
 import { deleteAllProducts } from "../store/slices/cart.slice";
 import { useNavigate } from "react-router-dom";
+import { Token } from "@mui/icons-material";
 
 const useAuth = () => {
     const [isLoged, setIsloged] = useState(false)
@@ -55,9 +56,8 @@ const useAuth = () => {
                         title: 'Sesión Iniciada',
                         text: `Bienvenido ${res.data.user.firstName}`,
                     })
-                    localStorage.removeItem('likes');
-                    dispatch(setUser(res.data));
-                    localStorage.setItem("userData", JSON.stringify(res.data))                    
+                    localStorage.removeItem('likes');                                  
+                    dispatch(setUpdateUser({ token: res.data.token, user: res.data.user}));                    
                     setIsloged(true);
                 }
             })
@@ -74,7 +74,7 @@ const useAuth = () => {
 
     const logOut = () => {        
         localStorage.clear();        
-        dispatch(setUser({ user: null}))
+        dispatch(setUpdateUser({ token: null , user: null}))
         dispatch(deleteAllProducts())
         setIsloged(false)
         navigate('/')

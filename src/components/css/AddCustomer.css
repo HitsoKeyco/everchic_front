@@ -55,7 +55,11 @@
     width: 100%;   
     flex-direction: column;
     gap: 10px;
+}
 
+#panel-content {
+    background-color: var(--bgCardContainerProduct);
+    border-radius: 5px;
 }
 
 .add_customer_label {
@@ -181,8 +185,9 @@
     text-decoration: underline;
     cursor: pointer;
 }
-.disabled-input {
-    background-color: var(--bgInput) !important;
-    color: #a0a0a0;
+
+.input-disabled {
+    opacity: 0.5;
     cursor: not-allowed;
-  }
+    background-color: var(--bgInput);
+}
