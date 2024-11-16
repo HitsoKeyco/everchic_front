@@ -82,7 +82,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 type="text"
                                 id="dni"
                                 name="dni"
-                                className={`add_customer_input ${errors.dni ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.dni ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 autoComplete='on'
                                 disabled={ user?.user ? !isEditable : isEditable}
                                 {...register('dni', {
@@ -108,7 +108,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="firstName"
                                 name="firstName"
                                 autoComplete="on"
-                                className={`add_customer_input ${errors.firstName ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.firstName ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
 
                                 disabled={ user?.user  ? !isEditable : isEditable}
                                 {...register('firstName', {
@@ -129,7 +129,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="lastName"
                                 name="lastName"
                                 autoComplete="on"
-                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 disabled={user?.user ? !isEditable : isEditable}
                                 {...register('lastName', {
                                     required: {
@@ -152,7 +152,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="phone_first"
                                 name="phone_first"
                                 placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 disabled={user?.user ? !isEditable : isEditable}
                                 {...register('phone_first', {
                                     required: {
@@ -179,7 +179,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="phone_second"
                                 name="phone_second"
                                 placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_second ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.phone_second ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 disabled={user?.user ? !isEditable : isEditable}
                                 {...register('phone_second', {
                                     required: {
@@ -204,7 +204,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 type="text"
                                 id='city'
                                 name='city'
-                                className={`add_customer_input ${errors.city ? 'input-error' : ''} ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.city ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 disabled={user?.user ? !isEditable : isEditable}
                                 {...register('city', {
                                     required: {
