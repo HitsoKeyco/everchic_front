@@ -241,7 +241,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 name="address"
                                 autoComplete='on'
                                 disabled={user?.user ? !isEditable : isEditable}
-                                className={`add_customer_textarea ${errors.address ? 'input-error' : '' } ${ !isEditable && user.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_textarea ${errors.address ? 'input-error' : '' } ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
                                 {...register('address', {
                                     required: {
                                         value: true,
