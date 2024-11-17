@@ -89,6 +89,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         }
 
     }
+    
     //manejador de logOut
     const onLogOut = () => {
         setLoading(true)

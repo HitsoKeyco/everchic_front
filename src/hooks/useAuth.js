@@ -54,10 +54,10 @@ const useAuth = () => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Sesión Iniciada',
-                        text: `Bienvenido ${res.data.user.firstName}`,
+                        text: `Bienvenido ${res.data.user?.firstName}`,
                     })
                     localStorage.removeItem('likes');                                  
-                    dispatch(setUpdateUser({ token: res.data.token, user: res.data.user}));                    
+                    dispatch(setUpdateUser({ token: res.data?.token, user: res.data?.user}));                    
                     setIsloged(true);
                 }
             })
@@ -74,7 +74,7 @@ const useAuth = () => {
 
     const logOut = () => {        
         localStorage.clear();        
-        dispatch(setUpdateUser({ token: null , user: null}))
+        dispatch(setUpdateUser({ token: null , user: {}}))
         dispatch(deleteAllProducts())
         setIsloged(false)
         navigate('/')
@@ -82,7 +82,7 @@ const useAuth = () => {
 
     const logOutTime = () => {
         localStorage.clear();      
-        dispatch(setUser({ user: null}))
+        dispatch(setUser({ token: null, user: {}}))
         setIsloged(false)
     }
 

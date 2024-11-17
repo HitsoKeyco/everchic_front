@@ -10,14 +10,22 @@ const userSlice = createSlice({
     },
     reducers: {
         setUser: (state, action) => {
-            // const data = action.payload;            
-            // state.userData = data ;
-            
+            // Obtener el estado actual del localStorage
+            const userData = JSON.parse(localStorage.getItem("userData")) || { token: null, user: {} };
+
+            // Actualizar solo la información del usuario, manteniendo el token intacto
+            userData.user = action.payload;
+
+            // Guardar el estado actualizado en localStorage
+            localStorage.setItem("userData", JSON.stringify(userData));
+
+            // Actualizar el estado en Redux
+            state.userData = userData; 
         },
 
         setUpdateUser: (state, action) => {
             const data = action.payload
-            const userLS = JSON.parse(localStorage.getItem("userData")) || { token: false , user: {}};
+            const userLS = JSON.parse(localStorage.getItem("userData")) || { token: null , user: {}};
             userLS.user =  data.user;
             userLS.token = data.token
             state.userData = userLS

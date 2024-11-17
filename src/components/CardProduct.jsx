@@ -49,15 +49,18 @@ const CardProduct = ({ product, isSlider }) => {
     const cartFree = useSelector(state => state.cart.storedCartFree)
     const unitCartFree = cartFree ? cartFree.reduce((acc, productFree) => acc + productFree.quantity, 0) : 0;
     const navigate = useNavigate()
+
+
     const handleBuy = () => {
-        console.log('clic');
+        console.log('Entre a comprar');
         
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
 
         if (positionDifference <= tolerance) {
-
+            console.log('La posicion de diferencia es menor a la tolerancia');
             if (!isFree && product) {
+                console.log('No es gratis', isFree, product);
                 dispatch(addProduct({
                     productId: product?.id,
                     price: product?.sell_price,
@@ -73,31 +76,32 @@ const CardProduct = ({ product, isSlider }) => {
                     }
                 }));
 
-            } else {
-                if (!(freeProducts === unitCartFree)) {
-                    dispatch(addProductFree({
-                        productId: product?.id,
-                        price: product?.sell_price,
-                        productName: product?.collection?.name,
-                        stock: product?.stock,
-                        weight: product?.weight,
-                        category: product?.category?.name,
-                        tittle: product?.tittle,
-                        size: product?.size?.size,
-                        image: {
-                            url: product?.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
-                            alt: product?.title
-                        }
-                    }));
-
-                    if (freeProducts - unitCartFree == 1) {
-                        navigate("/cart");
+            } else if(!(freeProducts === unitCartFree)){   
+                console.log('Si freeProducts es igual a unitCartFree', freeProducts, unitCartFree);
+                dispatch(addProductFree({
+                    productId: product?.id,
+                    price: product?.sell_price,
+                    productName: product?.collection?.name,
+                    stock: product?.stock,
+                    weight: product?.weight,
+                    category: product?.category?.name,
+                    tittle: product?.tittle,
+                    size: product?.size?.size,
+                    image: {
+                        url: product?.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
+                        alt: product?.title
                     }
+                }));
 
-                }
+                if (freeProducts - unitCartFree == 1) {
+                    navigate("/cart");
+                }                
             }
         };
     }
+
+
+
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
     const userId = useSelector(state => state.user.userData?.user?.id) || null;

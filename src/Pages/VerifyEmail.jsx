@@ -14,13 +14,12 @@ const VerifyEmail = () => {
             setLoading(true)
             try {
                 const url = import.meta.env.VITE_API_URL;
-                const response = await axios.put(`${url}/users/verify/${verificationToken}`).catch(err => console.log(err));
+                const response = await axios.put(`${url}/users/verify/${verificationToken}`);
                 if (response.status === 200) {
                     setVerificationStatus('¡Correo electrónico verificado con éxito!');
                     setLoading(false)
                 }
-            } catch (error) {
-                console.error('Error:', error);
+            } catch (error) {                
                 setVerificationStatus('Hubo un error al verificar el correo electrónico.');
                 setLoading(false)
             }

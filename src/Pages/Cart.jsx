@@ -188,7 +188,7 @@ const Cart = () => {
     const onLoad = () => {
         captchaRef.current.execute();
     }
-    console.log(user);
+    
 
     useEffect(() => {
         // Resetea el formulario con los datos actuales del usuario cuando `user` cambia
@@ -276,23 +276,26 @@ const Cart = () => {
             return;
         }
 
-        try {
 
+
+        try {
+            
+            
             // //Verification Hcaptcha
-            const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
-            if (!verifyCaptchaResponse) {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Captcha no válido",
-                    showConfirmButton: true,
-                    timer: 1500,
-                }).then(() => {
-                    setLoading(false);
-                    captchaRef.current.resetCaptcha();
-                });
-                return
-            }
+            // const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
+            // if (!verifyCaptchaResponse) {
+            //     Swal.fire({
+            //         position: "center",
+            //         icon: "error",
+            //         title: "Captcha no válido",
+            //         showConfirmButton: true,
+            //         timer: 1500,
+            //     }).then(() => {
+            //         setLoading(false);
+            //         captchaRef.current.resetCaptcha();
+            //     });
+            //     return
+            // }
             
             // Crear la orden
             // Realizar la solicitud para crear la orden
@@ -301,9 +304,7 @@ const Cart = () => {
             
             // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
             localStorage.removeItem('everchic_cart_free');
-            localStorage.removeItem('everchic_cart');
-            localStorage.removeItem('userData');
-            dispatch(setUpdateUser({ token: null, user: {} }));
+            localStorage.removeItem('everchic_cart');                       
             
             dispatch(deleteAllProducts());
             navigate('/');
@@ -312,8 +313,14 @@ const Cart = () => {
             Swal.fire({
                 position: "center",
                 icon: "success",
-                text: `Orden enviada con éxito 🎉, ${!user?.token ? 'No olvides verificar tu cuenta !!':''}`,
+                text: `Orden enviada con éxito 🎉. ${ user?.isVerify ? '':'No olvides verificar tu cuenta !!'}`,
                 showConfirmButton: true,
+            }).then(() => {
+                if(!user?.isVerify){
+                        dispatch(setUpdateUser({ token: null, user: {} }));
+                        localStorage.removeItem('userData');
+                        reset({ password: '', repeat_password: '' });
+                }
             });
             
             
@@ -327,13 +334,27 @@ const Cart = () => {
                 Swal.fire({
                     position: "center",
                     icon: "warning",
-                    title: '¡Aviso!',
+                    title: "¡Aviso!",
                     text: info,
-                    showConfirmButton: true
+                    showConfirmButton: true,
+                    confirmButtonText: info.includes("debes verificar tu cuenta al correo") ? "Reenviar correo" : "Aceptar",
+                    
+                    showCancelButton: info.includes("debes verificar tu cuenta al correo"),                     
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    //eliminar campo de contraseña
+                    
+                    
+                    if (result.isConfirmed && info.includes("debes verificar tu cuenta al correo")) {
+                        // Llama a la función para reenviar el correo
+                        resendEmail(data.email);                        
+                        dispatch(setUpdateUser({ token: null, user: {} }));
+                        localStorage.removeItem('userData');
+                        reset({ password: '', repeat_password: '' });
+                    }
                 });
-
+            
                 return;
-
             }
 
 
@@ -347,6 +368,16 @@ const Cart = () => {
                 });
 
             }
+
+            //"Hola Sergio, debes verificar tu cuenta al correo olivosergio09@gmail.com"
+            //validar si contiene message -> 'debes verificar tu cuenta al correo'
+            if (err.response?.data?.message == contains('debes verificar tu cuenta al correo')) {
+                //extraer email
+            }
+                
+
+
+
 
             err.response?.data?.result?.cartJoinFiltered?.forEach(product => {
                 message = `${product.title} (${product.description}): Stock actual: ${product.stock} Pares\n`;
@@ -384,6 +415,32 @@ const Cart = () => {
         }
     };
 
+    const resendEmail = async (email) => {        
+        setLoading(true)        
+        try {
+            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+            const res = await axios.post(url, { email });
+            if (res.data.message == "Se ha enviado un correo de verificación") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo electrónico enviado',
+                    text: 'Revisa tu correo electrónico para activar tu cuenta',
+                });
+                setLoading(false)                
+            }
+
+        } catch (err) {            
+            if (err.response.data.message = "Usuario no encontrado") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email invalido',
+                    text: 'Opps.. algo salio mal.. !!',
+                });
+                setLoading(false)
+            }
+        }
+
+    }
 
     return (
         <>

@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import Orders from '../components/Orders';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Backdrop, Button, CircularProgress } from '@mui/material';
-import { setUpdateUser } from '../store/slices/user.slice';
+import { setUpdateUser, setUser } from '../store/slices/user.slice';
 import AddCustomer from '../components/AddCustomer';
 
 const Profile = () => {
@@ -19,7 +19,7 @@ const Profile = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm();
+    const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm();
 
     const user = useSelector(state => state.user.userData?.user || {});
     const token = useSelector(state => state.user.userData?.token || {});
@@ -50,33 +50,36 @@ const Profile = () => {
 
     const verifyCaptcha = () => {
         return new Promise((resolve, reject) => {
-            setLoading(true);
+            setLoading(true);  // Activar el estado de carga
             axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
                 .then(res => {
-                    setIsValidCaptcha(true);
-                    resolve();
+                    // Si la respuesta es exitosa, se considera que el captcha es válido
+                    setIsValidCaptcha(true); // Se establece que el captcha es válido
+                    resolve(true);  // Resolver la promesa con valor `true`
                 })
                 .catch(err => {
-                    setIsValidCaptcha(false);
+                    // Si hay un error (por ejemplo, el captcha es inválido)
+                    setIsValidCaptcha(false); // Se establece que el captcha es inválido
                     Swal.fire({
                         position: "center",
                         icon: "error",
                         text: "Captcha inválido",
-                        showConfirmButton: false,
+                        showConfirmButton: true,
                         timer: 1500
                     });
-                    reject();
+                    reject(false); // Rechazar la promesa con valor `false`
                 })
                 .finally(() => {
+                    // Al final, independientemente de si hubo éxito o error, se detiene el estado de carga
                     setLoading(false);
-                    captchaRef.current.resetCaptcha();
+                    captchaRef.current.resetCaptcha(); // Reseteamos el captcha
                 });
         });
     };
+    
 
     const submit = async (data) => {
-        await verifyCaptcha();
-    
+            
         if (isValidCaptcha) {
             setLoading(true);
     
@@ -107,7 +110,9 @@ const Profile = () => {
                 axios.put(`${apiUrl}/users/${user.id}/update_user`, userData, getConfigAuth())
                     .then(res => {
                         // Actualizar los datos en el Redux y en el localStorage
-                        dispatch(setUpdateUser(res.data));
+                        console.log(res.data);
+                        
+                        dispatch(setUpdateUser({ token:res.data?.token || null , user: res.data.user}));
                         setIsEditable(false);
                         Swal.fire({
                             position: "center",
@@ -181,6 +186,60 @@ const Profile = () => {
                 setLoading(false);
             });
     };
+
+    const saveDataUser = async () => {
+        try{
+            const verify = await verifyCaptcha();
+            console.log('Estado verificacion',verify);   
+            
+            if (isEditable) {   
+                const data = {
+                    dni: watch('dni'),
+                    firstName: watch('firstName'),
+                    lastName: watch('lastName'),
+                    phone_first: watch('phone_first'),
+                    phone_second: watch('phone_second'),
+                    city: watch('city'),
+                    address: watch('address'),
+                }
+                
+                setLoading(true);
+                axios.put(`${apiUrl}/users/${user?.id}`, data, getConfigAuth(token))
+                    .then(res => {
+                        console.log(res.data);
+        
+                        // Preservar el token actual y actualizar solo el usuario
+                        dispatch(setUser(res.data));
+                        
+                        setLoading(false);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Datos actualizados',
+                            text: 'Tus datos han sido actualizados correctamente',
+                        }).then(()=>{
+                            setIsEditable(false);
+                        });
+                        
+                    })
+                    .catch(err => {        
+                        console.log(err);                       
+                        setLoading(false);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al actualizar',
+                            text: 'Ha ocurrido un error al actualizar tus datos',
+                        });
+                    });
+                }
+        }catch(err){
+            console.log('error recaptcha',err);
+            
+        }
+        
+
+
+    }
+
 
     return (
         <motion.div
@@ -346,17 +405,32 @@ const Profile = () => {
                             </div>
                         )}
 
+
                         <div className='profile_buttons_container'>
-                            <Button className="profile_button" type="button" onClick={() => setIsEditable(prev => !prev)}>
-                                {isEditable ? 'Cancelar' : 'Editar'}
+                            <Button className="profile_button" type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    if (isEditable) {
+                                        saveDataUser(); 
+
+                                          
+                                    }else{
+                                        setIsEditable(true);
+                                    }
+
+                                    
+                                }}>
+                                {isEditable ? 'Guardar' : 'Editar'}
                             </Button>
-                            {isEditable && <Button className="profile_button" type="submit">Actualizar</Button>}
                         </div>
+
+
                     </form>
 
 
                 </div>
             </div>
+            
 
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

@@ -63,6 +63,38 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
         }
     }
 
+    const handleResendEmail = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        const email = e.target.form.email.value;
+
+        try {
+            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+            const res = await axios.post(url, { email });
+            if (res.data.message == "Se ha enviado un correo de verificación") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo electrónico enviado',
+                    text: 'Revisa tu correo electrónico para activar tu cuenta',
+                });
+                setLoading(false)
+                setIsResendEmail(false);
+            }
+
+        } catch (err) {
+            console.log(err);
+            if (err.response.data.message = "Usuario no encontrado") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email invalido',
+                    text: 'Opps.. algo salio mal.. !!',
+                });
+                setLoading(false)
+            }
+        }
+
+    }
+
 
     return (
         <>
@@ -82,9 +114,9 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 type="text"
                                 id="dni"
                                 name="dni"
-                                className={`add_customer_input ${errors.dni ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.dni ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
                                 autoComplete='on'
-                                disabled={ user?.user ? !isEditable : isEditable}
+                                disabled={ user?.user?.isVerify ? !isEditable : isEditable}
                                 {...register('dni', {
                                     required: 'Este campo es obligatorio',
                                     minLength: { value: 10 },
@@ -108,9 +140,9 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="firstName"
                                 name="firstName"
                                 autoComplete="on"
-                                className={`add_customer_input ${errors.firstName ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
+                                className={`add_customer_input ${errors.firstName ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
 
-                                disabled={ user?.user  ? !isEditable : isEditable}
+                                disabled={ user?.user?.isVerify  ? !isEditable : isEditable}
                                 {...register('firstName', {
                                     required: { value: true, message: 'Este campo es requerido' },
                                     maxLength: 25,
@@ -129,8 +161,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="lastName"
                                 name="lastName"
                                 autoComplete="on"
-                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
-                                disabled={user?.user ? !isEditable : isEditable}
+                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
+                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
                                 {...register('lastName', {
                                     required: {
                                         value: true,
@@ -152,8 +184,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="phone_first"
                                 name="phone_first"
                                 placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
-                                disabled={user?.user ? !isEditable : isEditable}
+                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
+                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
                                 {...register('phone_first', {
                                     required: {
                                         value: true,
@@ -179,8 +211,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="phone_second"
                                 name="phone_second"
                                 placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_second ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
-                                disabled={user?.user ? !isEditable : isEditable}
+                                className={`add_customer_input ${errors.phone_second ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
+                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
                                 {...register('phone_second', {
                                     required: {
                                         value: false,
@@ -204,8 +236,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 type="text"
                                 id='city'
                                 name='city'
-                                className={`add_customer_input ${errors.city ? 'input-error' : ''} ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
-                                disabled={user?.user ? !isEditable : isEditable}
+                                className={`add_customer_input ${errors.city ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
+                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
                                 {...register('city', {
                                     required: {
                                         value: true,
@@ -217,7 +249,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                         {errors.city && <p className="error_message">{errors.city.message}</p>}
 
                         {
-                            user?.user &&
+                            user?.user?.isVerify &&
                             <>
                                 <div className="add_customer_elements_container">
                                     <label className="add_customer_label" htmlFor="email" >E-mail:</label>
@@ -240,8 +272,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                 id="address"
                                 name="address"
                                 autoComplete='on'
-                                disabled={user?.user ? !isEditable : isEditable}
-                                className={`add_customer_textarea ${errors.address ? 'input-error' : '' } ${ !isEditable && user?.user !==  null ? 'input-disabled' : ''}`}
+                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
+                                className={`add_customer_textarea ${errors.address ? 'input-error' : '' } ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
                                 {...register('address', {
                                     required: {
                                         value: true,
@@ -253,7 +285,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                         </div>
                         {errors.address && <p className="error_message">{errors.address.message}</p>}
                         {
-                            user?.user == null
+                            !user?.user?.isVerify
 
                             ?
 

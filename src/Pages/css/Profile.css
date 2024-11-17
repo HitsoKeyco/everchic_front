@@ -97,8 +97,7 @@
     font-size: 0.9em;
 }
 
-.disabled-input {
-    background-color: #f0f0f0;
+.disabled-input {    
     color: #a0a0a0;
     cursor: not-allowed;
   }
