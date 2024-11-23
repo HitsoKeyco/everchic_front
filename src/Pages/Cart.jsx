@@ -282,20 +282,20 @@ const Cart = () => {
             
             
             // //Verification Hcaptcha
-            // const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
-            // if (!verifyCaptchaResponse) {
-            //     Swal.fire({
-            //         position: "center",
-            //         icon: "error",
-            //         title: "Captcha no válido",
-            //         showConfirmButton: true,
-            //         timer: 1500,
-            //     }).then(() => {
-            //         setLoading(false);
-            //         captchaRef.current.resetCaptcha();
-            //     });
-            //     return
-            // }
+            const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
+            if (!verifyCaptchaResponse) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Captcha no válido",
+                    showConfirmButton: true,
+                    timer: 1500,
+                }).then(() => {
+                    setLoading(false);
+                    captchaRef.current.resetCaptcha();
+                });
+                return
+            }
             
             // Crear la orden
             // Realizar la solicitud para crear la orden
