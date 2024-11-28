@@ -10,9 +10,12 @@
     align-items: center;
     overflow-y: visible !important;
     transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-    background-color: var(--bgBodyPage);
+    /* background-color: var(--bgBodyPage); */
+    background: var(--bgNavidadHeader);
     
 }
+    
+
 
 .header_elements_container {
     width: 100%;
@@ -32,7 +35,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1em 1em;
-    color: var(--colorText_b);
+    color: var(--colorTextNavidad);
     width: 100%;
     max-width: 1280px;
     border-bottom: 1px solid var(--borderCardproduct);
@@ -45,21 +48,21 @@
 }
 
 .linkActive {
-    color: var(--colorText_b);
+    color: var(--colorTextNavidad);
     padding: 0 10px;
     border-radius: 3px;
     background-color: var(--colorTextActiveLink);
 }
 
 .linkDesactive {
-    color: var(--colorText_a);
+    color: var(--colorTextNavidad);
 }
 
 .nav_items_left,
 .nav_items_right {
     display: flex;
     align-items: center;
-
+    
 
 }
 
@@ -95,7 +98,7 @@
     top: 7.5px;
     font-size: 16px;
     opacity: 0.5;
-    color: var(--colorText_a);
+    color: var(--colorTextNavidad);
 }
 
 .nav_link {
@@ -113,7 +116,8 @@
     user-select: none;
     touch-action: none;
     margin: 0;
-    color: var(--colorText_a);
+    /* color: var(--colorText_a); */
+    color: var(--colorTextNavidad);
 }
 
 .bx-menu {
@@ -121,7 +125,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    color: var(--colorText_a);
+    /* color: var(--colorText_a); */
+    color: var(--colorTextNavidad)
 }
 
 .bx-user {
@@ -129,7 +134,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    color: var(--colorText_a);
+    /* color: var(--colorText_a); */
+    color: var(--colorTextNavidad)
 }
 
 .bx-moon,
@@ -139,7 +145,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    color: var(--colorText_a);
+    /* color: var(--colorText_a); */
+    color: var(--colorTextNavidad)
 
 }
 
@@ -171,8 +178,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--colorText_a);
-    color: var(--colorText_e)
+    background-color: var(--colorText_b);
+    color: var(--colorText_f);
+    font-weight: 600;
     
 }
 
@@ -213,7 +221,9 @@
 }
 
 .header_address {
-    margin: 0
+    margin: 0;    
+    color: var(--colorTextNavidad)
+
 }
 
 .nav_chat_box_container {
@@ -248,6 +258,7 @@
 
 .nav_item_link_element {
     display: none;
+    
 }
 
 
@@ -286,7 +297,7 @@
         border-bottom: 2px solid var(--borderCardproduct);
 
         padding: 5px 10px;
-        color: var(--colorText_a);
+        color: var(--colorTextNavidad);
         font-weight: 300;
     }
 
@@ -297,7 +308,7 @@
         justify-content: space-between;
         padding: 1em 1em;
         width: 100%;
-        color: var(--colorText_a);
+        color: var(--colorTextNavidad);
     }
 
     .quantity_products {
@@ -344,7 +355,7 @@
     .header_info_user {
         padding-right: 15px;
         font-size: 1em;
-        color: var(--colorText_a);
+        color: var(--colorTextNavidad);
         padding: 0px 5px;
         margin-right: 5px;
         border-radius: 3px;

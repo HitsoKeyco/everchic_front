@@ -109,8 +109,6 @@ const Profile = () => {
     
                 axios.put(`${apiUrl}/users/${user.id}/update_user`, userData, getConfigAuth())
                     .then(res => {
-                        // Actualizar los datos en el Redux y en el localStorage
-                        console.log(res.data);
                         
                         dispatch(setUpdateUser({ token:res.data?.token || null , user: res.data.user}));
                         setIsEditable(false);
@@ -190,8 +188,7 @@ const Profile = () => {
     const saveDataUser = async () => {
         try{
             const verify = await verifyCaptcha();
-            console.log('Estado verificacion',verify);   
-            
+                        
             if (isEditable) {   
                 const data = {
                     dni: watch('dni'),
@@ -204,10 +201,9 @@ const Profile = () => {
                 }
                 
                 setLoading(true);
-                axios.put(`${apiUrl}/users/${user?.id}`, data, getConfigAuth(token))
+                axios.put(`${apiUrl}/users/${user?.id}/update_user`, data, getConfigAuth(token))
                     .then(res => {
-                        console.log(res.data);
-        
+                                
                         // Preservar el token actual y actualizar solo el usuario
                         dispatch(setUser(res.data));
                         
@@ -265,7 +261,13 @@ const Profile = () => {
                         <Orders />
                     </div>
 
-                    <form className="profile_form" onSubmit={handleSubmit(submit)}>
+                    <form className="profile_form" onSubmit={handleSubmit(() => {                                                            
+                        if (isEditable) {
+                            saveDataUser();                         
+                        }else{
+                            setIsEditable(true);
+                        }
+                    })}>
                         <h4 className='profile_title_shipping'>Datos de envío</h4>
 
                         {/*------------------------------\\ dni //-----------------------------------*/}
@@ -394,7 +396,15 @@ const Profile = () => {
                         {errors.address && <p className="error_message">{errors.address.message}</p>}
 
                         {isEditable && (
-                            <div className="captcha_container" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            <div 
+                                className="captcha_container" 
+                                style={{ 
+                                    width: '100%', 
+                                    display: 'flex', 
+                                    justifyContent: 'center' 
+                                }}
+                                
+                            >
                                 <HCaptcha
                                     sitekey={keyHcaptcha}
                                     onVerify={handleVerifyCaptcha}

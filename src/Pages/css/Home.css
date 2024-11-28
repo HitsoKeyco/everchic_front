@@ -516,7 +516,7 @@
         font-weight: 500;
         color: white;        
         background-color: var(--colorButtonHome);
-        border: 2px solid white;
+        border: 2px solid rgb(232, 232, 232);
     }
     .home_btn_buy:hover{
         background-color: var(--bgButtonHoverHome);
@@ -592,7 +592,10 @@
         padding: 0 25px;
 
     }
+
 }
+
+
 
 
 @media (min-width: 1024px) {

@@ -76,14 +76,14 @@
 
 
     /*Background Body*/
-    --bgBodyPage: #f3f3f3;
+    --bgBodyPage: #f3bdbd;
     --bgBodyPageBlur: #f3f3f3;
 
     /* CardProduct */
     --bgCardProduct: #eeecec;
-    --bgCardContainerProduct: #f1f1f1;
+    --bgCardContainerProduct: #fefdfd;
     --bgModalProduct: #010000;
-    --bgCardContainer: #e9ebef;
+    --bgCardContainer: hsl(0, 0%, 98%);
     --bgCardContainerHover: #eee9f7;
     --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
     --colorTag: #2D9596;
@@ -108,6 +108,11 @@
 
     /* Footer */
     --bgColorFooter: #e8e8ea;
+
+    /*Navidad*/
+    --colorTextNavidad: white;
+    --bgNavidadHeader: linear-gradient(92.41deg, #003d32, #04734b);    
+    --bgNavidadFooter: linear-gradient(92.41deg, #003d32, #04734b);
 }
 
 .swal2-popup {
@@ -125,7 +130,8 @@
 body {
     width: 100%;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
+   
 }
 
 .swal2-shown,
@@ -303,8 +309,8 @@ textarea {
     /* Boton */
     --colorButton: #181918;
     --bgButtonHover: #202323;
-    --colorButtonHome: #c09319;
-    --bgButtonHoverHome: #c39925;
+    --colorButtonHome: #21960d;
+    --bgButtonHoverHome: #14910d;
 
 
     /* Input */

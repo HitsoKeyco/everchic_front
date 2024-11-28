@@ -1,6 +1,7 @@
 .card_product_container {
     width: 100%;
-    max-width: 190px;
+    min-width: 140px;
+    max-width: 200px;
     cursor: pointer;
     position: relative;
     background-color: var(--bgCardContainerProduct);
@@ -14,15 +15,12 @@
 }
 
 
-.card_container_img {
-    
-    
+.card_container_img {   
     aspect-ratio: 1/1;
-
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;    
+    overflow: hidden;   
 
     position: relative;
 }
@@ -114,12 +112,12 @@
 }
 
 .card_product_price {
-    font-size: 20px;
+    font-size: 1.1em;
     font-weight: 500;
     color: var(--colorText_a);
 }
 
-.card_product_name {
-    font-size: 1em;
+.card_product_name {    
+    font-size: 0.9em;
     color: var(--colorText_a);
 }

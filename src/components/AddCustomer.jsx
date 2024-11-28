@@ -1,17 +1,12 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useState } from 'react';
 import './css/AddCustomer.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Accordion, AccordionDetails, AccordionSummary, Backdrop, Button, CircularProgress } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Swal from 'sweetalert2';
-import { setUpdateUser } from '../store/slices/user.slice';
-import { useForm } from 'react-hook-form';
 
 import axios from 'axios';
 import getConfigAuth from '../utils/getConfigAuth';
-import { Link } from 'react-router-dom';
 import RegisterUser from './RegisterUser';
-
 
 const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSubmit, watch, onSubmitForm }) => {
     
@@ -42,7 +37,8 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
         }
         
         setLoading(true);
-        axios.put(`${apiUrl}/users/${user.user.id}`, data, getConfigAuth(user.token))
+        axios.put(`${apiUrl}/users/${user.user.id}/update_user`, data, getConfigAuth(user.token))
+        // eslint-disable-next-line no-unused-vars
             .then(res => {
                 setLoading(false);
                 Swal.fire({
@@ -52,6 +48,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                 });
                 
             })
+            // eslint-disable-next-line no-unused-vars
             .catch(err => {                               
                 setLoading(false);
                 Swal.fire({
@@ -63,44 +60,44 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
         }
     }
 
-    const handleResendEmail = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        const email = e.target.form.email.value;
+    // const handleResendEmail = async (e) => {
+    //     e.preventDefault()
+    //     setLoading(true)
+    //     const email = e.target.form.email.value;
 
-        try {
-            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
-            const res = await axios.post(url, { email });
-            if (res.data.message == "Se ha enviado un correo de verificación") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Correo electrónico enviado',
-                    text: 'Revisa tu correo electrónico para activar tu cuenta',
-                });
-                setLoading(false)
-                setIsResendEmail(false);
-            }
+    //     try {
+    //         const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+    //         const res = await axios.post(url, { email });
+    //         if (res.data.message == "Se ha enviado un correo de verificación") {
+    //             Swal.fire({
+    //                 icon: 'success',
+    //                 title: 'Correo electrónico enviado',
+    //                 text: 'Revisa tu correo electrónico para activar tu cuenta',
+    //             });
+    //             setLoading(false)
+    //             setIsResendEmail(false);
+    //         }
 
-        } catch (err) {
-            console.log(err);
-            if (err.response.data.message = "Usuario no encontrado") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Email invalido',
-                    text: 'Opps.. algo salio mal.. !!',
-                });
-                setLoading(false)
-            }
-        }
+    //     } catch (err) {
+    //         console.log(err);
+    //         if (err.response.data.message = "Usuario no encontrado") {
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Email invalido',
+    //                 text: 'Opps.. algo salio mal.. !!',
+    //             });
+    //             setLoading(false)
+    //         }
+    //     }
 
-    }
+    // }
 
 
     return (
         <>
 
             <Accordion expanded={expanded} onChange={handleExpandAccordion}>
-                <AccordionSummary id="panel-header" aria-controls="panel-content" expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary id="panel-header" aria-controls="panel-content">
                     <p className='add_customer_title'>Información de usuario - Envío</p>
                 </AccordionSummary>
                 <AccordionDetails  >
@@ -278,8 +275,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
                                     required: {
                                         value: true,
                                         message: 'Este campo es requerido'
-                                    },
-                                    maxLength: 60,
+                                    },                            
                                 })}
                             />
                         </div>
@@ -335,5 +331,7 @@ const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSub
         </>
     );
 };
+
+
 
 export default AddCustomer;

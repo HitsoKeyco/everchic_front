@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { setUpdateUser, setUser } from "../store/slices/user.slice";
 import { deleteAllProducts } from "../store/slices/cart.slice";
 import { useNavigate } from "react-router-dom";
-import { Token } from "@mui/icons-material";
+
 
 const useAuth = () => {
     const [isLoged, setIsloged] = useState(false)
@@ -49,7 +49,7 @@ const useAuth = () => {
     const loginUser = async (data) => {
         await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, data)
             .then(res => {
-                //console.log(res.data);
+                
                 if (res.data.user) {
                     Swal.fire({
                         icon: 'success',

@@ -1,20 +1,15 @@
-import React, { cloneElement, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import './css/Product.css';
 import CardProduct from '../components/CardProduct';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { addProductStore } from '../store/slices/cart.slice';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import FilterSocks from '../components/FilterSocks';
 import ProductCarousel from '../components/ProductCarousel';
 import { Backdrop, Box, CircularProgress } from '@mui/material';
-import { WidthFull } from '@mui/icons-material';
-
-
-
 
 const Products = () => {
     // ################### Api url ##########################    
@@ -26,8 +21,7 @@ const Products = () => {
     // ################### States ##########################   
     const [productsAPI, setProductsAPI] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [collections, setCollections] = useState([{ name: 'Colección' }]);
-    const [searchFilter, setSearchFilter] = useState({ type: '', value: '' });
+    const [collections, setCollections] = useState([{ name: 'Colección' }]);    
     const [searchCategory, setSearchCategory] = useState('');
     const [searchCollection, setSearchCollection] = useState(false);
     const [loading, setLoading] = useState(false); // Estado de carga
@@ -38,18 +32,18 @@ const Products = () => {
     });
 
     // ################### Pagination Limit products ##########################  
-    const limit = 18;
+    const limit = 24;
 
     // ################### Fecth Products Custom, Category ##########################  
     const [changeFilter, setChangeFilter] = useState(false);
 
     useEffect(() => {
         fetchProducts();
+        fetchAllQuantityProducts();
     }, [pagination.currentPage, changeFilter]);
 
     
-    const fetchProducts = () => {
-        
+    const fetchProducts = () => {        
         //sabiendo q tengo searchCollection
         setLoading(true);
         let url = '';
@@ -66,13 +60,28 @@ const Products = () => {
                 const { total, currentPage, totalPages, products } = res.data;                
                 setPagination({ total, currentPage, totalPages });
                 setProductsAPI(products);                
-                localStorage.setItem('everchic_stored_products', JSON.stringify(products));
-                dispatch(addProductStore(products));
+                //Este no debería ser el lugar correcto para almacenar los productos en el store
+                //localStorage.setItem('everchic_stored_products', JSON.stringify(products));
+
+                //dispatch(addProductStore(products));
             })
             .catch(err => {
                 console.log(err);
             })
             .finally(() => setLoading(false));
+
+        
+
+    };
+
+    const fetchAllQuantityProducts = () => {
+        axios.get(`${apiUrl}/products/getAllQuantityProducts`)
+            .then(res => {                
+                localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
+            })
+            .catch(err => {
+                console.log(err);
+            })
     };
 
     // ################### Function handle pagination ########################## 
@@ -133,8 +142,20 @@ const Products = () => {
 
                         />
                     </div>
+                    <div className='product_pagination_container'>
+                        <Stack spacing={2}>
+                            <Pagination
+                                count={pagination.totalPages}
+                                page={parseInt(pagination.currentPage)}
+                                onChange={goToPage}
+                                variant="outlined"
+                                shape="rounded"
+                            />
+                        </Stack>
+                    </div>
 
                     <div className={`${searchCollection && searchCategory == '' ? 'product_container_carousel' : 'product_container'} `}>
+                        
                         {
                             productsAPI.length > 0 ? (
                                 <>
@@ -194,7 +215,7 @@ const Products = () => {
             <Backdrop
                 
                 sx={{ color: '#fff',
-                      zIndex: (theme) => theme.zIndex.drawer + 1                       
+                        zIndex: (theme) => theme.zIndex.drawer + 1                       
                     }}
                 open={loading}
             >

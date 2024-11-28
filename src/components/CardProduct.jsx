@@ -52,15 +52,15 @@ const CardProduct = ({ product, isSlider }) => {
 
 
     const handleBuy = () => {
-        console.log('Entre a comprar');
+        //console.log('Entre a comprar');
         
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
 
         if (positionDifference <= tolerance) {
-            console.log('La posicion de diferencia es menor a la tolerancia');
+            //console.log('La posicion de diferencia es menor a la tolerancia');
             if (!isFree && product) {
-                console.log('No es gratis', isFree, product);
+                //console.log('No es gratis', isFree, product);
                 dispatch(addProduct({
                     productId: product?.id,
                     price: product?.sell_price,
@@ -77,7 +77,7 @@ const CardProduct = ({ product, isSlider }) => {
                 }));
 
             } else if(!(freeProducts === unitCartFree)){   
-                console.log('Si freeProducts es igual a unitCartFree', freeProducts, unitCartFree);
+                //console.log('Si freeProducts es igual a unitCartFree', freeProducts, unitCartFree);
                 dispatch(addProductFree({
                     productId: product?.id,
                     price: product?.sell_price,

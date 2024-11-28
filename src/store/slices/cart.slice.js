@@ -24,27 +24,6 @@ const unitsFree = calculateDozens(quantityProductCart);
 
 localStorage.setItem('everchic_cart_quantity_free', unitsFree);
 
-const calculatePriceCart = (quantityProductCart) => {   
-    let price;
-
-    if (quantityProductCart < 3) {
-        price = new Decimal(quantityProductCart).times(5);
-    } else if (quantityProductCart >= 3 && quantityProductCart < 6) {
-        price = new Decimal(13).div(3).times(quantityProductCart);
-    } else if (quantityProductCart >= 6 && quantityProductCart < 12) {
-        price = new Decimal(20).div(6).times(quantityProductCart);
-    } else if (quantityProductCart >= 12 && quantityProductCart < 60) {
-        price = new Decimal(36).div(12).times(quantityProductCart);
-    } else if (quantityProductCart >= 60) {
-        price = new Decimal(165).div(60).times(quantityProductCart);
-    }
-
-    // Redondear a dos decimales
-    return price.toDecimalPlaces(2).toNumber();
-};
-
-const totalCartPrice = calculatePriceCart(quantityProductCart)
-
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -53,12 +32,13 @@ const cartSlice = createSlice({
         storedCartFree,
         storedProducts: storedProducts,
         stateShippingCart: 0,
-        stateTotalCart: totalCartPrice,
+        stateTotalCart: 0,
         stateFreeToCart: false,
 
 
     },
     reducers: {
+        // eslint-disable-next-line no-unused-vars
         deleteAllProducts: (state, action) => {
             state.storedCart = [];
             state.storedCartFree = [];
@@ -85,11 +65,15 @@ const cartSlice = createSlice({
         },
 
         addProduct: (state, action) => {
-            const { productId } = action.payload
-
+            const { productId } = action.payload    
+            //console.log('entramos a la compra a redux', productId);
+            
             //buscamos el producto en la store general
-            const existingStoreProductIndex = state.storedProducts.findIndex(item => item.id === productId);
-            // console.log(existingStoreProductIndex);
+            const existingStoreProductIndex = state.storedProducts.findIndex(item => {
+                return item.id === productId;
+            });
+                // console.log(existingStoreProductIndex);
+            
             //buscamos en el storeCart
             const existingProductCartIndex = state.storedCart.findIndex(item => item.productId === productId);
             // console.log(existingProductCartIndex);
@@ -100,17 +84,24 @@ const cartSlice = createSlice({
             //si existe el producto
             // - Preguntar si existe tambien en freeCart
             // - Preguntar si sumando las cantidades entre storeCart y StoredCartFree es === al stock en storeProduct
-
+                //console.log('Preguntar si existe el producto en existingStoreProductIndex',existingStoreProductIndex);
+                
             //preguntamos si existe en la storeProduct el producto
             if (existingStoreProductIndex !== -1) {
+                //console.log('preguntamos si existe en la storeProduct el producto');
+                
                 //preguntamos si existe en la storecart el producto    
                 if (existingProductCartIndex !== -1) {
+                    //console.log('preguntamos si existe en la storecart el producto    ');
+                    
                     //verificamos existencias de quantity en storeCartFree y storeCart
                     const cartFreeQuantity = existingProductCartFreeIndex !== -1 ? state.storedCartFree[existingProductCartFreeIndex].quantity : 0;
                     const cartQuantity = existingProductCartIndex !== -1 ? state.storedCart[existingProductCartIndex].quantity : 0;
 
                     // si el stock es mayor q la suma de las cantidades de storeCart.quantity y storeCartFree.quantity agregamos + 1
                     if (state.storedProducts[existingStoreProductIndex].stock > (cartFreeQuantity + cartQuantity)) {
+                        //console.log('si el stock es mayor q la suma de las cantidades de storeCart.quantity y storeCartFree.quantity agregamos + 1');
+                        
                         state.storedCart[existingProductCartIndex].quantity += 1;
                         Swal.fire({
                             position: "center",
@@ -128,6 +119,7 @@ const cartSlice = createSlice({
                             showConfirmButton: true,
                         });
                     }
+
                 } else {
                     //caso contrario si el producto no existe en el cart lo agregamos
                     const newProduct = {
@@ -153,6 +145,32 @@ const cartSlice = createSlice({
                     });
                 }
             }
+            
+            // else{
+            //     //si el producto no existe en el store lo agregamos
+            //     const newProduct = {
+            //         productId: productId,
+            //         price: action.payload.price,
+            //         productName: action.payload.productName,
+            //         stock: action.payload.stock,
+            //         weight: action.payload.weight,
+            //         category: action.payload.category,
+            //         title: action.payload.title,
+            //         size: action.payload.size,
+            //         image: action.payload.image,
+            //         quantity: 1,
+            //     };
+            //     state.storedCart.push(newProduct);
+            //     localStorage.setItem('everchic_cart', JSON.stringify(state.storedCart));
+            //     Swal.fire({
+            //         position: "center",
+            //         icon: "success",
+            //         title: "Calcetín agregado!",
+            //         showConfirmButton: false,
+            //         timer: 1500
+            //     });
+            
+            // }
 
             const units = state.storedCart.reduce((acc, product) => acc + product.quantity, 0);
             const priceUnit = calculatePriceUnit(units);
@@ -471,8 +489,7 @@ const cartSlice = createSlice({
 
             const units = state.storedCart.reduce((acc, product) => acc + product.quantity, 0);
             const priceUnit = calculatePriceUnit(units);
-            const unitsFree = Math.floor(units / 12);
-
+            
 
             if (existingProductFreeIndex !== -1) {
                 state.storedCartFree.splice(existingProductFreeIndex, 1);
@@ -510,8 +527,10 @@ const calculatePriceUnit = (units) => {
     }
 
     // Redondear a dos decimales y convertir a número
-    return price.toDecimalPlaces(2).toNumber(); // Cambia aquí
+    return price.toNumber(); // Cambia aquí
 };
+
+
 
 
 export const {

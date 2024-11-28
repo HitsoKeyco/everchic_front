@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import '../Pages/css/Home.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -8,9 +8,12 @@ import SliderHomeMovil from '../components/SliderHomeMovil';
 import imagesProcessBuy from '../utils/imagesProcessBuy';
 import BannerHome from '../components/BannerHome';
 import ProductCarousel from '../components/ProductCarousel';
+import { useDispatch } from 'react-redux';
+import { addProductStore } from '../store/slices/cart.slice';
 
 const Home = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   const handdleBuyButton = () => {
     navigate('/products');
   }
@@ -22,9 +25,26 @@ const Home = () => {
     axios.get(`${apiUrl}/products/new_product`)
       .then(res => {
         setIsNewProducts(res.data);
-      })      
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      //Trae todos los productos con cantidad, id, stock
+      fetchAllQuantityProducts();
   }, [])
 
+  
+  const fetchAllQuantityProducts = () => {
+    axios.get(`${apiUrl}/products/getAllQuantityProducts`)
+        .then(res => {
+            
+            localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
+            dispatch(addProductStore(res.data));
+        })
+        .catch(err => {
+            console.log(err);
+        })
+};
 
 
   return (
