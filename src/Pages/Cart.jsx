@@ -286,8 +286,6 @@ const Cart = () => {
 
 
         try {
-
-            //Verification Hcaptcha
             const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
             if (!verifyCaptchaResponse) {
                 Swal.fire({
