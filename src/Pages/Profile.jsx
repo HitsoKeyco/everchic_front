@@ -10,7 +10,7 @@ import Orders from '../components/Orders';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Backdrop, Button, CircularProgress } from '@mui/material';
 import { setUpdateUser, setUser } from '../store/slices/user.slice';
-import AddCustomer from '../components/AddCustomer';
+
 
 const Profile = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -24,9 +24,8 @@ const Profile = () => {
     const user = useSelector(state => state.user.userData?.user || {});
     const token = useSelector(state => state.user.userData?.token || {});
     const [tokenCaptcha, setTokenCaptcha] = useState(null);
-    const [isValidCaptcha, setIsValidCaptcha] = useState(false);
-    const [isCaptchaExpired, setIsCaptchaExpired] = useState(false);
-    const [error, setError] = useState(null);
+    const [isValidCaptcha, setIsValidCaptcha] = useState(false);    
+    
 
     const theme = useSelector(state => state.user.theme);
     const captchaRef = useRef(null);
@@ -40,43 +39,14 @@ const Profile = () => {
     const handleVerifyCaptcha = (tokenCaptcha) => {
         setTokenCaptcha(tokenCaptcha);
         setIsValidCaptcha(true);
-        setIsCaptchaExpired(false);
+        
     };
 
     const handleExpireCaptcha = () => {
         setIsValidCaptcha(false);
-        setIsCaptchaExpired(false);
+        
     };
 
-    const verifyCaptcha = () => {
-        return new Promise((resolve, reject) => {
-            setLoading(true);  // Activar el estado de carga
-            axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha })
-                .then(res => {
-                    // Si la respuesta es exitosa, se considera que el captcha es válido
-                    setIsValidCaptcha(true); // Se establece que el captcha es válido
-                    resolve(true);  // Resolver la promesa con valor `true`
-                })
-                .catch(err => {
-                    // Si hay un error (por ejemplo, el captcha es inválido)
-                    setIsValidCaptcha(false); // Se establece que el captcha es inválido
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        text: "Captcha inválido",
-                        showConfirmButton: true,
-                        timer: 1500
-                    });
-                    reject(false); // Rechazar la promesa con valor `false`
-                })
-                .finally(() => {
-                    // Al final, independientemente de si hubo éxito o error, se detiene el estado de carga
-                    setLoading(false);
-                    captchaRef.current.resetCaptcha(); // Reseteamos el captcha
-                });
-        });
-    };
-    
 
     const submit = async (data) => {
             
@@ -120,8 +90,9 @@ const Profile = () => {
                             timer: 1500
                         });
                     })
-                    .catch(err => {
-                        console.log(err);
+                    // Si ocurre un error, mantener los valores anteriores
+                    // eslint-disable-next-line no-unused-vars
+                    .catch(err => {   
                         
                         // Si ocurre un error, mantener los valores anteriores
                         setValue('dni', user.dni);
@@ -187,7 +158,6 @@ const Profile = () => {
 
     const saveDataUser = async () => {
         try{
-            const verify = await verifyCaptcha();
                         
             if (isEditable) {   
                 const data = {

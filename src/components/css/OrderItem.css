@@ -1,13 +1,13 @@
 .order_item_product_container{
     margin: 0;
-    height: 100px;
+    height: max-content;
     display: flex;
     border-radius: 5px;
     
 }
 
 .order_item_product_image_container{
-    width: 100px;
+    width: 110px;
     margin: 0;    
 }
 .order_item_product_image{
@@ -28,4 +28,10 @@
 .order_item_product_subtotal {
     font-size: 1em;
     color: var(--colorText_a);
+}
+
+.order_item_product_ul{
+    list-style: none;
+    padding: 5px;
+    margin: 0;
 }

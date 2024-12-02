@@ -1,8 +1,9 @@
 // OrderContainer.js
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import getConfigAuth from '../utils/getConfigAuth';
 import axios from 'axios';
 import OrderItem from './OrderItem';
+import PropTypes from 'prop-types';
 import './css/OrderContainer.css';
 
 const OrderContainer = ({ order }) => {
@@ -11,6 +12,11 @@ const OrderContainer = ({ order }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
+        if (!apiUrl) {
+            console.error('API URL is not defined');
+            return;
+        }
+
         const fetchOrderItems = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/orders_items/order/${order.id}`, getConfigAuth());
@@ -37,6 +43,12 @@ const OrderContainer = ({ order }) => {
             ))}
         </>
     );
+};
+
+OrderContainer.propTypes = {
+    order: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+    }).isRequired,
 };
 
 export default OrderContainer;

@@ -53,6 +53,12 @@ const Orders = () => {
         return <div>Error: {error}</div>;
     }
 
+    console.log(orders);
+
+    //consultamos el estado de la orden
+
+    
+
     return (
         <>
             <div className='profile_title_shipping_container'>
@@ -61,14 +67,17 @@ const Orders = () => {
             {orders.map((order, index) => (
                 <div className={`orders_main_container ${hiddenStates[index] && 'orders_main_container_hidden'}`} key={order.id}>
                     <div className="order_main_header">
-                        <span className='order_main_date'>Fecha: {formatDate(order.updatedAt)}</span>
+                        <span className='order_main_date'>Fecha: {formatDate(order.updatedAt)} - {order?.orderStatus.order_status.charAt(0).toUpperCase() + order?.orderStatus.order_status.slice(1)} </span>
                         <div className="orders_main_right_elements_container">
                             <span className='order_main_total'>Total: ${order.total} Inc. envío.</span>
                             <i className={`bx bx-chevron-down chevron_hidden_down ${hiddenStates[index] ? 'chevron_visible' : ''}`} onClick={() => handleOrderVisible(index)}></i>
                             <i className={`bx bx-chevron-up chevron_hidden_up ${hiddenStates[index] ? 'chevron_hidden' : ''}`} onClick={() => handleOrderVisible(index)}></i>
                         </div>
                     </div>
-                    <OrderContainer order={order} />
+                    {
+                        orders.length > 0 &&
+                        <OrderContainer order={order} />
+                    }
                 </div>
             ))}
         </>
