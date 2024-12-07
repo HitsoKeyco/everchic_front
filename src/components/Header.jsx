@@ -51,9 +51,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const userTheme = useSelector(state => state.user.theme)
 
+
   useEffect(() => {
     // Configura el tema inicial basado en la preferencia almacenada
-    const savedTheme = localStorage.getItem('theme') || 'lightTheme';
+    const savedTheme = localStorage.getItem('theme') || 'darkTheme';
     if (savedTheme !== userTheme) {
       dispatch(setTheme(savedTheme));
     }
@@ -69,18 +70,24 @@ const Header = () => {
     }
   }, [userTheme, dispatch]);
 
+
+
   const handleDarkMode = () => {
     const newTheme = userTheme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
     localStorage.setItem('theme', newTheme);
     dispatch(setTheme(newTheme));
   };
 
+
+
   // Manejo de cantidad de producto en estado global a mostrar en cart.
   const cart = useSelector((state) => state.cart.storedCart);
   const quantity = cart.reduce((acc, product) => acc + product.quantity, 0);
 
-  const user = useSelector((state) => state.user.userData?.user)
-  const token = useSelector(state => state.user.userData?.token)
+  const user = useSelector((state) => state.user.userData?.user);
+  const token = useSelector(state => state.user.userData?.token);
+
+
   return (
     <>
 

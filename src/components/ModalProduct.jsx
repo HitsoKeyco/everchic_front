@@ -1,10 +1,12 @@
-import React from "react";
+
 import "../components/css/ModalProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, addProductFree } from "../store/slices/cart.slice";
 import SliderImg from "./SliderImg";
 import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
+import PropTypes from 'prop-types';
+import Swal from "sweetalert2";
 
 
 const ModalProduct = ({ product, setIsModal }) => {
@@ -78,7 +80,7 @@ const ModalProduct = ({ product, setIsModal }) => {
 
     return (
         <>
-            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md" style={{ zIndex: 9, overflow: "hidden" }}>
+            <Dialog open={handleContainerClick} onClose={handleContainerClick} fullWidth maxWidth="md" style={{ zIndex: 999, overflow: "hidden" }}>
 
                 <div className="modal_product_container"
                     onTouchMove={handleContentClick}
@@ -119,6 +121,33 @@ const ModalProduct = ({ product, setIsModal }) => {
             </Dialog>
         </>
     );
+};
+
+
+
+ModalProduct.propTypes = {
+    product: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        sell_price: PropTypes.number.isRequired,
+        collection: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }).isRequired,
+        stock: PropTypes.number.isRequired,
+        category: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }).isRequired,
+        tittle: PropTypes.string.isRequired,
+        weight: PropTypes.number,
+        size: PropTypes.shape({
+            size: PropTypes.string.isRequired
+        }).isRequired,
+        productImgs: PropTypes.arrayOf(PropTypes.shape({
+            url_medium: PropTypes.string
+        })),
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string
+    }).isRequired,
+    setIsModal: PropTypes.func.isRequired
 };
 
 export default ModalProduct;

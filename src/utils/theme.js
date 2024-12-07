@@ -101,7 +101,6 @@ const lightTheme = createTheme({
                         borderWidth: '2px',
                         borderColor: '#8a8a8a5a',
                     },
-               
             },
         },
     },

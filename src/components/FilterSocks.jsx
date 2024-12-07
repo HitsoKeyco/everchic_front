@@ -1,6 +1,6 @@
-// FilterSocks.js
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab, Autocomplete, TextField } from '@mui/material';
 
 const FilterSocks = ({ categories, collections, filterOptionsCategory, setSearchCategory, setPagination, setSearchCollection, changeFilter, setChangeFilter, setProductsAPI }) => {
@@ -40,13 +40,14 @@ const FilterSocks = ({ categories, collections, filterOptionsCategory, setSearch
     }
   };
 
-
   return (
     <>
       <Tabs value={activeTab} onChange={handleTabChange}>
         <Tab label="Categoría" />
         <Tab label="Colecciones" />
       </Tabs>
+
+      
       {activeTab === 0 && (
         <Autocomplete
           id="filter-category"
@@ -58,6 +59,8 @@ const FilterSocks = ({ categories, collections, filterOptionsCategory, setSearch
           renderInput={(params) => <TextField {...params} label="Selecciona una Categoría" />}
         />
       )}
+
+
       {activeTab === 1 && (
         <Autocomplete
           options={collections}
@@ -67,8 +70,22 @@ const FilterSocks = ({ categories, collections, filterOptionsCategory, setSearch
           renderInput={(params) => <TextField {...params} label="Agrupar por" />}
         />
       )}
+
+
     </>
   );
+};
+
+FilterSocks.propTypes = {
+  categories: PropTypes.array.isRequired,
+  collections: PropTypes.array.isRequired,
+  filterOptionsCategory: PropTypes.func.isRequired,
+  setSearchCategory: PropTypes.func.isRequired,
+  setPagination: PropTypes.func.isRequired,
+  setSearchCollection: PropTypes.func.isRequired,
+  changeFilter: PropTypes.bool.isRequired,
+  setChangeFilter: PropTypes.func.isRequired,
+  setProductsAPI: PropTypes.func.isRequired,
 };
 
 export default FilterSocks;

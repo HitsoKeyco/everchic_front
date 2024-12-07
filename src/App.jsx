@@ -1,8 +1,7 @@
 import './App.css';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home';
 import Header from './components/Header';
-import Products from './Pages/Products';
 import NoMatch from './components/NoMatch';
 import Footer from './components/Footer';
 import GalleryPage from './Pages/GalleryPage';
@@ -17,6 +16,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme, lightTheme } from './utils/theme';
 import TermsAndConditions from './Pages/TermsAndConditions';
+import ProductPage from './Pages/ProductPage';
 
 
 
@@ -32,7 +32,7 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/products' element={<Products />} />
+          <Route path='/products' element={<ProductPage />} />
           <Route path='/gallery' element={<GalleryPage />} />
           <Route path='/faqs' element={<Faqs />} />
           <Route path='/cart' element={<Cart />} />

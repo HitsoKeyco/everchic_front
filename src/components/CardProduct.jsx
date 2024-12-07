@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import '../components/css/CardProduct.css';
 import ModalProduct from './ModalProduct';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,8 +9,8 @@ import 'react-medium-image-zoom/dist/styles.css'
 import LazyLoad from 'react-lazyload';
 import likeService from '../utils/likeService';
 
-const CardProduct = ({ product, isSlider }) => {
-//console.log(product);
+const CardProduct = ({ product, isSlider, key }) => {
+
 
     const [isModal, setIsModal] = useState(false);
     const [isPositionInitial, setIsPositionInitial] = useState({ x: 0 })
@@ -52,14 +53,14 @@ const CardProduct = ({ product, isSlider }) => {
 
 
     const handleBuy = () => {
-        //console.log('Entre a comprar');
         
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
-
+        
         if (positionDifference <= tolerance) {
             //console.log('La posicion de diferencia es menor a la tolerancia');
             if (!isFree && product) {
+                console.log('Entre a comprar');
                 //console.log('No es gratis', isFree, product);
                 dispatch(addProduct({
                     productId: product?.id,
@@ -67,7 +68,7 @@ const CardProduct = ({ product, isSlider }) => {
                     productName: product?.collection?.name,
                     stock: product?.stock,
                     category: product?.category?.name,
-                    tittle: product?.tittle,
+                    title: product?.title,
                     size: product?.size?.size,
                     weight: product?.weight,
                     image: {
@@ -85,7 +86,7 @@ const CardProduct = ({ product, isSlider }) => {
                     stock: product?.stock,
                     weight: product?.weight,
                     category: product?.category?.name,
-                    tittle: product?.tittle,
+                    title: product?.title,
                     size: product?.size?.size,
                     image: {
                         url: product?.productImgs && product.productImgs.length > 0 ? product.productImgs[0].url_small : null,
@@ -97,8 +98,9 @@ const CardProduct = ({ product, isSlider }) => {
                     navigate("/cart");
                 }                
             }
-        };
+        }
     }
+
 
 
 
@@ -168,15 +170,15 @@ const CardProduct = ({ product, isSlider }) => {
                 className={`card_product_container ${isFree ? 'gold' : ''} ${isSlider && 'is_slider'}`}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
-                onClick={handdleModal}>
+                onClick={handdleModal}
+                key={key}>
+                
 
                 <div className="card_container_img">
                     <i className={`bx bxs-heart ${love ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
                     <p className='card_product_size'> Talla {product.size?.size}</p>
 
-
-
-
+                    
                     <LazyLoad  >
                         <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" />
                     </LazyLoad>
@@ -187,7 +189,7 @@ const CardProduct = ({ product, isSlider }) => {
 
                 <div className="card_product_body">
                     <div className="card_title_category">
-                        <p className='card_product_name'>{product.title}</p>
+                        <p className='card_product_name'>{product?.title}</p>
                         <p className='card_product_price'>{isFree ? 'Free' : `$ ${priceUnit}`}</p>
                     </div>
                     <div className='card_product_by_container'>
@@ -221,4 +223,29 @@ const CardProduct = ({ product, isSlider }) => {
     );
 };
 
+
+
+CardProduct.propTypes = {
+    product: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        sell_price: PropTypes.number,
+        collection: PropTypes.shape({
+            name: PropTypes.string
+        }),
+        stock: PropTypes.number,
+        category: PropTypes.shape({
+            name: PropTypes.string
+        }),
+        title: PropTypes.string,
+        size: PropTypes.shape({
+            size: PropTypes.string
+        }),
+        weight: PropTypes.number,
+        productImgs: PropTypes.arrayOf(PropTypes.shape({
+            url_small: PropTypes.string
+        }))
+    }).isRequired,
+    isSlider: PropTypes.bool,
+    key: PropTypes.number
+};
 export default CardProduct;

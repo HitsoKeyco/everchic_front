@@ -31,18 +31,11 @@ const userSlice = createSlice({
             state.userData = userLS
             localStorage.setItem("userData", JSON.stringify(userLS));
         },    
-           
+        
         setTheme: (state, action) => {           
             state.theme = action.payload;
         },
-
-        setresponseCartUserUpdate: (state, action) => {
-            // const responseCartUserUpdate = action.payload;            
-            // state.userData = {
-            //     ...state.userData,  
-            //     user: responseCartUserUpdate,  
-            // };
-        },        
+    
     }
 });
 
