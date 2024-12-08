@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Fetchproducts from "./js/Fetchproducts";
 import { Autocomplete, Backdrop, Box, CircularProgress, Pagination, Stack, Tab, Tabs, TextField, Typography } from "@mui/material";
 import CardProduct from "../Components/CardProduct";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 const ProductPage = () => {
     const {
@@ -123,6 +124,8 @@ const ProductPage = () => {
             margin: "auto",
             marginTop: "60px",
             padding: "10px",
+            display: "flex",
+            flexDirection: "column",
             '@media (min-width:600px)': { marginTop: '130px' }
 
         }}>
@@ -166,15 +169,16 @@ const ProductPage = () => {
 
             {/* Aquí se renderizan los productos */}
             <Box
-                style={{
+                sx={{
                     marginTop: "10px",
                     padding: "5px",
                     display: "grid",
-                    gap: "10px",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-                    placeItems: "center", // Esto centra las tarjetas dentro de cada celda
-                    "@media (min-width:600px)": {
-                        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                    gap: "15px",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", // Comportamiento predeterminado para pantallas pequeñas
+                    placeItems: "center",  // Centrado de los items dentro de las columnas
+                    justifyContent: "center",
+                    '@media (min-width: 1200px)': {  // Para pantallas más grandes (mayores a 1200px)
+                        gridTemplateColumns: "repeat(6, 1fr)", // Exactamente 6 columnas
                     },
                 }}
             >
