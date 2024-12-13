@@ -6,7 +6,8 @@
     position: relative;
     background-color: var(--bgCardContainerProduct);
     border-radius: 5px;
-    border: 1px solid var(--borderContainer)
+    border: 1px solid var(--borderContainer);
+    
 }
 
 .card_product_container:hover{
