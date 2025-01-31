@@ -1,44 +1,65 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const user = JSON.parse(localStorage.getItem("userData"));
+// Funciones utilitarias para manejar localStorage
+const storage = {
+    get: (key) => {
+        try {
+            return JSON.parse(localStorage.getItem(key));
+        } catch {
+            return null;
+        }
+    },
+    set: (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value));
+    },
+    remove: (key) => {
+        localStorage.removeItem(key);
+    },    
+    setChangeTheme: (key, value) => {
+        localStorage.setItem(key, value);
+    },
+};
+
+// Inicialización del estado desde localStorage
+const initialState = {
+    data: storage.get("user") || {},
+    token: storage.get("token") || null,
+    theme: storage.get("theme") || 'darkTheme',
+};
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        userData: user,        
-        userTheme: 'darkTheme',
-    },
+    initialState,
     reducers: {
         setUser: (state, action) => {
-            // Obtener el estado actual del localStorage
-            const userData = JSON.parse(localStorage.getItem("userData")) || { token: null, user: {} };
-
-            // Actualizar solo la información del usuario, manteniendo el token intacto
-            userData.user = action.payload;
-
-            // Guardar el estado actualizado en localStorage
-            localStorage.setItem("userData", JSON.stringify(userData));
-
-            // Actualizar el estado en Redux
-            state.userData = userData; 
-        },
-
-        setUpdateUser: (state, action) => {
-            const data = action.payload
-            const userLS = JSON.parse(localStorage.getItem("userData")) || { token: null , user: {}};
-            userLS.user =  data.user;
-            userLS.token = data.token
-            state.userData = userLS
-            localStorage.setItem("userData", JSON.stringify(userLS));
-        },    
+            const { user, token } = action.payload;
         
-        setTheme: (state, action) => {           
-            state.theme = action.payload;
+            // Actualizar localStorage
+            storage.set("user", user);
+            storage.set("token", token);
+
+            // Actualizar el estado
+            state.data = user;
+            state.token = token;
         },
-    
-    }
+        setTheme: (state, action) => {
+            const newTheme = action.payload;
+
+            // Actualizar localStorage
+            storage.setChangeTheme("theme", newTheme);
+
+            // Actualizar el estado
+            state.theme = newTheme;
+        },
+
+        updateUser: (state, action) => {
+            const { user } = action.payload;
+            storage.set("user", user);
+            state.data = user;
+        },
+    },
 });
 
-export const { setUser, setUpdateUser ,setTheme, setresponseCartUserUpdate } = userSlice.actions;
+export const { setUser, setTheme, updateUser } = userSlice.actions;
 
 export default userSlice.reducer;

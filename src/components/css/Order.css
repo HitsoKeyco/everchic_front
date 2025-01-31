@@ -40,11 +40,14 @@
 .order_main_total, .chevron_hidden_down, .chevron_hidden_up, .order_main_date {
     color: var(--colorText_a);
     margin: 0;
+    font-size: 0.7em;
 }
 
 .orders_main_right_elements_container{
     display: flex;
     margin-right: 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .chevron_hidden_down, .chevron_hidden_up {
@@ -58,4 +61,11 @@
 
 .chevron_visible {
     display: block; /* Muestra el icono de "arriba" cuando el contenedor está oculto */
+}
+
+@media (min-width: 465px) {
+    .order_main_total, .chevron_hidden_down, .chevron_hidden_up, .order_main_date {
+        font-size: 1em;
+    }
+    
 }

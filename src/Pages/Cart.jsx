@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './css/Cart.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { accessFreeProduct, addPriceShippingStore, addStoreCartFree, deleteAllProducts, updateCartFreeQuantity } from '../store/slices/cart.slice';
@@ -8,28 +8,46 @@ import { Controller, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import AddCustomer from '../components/AddCustomer';
 import { Backdrop, CircularProgress, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import axios from 'axios';
 
 import Decimal from 'decimal.js';
-import { setUpdateUser } from '../store/slices/user.slice';
-
-
+import { setUser } from '../store/slices/user.slice';
+import ReCaptchaComponent from '../components/ReCaptchaComponent';
 
 const Cart = () => {
-    const { control, register, setValue, reset, clearErrors, formState: { errors }, handleSubmit, watch } = useForm();
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD, VITE_RECAPTCHA_KEY_SITE_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const keyHcaptcha = import.meta.env.VITE_HCAPTCHA_KEY_SITE;
-    const user = useSelector(state => state.user.userData?.user);
-    const token = useSelector(state => state.user.userData?.token);
+
+    const {
+        control,
+        register,
+        setValue,
+        reset,
+        clearErrors,
+        formState: { errors },
+        handleSubmit,
+        watch,
+        trigger
+    } = useForm({ mode: 'onBlur' });
+
+
+    const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD;
+    const user = useSelector(state => state.user?.data);
+    const token = useSelector(state => state.user?.token);
     const theme = useSelector(state => state.user?.theme);
-    const captchaRef = useRef(null);
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    // Estado del token de Hcaptcha
-    const [tokenCaptcha, setTokenCaptcha] = useState("");
+    // Estado del token de Hcaptcha    
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [isEditable, setIsEditable] = useState(() => !user?.isVerify);
+
+
+    const onSubmitCaptcha = useCallback((token) => {
+        setCaptchaToken(token);
+    }, [setCaptchaToken]);
 
     // Estado de carga
     const [loading, setLoading] = useState(false);
@@ -49,7 +67,7 @@ const Cart = () => {
     const quantityProductCart = cart.reduce((acc, product) => acc + product.quantity, 0);
     // Obtener el precio unitario del primer producto
     const priceUnit = cart.length > 0 ? Number(cart[0].priceUnit) : 0;
-        
+
     // Calcular la cantidad total de productos gratuitos    
     const freeProducts = useSelector(state => state.cart.quantityProductsFree)
     // Obtener el precio de envio de la tienda
@@ -85,16 +103,6 @@ const Cart = () => {
 
             })
     }
-
-    useEffect(() => {
-        // Calcular el costo de envío
-        if (cart.length > 0 && isShippingOptionSelected && weightTotal > 0) {            
-            calculateShippingCost(isShippingOptionSelected);
-        } else {
-            dispatch(addPriceShippingStore(0));
-        }
-    }, [isShippingOptionSelected, quantityProductCart])
-
 
     // Verifica si la cantidad total de productos gratuitos está dentro del rango deseado
     const handleFreeButton = () => {
@@ -134,18 +142,18 @@ const Cart = () => {
 
 
     // Función para calcular el costo de envío dinámicamente con Decimal.js
-    const calculateShippingCost = (selectionShippingUser) => {
-
+    // Memoiza la función para calcular el costo de envío
+    const calculateShippingCost = useCallback((selectionShippingUser) => {
         const optionData = shippingOptions?.find(option => option.id === selectionShippingUser);
 
-        const basePrice = new Decimal(optionData?.shipping_value); // Precio base para 1 kg
-        const excessPrice = new Decimal(optionData?.extra_weight_cost); // Costo adicional por cada kg excedente
-        const baseWeight = new Decimal(optionData?.min_weight); // Peso base desde donde comienza el cálculo
+        const basePrice = new Decimal(optionData?.shipping_value || 0); // Precio base para 1 kg
+        const excessPrice = new Decimal(optionData?.extra_weight_cost || 0); // Costo adicional por cada kg excedente
+        const baseWeight = new Decimal(optionData?.min_weight || 0); // Peso base desde donde comienza el cálculo
 
         const shippingSelectedString = localStorage.getItem('selectedShippingOption');
         const shippingSelected = shippingSelectedString ? parseInt(shippingSelectedString) : null;
 
-        // Si no hay productos en el carrito o no se ha seleccionado opción de envío, retorna 0
+        // Si no hay productos en el carrito o no se ha seleccionado una opción de envío, retorna 0
         if (cart.length === 0 || !shippingSelected) {
             console.log('No hay productos en el carrito o no se ha seleccionado una opción de envío.');
             dispatch(addPriceShippingStore(0));
@@ -153,25 +161,40 @@ const Cart = () => {
         }
 
         // Si existe una opción de envío seleccionada, calcula el costo de envío
-        if (shippingSelected) {           
-
-            // Calcula el costo de envío si el peso total es menor o igual a 1 kg
+        if (shippingSelected) {
             if (new Decimal(weightTotal).lessThanOrEqualTo(baseWeight)) {
-                dispatch(addPriceShippingStore(basePrice.toFixed(2)));
-            }
-            // Si el peso es mayor que 1 kg, calcula el valor adicional
-            else if (new Decimal(weightTotal).greaterThan(baseWeight)) {
+                dispatch(addPriceShippingStore(basePrice.toFixed(2))); // Costo base
+            } else {
                 const excessWeight = new Decimal(weightTotal).minus(baseWeight);
                 const value = basePrice.plus(excessWeight.times(excessPrice));
-                dispatch(addPriceShippingStore(value.toFixed(2)));
+                dispatch(addPriceShippingStore(value.toFixed(2))); // Costo con exceso
             }
-            
         } else {
-            //console.log('No se seleccionó una opción de envío válida.');
+            console.log('No se seleccionó una opción de envío válida.');
         }
+    }, [cart, dispatch, shippingOptions, weightTotal]);
 
-    }
-    
+    // useEffect para ejecutar el cálculo dinámico
+    useEffect(() => {
+        if (cart.length > 0 && isShippingOptionSelected && weightTotal > 0) {
+            calculateShippingCost(isShippingOptionSelected);
+        } else {
+            dispatch(addPriceShippingStore(0));
+        }
+    }, [cart, calculateShippingCost, dispatch, isShippingOptionSelected, weightTotal]);
+
+    useEffect(() => {
+        if (user) {
+            setValue('dni', user?.dni);
+            setValue('firstName', user?.firstName);
+            setValue('lastName', user?.lastName);
+            setValue('phone_first', user?.phone_first);
+            setValue('phone_second', user?.phone_second);
+            setValue('city', user?.city);
+            setValue('address', user?.address);
+            setValue('email', user?.email);
+        }
+    }, [user, setValue]);
 
 
     // Calcula el total a pagar
@@ -181,26 +204,6 @@ const Cart = () => {
         .toDecimalPlaces(2)
 
     const total = totalToPay.toNumber();
-
-    const onLoad = () => {
-        captchaRef.current.execute();
-    }
-
-    useEffect(() => {
-        // Resetea el formulario con los datos actuales del usuario cuando `user` cambia
-        if (user) {
-            reset({
-                dni: user.dni || '',
-                firstName: user.firstName || '',
-                lastName: user.lastName || '',
-                phone_first: user.phone_first || '',
-                phone_second: user.phone_second || '',
-                city: user.city || '',
-                address: user.address || '',
-                email: user.email || '',
-            });
-        }
-    }, [user, reset]);
 
     useEffect(() => {
         const subscription = watch((data) => {
@@ -226,7 +229,7 @@ const Cart = () => {
                     }
                 };
 
-                dispatch(setUpdateUser(userData));
+                dispatch(setUser(userData));
             }
         });
 
@@ -236,82 +239,26 @@ const Cart = () => {
 
     const onSubmit = async (data) => {
 
-        setLoading(true);
-
-        const dataCart = { cart, cartFree, token, userCartData: data, total: total, shippingId: isShippingOptionSelected, weight: weightTotal, userId: user.id };
-
-        if(isShippingOptionSelected === null){
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: "Debes seleccionar un método de envío",
-                showConfirmButton: true,
-            }).then(() => {
-                setLoading(false);
-                captchaRef.current.resetCaptcha();
-            });
-            return;
-        }
-        
-        // Validar que el usuario haya completado la información
-        if (Object.keys(errors).length > 0) {
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: "Debes completar la información de usuario",
-                showConfirmButton: true,
-            }).then(() => {
-                setLoading(false);
-                captchaRef.current.resetCaptcha();
-            });
-            return;
-        }
-
-        //Si no tiene ningun producto agregado al cart
-        if (cart.length === 0) {
-            setLoading(false);
-            Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "No tienes ningún producto agregado",
-                showConfirmButton: false,
-                timer: 1500,
-            }).then(() => {
-                setLoading(false);
-                captchaRef.current.resetCaptcha();
-            });
-            return;
-        }
-
-
+        setLoading(true);        
+        const dataCart = { cart, cartFree, captchaToken, token, userCartData: data, total: total, shippingId: isShippingOptionSelected, weight: weightTotal, userId: user.id };
 
         try {
-            const verifyCaptchaResponse = await axios.post(`${apiUrl}/orders/verify_captcha`, { tokenCaptcha });
-            if (!verifyCaptchaResponse) {
+
+            // Validar que el usuario haya completado la información
+            if (Object.keys(errors).length > 0) {
                 Swal.fire({
                     position: "center",
-                    icon: "error",
-                    title: "Captcha no válido",
+                    icon: "info",
+                    title: "Debes completar la información de usuario",
                     showConfirmButton: true,
-                    timer: 1500,
                 }).then(() => {
                     setLoading(false);
-                    captchaRef.current.resetCaptcha();
+
                 });
-                return
+                return;
             }
 
-            // Crear la orden
-            // Realizar la solicitud para crear la orden
             await axios.post(`${apiUrl}/orders/create_order`, dataCart);
-
-
-            // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
-            localStorage.removeItem('everchic_cart_free');
-            localStorage.removeItem('everchic_cart');
-
-            dispatch(deleteAllProducts());
-            navigate('/');
 
             // Mostrar mensaje de éxito
             Swal.fire({
@@ -321,19 +268,23 @@ const Cart = () => {
                 showConfirmButton: true,
             }).then(() => {
                 if (!user?.isVerify) {
-                    dispatch(setUpdateUser({ token: null, user: {} }));
-                    localStorage.removeItem('userData');
                     reset({ password: '', repeat_password: '' });
                 }
-            });
 
+                dispatch(deleteAllProducts());
+                navigate('/');
+                // Limpiar localStorage y otros estados solo si la orden se creó exitosamente
+                localStorage.removeItem('everchic_cart_free');
+                localStorage.removeItem('everchic_cart');
+
+            });
 
         } catch (err) {
 
             let message
 
             const info = err.response?.data?.message;
-
+            
             if (info) {
                 Swal.fire({
                     position: "center",
@@ -347,14 +298,13 @@ const Cart = () => {
                     cancelButtonText: "Cancelar",
                 }).then((result) => {
                     //eliminar campo de contraseña
-
-
                     if (result.isConfirmed && info.includes("debes verificar tu cuenta al correo")) {
                         // Llama a la función para reenviar el correo
                         resendEmail(data.email);
-                        dispatch(setUpdateUser({ token: null, user: {} }));
-                        localStorage.removeItem('userData');
+                        dispatch(setUser({ token: null, user: {} }));
+                        localStorage.removeItem('user');
                         reset({ password: '', repeat_password: '' });
+
                     }
                 });
 
@@ -405,15 +355,15 @@ const Cart = () => {
             }
 
         } finally {
-            setLoading(false); // Asegurar que se limpie el estado de carga
-            captchaRef.current.resetCaptcha();
+            setLoading(false);
+            
         }
     };
 
     const resendEmail = async (email) => {
         setLoading(true)
         try {
-            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+            const url = `${apiUrl}/users/resend_email`;
             const res = await axios.post(url, { email });
             if (res.data.message == "Se ha enviado un correo de verificación") {
                 Swal.fire({
@@ -425,10 +375,10 @@ const Cart = () => {
             }
 
         } catch (err) {
-            if (err.response.data.message == "Usuario no encontrado") {
+            if (err) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Email invalido',
+                    title: 'Error',
                     text: 'Opps.. algo salio mal.. !!',
                 });
                 setLoading(false)
@@ -436,7 +386,21 @@ const Cart = () => {
         }
     }
 
+    const handleCaptchaSubmit = (token) => {
+        setCaptchaToken(token);
+    };
 
+    const resetCaptcha = () => {
+        try {
+            if (window.grecaptcha && typeof window.grecaptcha.reset === 'function') {
+                window.grecaptcha.reset();
+            } else {
+                console.warn("reCAPTCHA no está disponible o no se ha cargado correctamente.");
+            }
+        } catch (error) {
+            console.error("Error al intentar restablecer el reCAPTCHA:", error);
+        }
+    };
 
     return (
         <>
@@ -523,10 +487,13 @@ const Cart = () => {
                                 <AddCustomer
                                     register={register}
                                     setValue={setValue}
-                                    reset={reset}
+                                    setIsEditable={setIsEditable}
+                                    isEditable={isEditable}
+                                    reset={reset}                                    
                                     clearErrors={clearErrors}
                                     watch={watch}
                                     errors={errors}
+                                    trigger={trigger}
                                 />
                             </div>
 
@@ -603,20 +570,28 @@ const Cart = () => {
                                         <li className='cart_info_total_text'>Total a pagar: $ {totalToPay.toFixed(2)}</li>
                                     </ul>
                                 </div>
+                                <div className="captcha_container">
+                                    {/* <div
+                                        id="recaptcha-container"
+                                        className="g-recaptcha"
+                                        data-sitekey={reCaptchaKey}
+                                        data-callback={onSubmitCaptcha}
+                                        data-theme={theme === 'darkTheme' ? 'dark' : 'light'}
+                                        data-action='submit'
+                                        size='compact'
+                                        data-expired-callback={resetCaptcha}
+                                    ></div> */}
+                                <ReCaptchaComponent
+                                    reCaptchaKey={reCaptchaKey}
+                                    theme={theme}
+                                    onSubmitCaptcha={handleCaptchaSubmit}
+                                />
+                                </div>
 
 
                                 {/*------------------------------\\ Buttons accions //-----------------------------------*/}
                                 <div className="add_customer_buttons_container">
 
-                                    <div className={`add_customer_recaptcha`}>
-                                        <HCaptcha
-                                            sitekey={keyHcaptcha}
-                                            onLoad={onLoad}
-                                            onVerify={(tokenCaptcha) => setTokenCaptcha(tokenCaptcha)}
-                                            ref={captchaRef}
-                                            theme={theme == 'darkTheme' ? 'dark' : 'light'}
-                                        />
-                                    </div>
 
                                     <button
                                         type="submit"

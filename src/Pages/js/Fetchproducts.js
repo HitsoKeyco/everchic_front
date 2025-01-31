@@ -4,7 +4,9 @@ import { addProductStore } from "../../store/slices/cart.slice";
 import { useDispatch } from "react-redux";
 
 const useFetchProducts = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+    
     const path = "/products";
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);

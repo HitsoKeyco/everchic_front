@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Login from './Login';
 import './css/AuthModal.css';
 import Register from './Register';
 import Recover from './Recover';
+import PropTypes from 'prop-types';
 
 const AuthModal = ({ setIsModalAuth }) => {
     const [isModalLogin, setIsModalLogin] = useState(true);
@@ -75,6 +76,12 @@ const AuthModal = ({ setIsModalAuth }) => {
         </div>
 
     );
+};
+
+
+
+AuthModal.propTypes = {
+    setIsModalAuth: PropTypes.func.isRequired,
 };
 
 export default AuthModal;

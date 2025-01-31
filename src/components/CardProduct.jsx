@@ -53,10 +53,10 @@ const CardProduct = ({ product, isSlider, key }) => {
 
 
     const handleBuy = () => {
-        
+
         const tolerance = 3;
         const positionDifference = Math.abs(isPositionFinish.x - isPositionInitial.x);
-        
+
         if (positionDifference <= tolerance) {
             //console.log('La posicion de diferencia es menor a la tolerancia');
             if (!isFree && product) {
@@ -77,7 +77,7 @@ const CardProduct = ({ product, isSlider, key }) => {
                     }
                 }));
 
-            } else if(!(freeProducts === unitCartFree)){   
+            } else if (!(freeProducts === unitCartFree)) {
                 //console.log('Si freeProducts es igual a unitCartFree', freeProducts, unitCartFree);
                 dispatch(addProductFree({
                     productId: product?.id,
@@ -96,7 +96,7 @@ const CardProduct = ({ product, isSlider, key }) => {
 
                 if (freeProducts - unitCartFree == 1) {
                     navigate("/cart");
-                }                
+                }
             }
         }
     }
@@ -106,7 +106,7 @@ const CardProduct = ({ product, isSlider, key }) => {
 
     const cart = useSelector(state => state.cart.storedCart)
     const priceUnit = cart && cart.length > 0 ? cart[0].priceUnit.toFixed(2) : '5.00';
-    const userId = useSelector(state => state.user.userData?.user?.id) || null;
+    const userId = useSelector(state => state.user.data?.id);
 
     const { updateLikeProducts, getLikeProducts } = likeService()
 
@@ -125,6 +125,7 @@ const CardProduct = ({ product, isSlider, key }) => {
     useEffect(() => {
         fetchGetLike();
     }, [])
+    
 
     const fetchGetLike = async () => {
         const res = await getLikeProducts();
@@ -136,13 +137,17 @@ const CardProduct = ({ product, isSlider, key }) => {
         }
     }
 
+
+
     const fetchUpdateLike = async () => {
-        const res = await updateLikeProducts(product.id, userId)
-        const validLike = res.includes(product.id)
-        if (validLike) {
-            fetchGetLike();
-        } else {
-            setIslove(false);
+        if (userId) {
+            const res = await updateLikeProducts(product.id, userId)
+            const validLike = res.includes(product.id)
+            if (validLike) {
+                fetchGetLike();
+            } else {
+                setIslove(false);
+            }
         }
     }
 
@@ -172,13 +177,13 @@ const CardProduct = ({ product, isSlider, key }) => {
                 onMouseUp={handleMouseUp}
                 onClick={handdleModal}
                 key={key}>
-                
+
 
                 <div className="card_container_img">
                     <i className={`bx bxs-heart ${love ? 'heart-fill' : ''}`} onClick={handleLikeProduct}></i>
                     <p className='card_product_size'> Talla {product.size?.size}</p>
 
-                    
+
                     <LazyLoad  >
                         <img className='card_product_img' src={product?.productImgs[0] && product?.productImgs[0]?.url_small} alt="image" />
                     </LazyLoad>
@@ -194,8 +199,8 @@ const CardProduct = ({ product, isSlider, key }) => {
                     </div>
                     <div className='card_product_by_container'>
                         {
-                            
-                            product.stock == 0 || solOut?
+
+                            product.stock == 0 || solOut ?
                                 (
                                     <div className="card_product_stock">
                                         <span className='card_product_text_sold_out'>Agotado</span>

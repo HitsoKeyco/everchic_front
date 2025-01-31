@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import { addProductStore } from '../store/slices/cart.slice';
 
 const Home = () => {
+  const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+  const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const handdleBuyButton = () => {
@@ -19,7 +21,6 @@ const Home = () => {
   }
 
   const [products, setIsNewProducts] = useState([]);  
-  const apiUrl = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     axios.get(`${apiUrl}/products/new_product`)

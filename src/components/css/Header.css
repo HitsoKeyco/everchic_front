@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;    
+    width: 100vw;
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -10,14 +10,16 @@
     align-items: center;
     overflow-y: visible !important;
     transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-    /* background-color: var(--bgBodyPage); */
-    background: var(--bgNavidadHeader);
-    
+    background-color: var(--bgColorNav);
+    -webkit-transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    -moz-transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    -ms-transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    -o-transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
     
 
 
-.header_elements_container {
+.header_elements_container {    
     width: 100%;
     max-width: 1280px;       
 }
@@ -34,8 +36,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 1em;
-    color: var(--colorTextNavidad);
+    padding: 1em 1em;    
     width: 100%;
     max-width: 1280px;
     border-bottom: 1px solid var(--borderCardproduct);
@@ -48,14 +49,14 @@
 }
 
 .linkActive {
-    color: var(--colorTextNavidad);
+    
     padding: 0 10px;
     border-radius: 3px;
-    background-color: var(--colorTextActiveLink);
+    
 }
 
 .linkDesactive {
-    color: var(--colorTextNavidad);
+    
 }
 
 .nav_items_left,
@@ -98,7 +99,7 @@
     top: 7.5px;
     font-size: 16px;
     opacity: 0.5;
-    color: var(--colorTextNavidad);
+    
 }
 
 .nav_link {
@@ -116,8 +117,7 @@
     user-select: none;
     touch-action: none;
     margin: 0;
-    /* color: var(--colorText_a); */
-    color: var(--colorTextNavidad);
+
 }
 
 .bx-menu {
@@ -125,8 +125,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    /* color: var(--colorText_a); */
-    color: var(--colorTextNavidad)
+    color: var(--colorText_a);
+
 }
 
 .bx-user {
@@ -134,8 +134,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    /* color: var(--colorText_a); */
-    color: var(--colorTextNavidad)
+    color: var(--colorText_a);
+    
 }
 
 .bx-moon,
@@ -145,8 +145,8 @@
     user-select: none;
     touch-action: none;
     cursor: pointer;
-    /* color: var(--colorText_a); */
-    color: var(--colorTextNavidad)
+    color: var(--colorText_a);
+    
 
 }
 
@@ -222,7 +222,7 @@
 
 .header_address {
     margin: 0;    
-    color: var(--colorTextNavidad)
+    
 
 }
 
@@ -297,7 +297,7 @@
         border-bottom: 2px solid var(--borderCardproduct);
 
         padding: 5px 10px;
-        color: var(--colorTextNavidad);
+        
         font-weight: 300;
     }
 
@@ -308,7 +308,7 @@
         justify-content: space-between;
         padding: 1em 1em;
         width: 100%;
-        color: var(--colorTextNavidad);
+        
     }
 
     .quantity_products {
@@ -355,7 +355,7 @@
     .header_info_user {
         padding-right: 15px;
         font-size: 1em;
-        color: var(--colorTextNavidad);
+        
         padding: 0px 5px;
         margin-right: 5px;
         border-radius: 3px;

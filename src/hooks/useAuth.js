@@ -2,17 +2,19 @@ import axios from "axios"
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { setUpdateUser, setUser } from "../store/slices/user.slice";
+import { setUser } from "../store/slices/user.slice";
 import { deleteAllProducts } from "../store/slices/cart.slice";
 import { useNavigate } from "react-router-dom";
 
 
 const useAuth = () => {
-    const [isLoged, setIsloged] = useState(false)
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
+    const [isLoged, setIsloged] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const url = import.meta.env.VITE_API_URL;
+    
 
     function capitalizeFirstLetter(string) {
         return string.replace(/^\w/, (c) => c.toUpperCase());
@@ -20,7 +22,7 @@ const useAuth = () => {
 
     const createUser = async (data) => {
         try {
-            const res = await axios.post(`${url}/users`, data);            
+            const res = await axios.post(`${apiUrl}/users`, data);            
             const name = capitalizeFirstLetter(res.data?.firstName)
             if (res.data.email) {
                 Swal.fire({
@@ -30,6 +32,9 @@ const useAuth = () => {
                 });
                 return res.data.email
             }
+
+            
+
         } catch (err) {
             console.log(err);
             if (err.response.data.message === 'Su email ya esta registrado, pero aun no verificado.') {
@@ -47,20 +52,21 @@ const useAuth = () => {
     };
 
     const loginUser = async (data) => {
-        await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, data)
+        await axios.post(`${apiUrl}/users/login`, data)
             .then(res => {
                 
-                if (res.data.user) {
+                if (res.data) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Sesión Iniciada',
                         text: `Bienvenido ${res.data.user?.firstName}`,
                     })
-                    localStorage.removeItem('likes');                                  
-                    dispatch(setUpdateUser({ token: res.data?.token, user: res.data?.user}));                    
-                    setIsloged(true);
                 }
-            })
+                localStorage.removeItem('likes');   
+                dispatch(setUser(res.data))
+                setIsloged(true)
+            })           
+
             .catch(err => {
                 Swal.fire({
                     icon: 'error',
@@ -74,7 +80,7 @@ const useAuth = () => {
 
     const logOut = () => {        
         localStorage.clear();        
-        dispatch(setUpdateUser({ token: null , user: {}}))
+        dispatch(setUser({ token: null , user: {}}))
         dispatch(deleteAllProducts())
         setIsloged(false)
         navigate('/')
@@ -82,7 +88,7 @@ const useAuth = () => {
 
     const logOutTime = () => {
         localStorage.clear();      
-        dispatch(setUser({ token: null, user: {}}))
+        dispatch(setUser({ token: null, user: {} }))
         setIsloged(false)
     }
 

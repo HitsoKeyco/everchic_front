@@ -14,7 +14,8 @@ import { addProductStore } from '../store/slices/cart.slice';
 
 const Products = () => {
     // ################### Api url ##########################    
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
     // ################### hooks ##########################
     const dispatch = useDispatch();

@@ -109,6 +109,7 @@ const ProductPage = () => {
             margin: "auto",
             marginTop: "60px",
             padding: "10px",
+            paddingTop: "30px",
             display: "flex",
             flexDirection: "column",
             '@media (min-width:600px)': { marginTop: '130px' }

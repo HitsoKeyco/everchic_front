@@ -1,20 +1,22 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import './css/VerifyEmail.css'
 import { Backdrop, CircularProgress } from '@mui/material';
 
 const VerifyEmail = () => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
     const { verificationToken } = useParams(); // Obtener el token de verificación de los parámetros de la URL
     const [verificationStatus, setVerificationStatus] = useState('Verificando...'); // Estado para almacenar el estado de la verificación
     const [loading, setLoading] = useState(false); // Estado de carga
     useEffect(() => {
         const verifyEmail = async () => {
             setLoading(true)
-            try {
-                const url = import.meta.env.VITE_API_URL;
-                const response = await axios.put(`${url}/users/verify/${verificationToken}`);
+            try {                
+                const response = await axios.put(`${apiUrl}/users/verify/${verificationToken}`);
                 if (response.status === 200) {
                     setVerificationStatus('¡Correo electrónico verificado con éxito!');
                     setLoading(false)

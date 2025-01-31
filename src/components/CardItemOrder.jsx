@@ -2,11 +2,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import './css/CardItemOrder.css'
 const CardItemOrder = ({ isItemOrder }) => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
     const [isProduct, setIsProduct] = useState()
     const productId = isItemOrder?.productId
 
-    console.log(productId);
+
 
     // useEffect(() => {
     //     if (productId) {

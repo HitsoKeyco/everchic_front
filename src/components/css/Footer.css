@@ -1,5 +1,5 @@
 .footer_container {        
-    background: linear-gradient(160deg, #003d32, #04734b);
+    background: var(--bgColorFooter);
     color: var(--colorText_b);
     padding: 20px;
     display: flex;
@@ -37,7 +37,7 @@
 
 .footer_link {
     text-decoration: none;        
-    color: var(--colorTextNavidad);
+    color: var(--colorText_b);
 }
 
 
@@ -62,7 +62,7 @@
 .footer_copyright_text {
     margin-top: 20px;
     text-align: center;
-    color: var(--colorTextNavidad);
+    color: var(--colorText_b);
 }
 
 a{
@@ -75,7 +75,7 @@ a{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(160deg, #003d32, #04734b);
+        
     }
     .footer_section_container{
         width: 100%;

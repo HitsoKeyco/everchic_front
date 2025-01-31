@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth'
 import validatePasswordRegister from '../hooks/validatePasswordRegister'
 import Swal from 'sweetalert2'
 import { Backdrop, CircularProgress } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
     const [loading, setLoading] = useState(false); // Estado de carga
@@ -75,6 +76,13 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
         }
 
     };
+
+    const navigate = useNavigate();
+
+    const goToTerm = () => {
+        console.log('goToTerm')
+        //navigate('/terms')
+    }
 
 
     return (
@@ -212,11 +220,11 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
                                 }
                             })}
                         />
-                        <label className="register_label_agreeToTerms" htmlFor="agreeToTerms" >Acepto los términos y condiciones.</label>
-
+                        <label className="register_label_agreeToTerms"  onClick={() => { navigate('/terms'); handleModalContentClick(false); setIsModalRegister(false)}} >Acepto los términos y condiciones.</label>
                     </div>
-                    {errors.agreeToTerms && <p className="error_message">{errors.agreeToTerms.message}</p>}
                 </div>
+                {errors.agreeToTerms && <p className="error_message">{errors.agreeToTerms.message}</p>}
+
 
                 <div className="register_items_button_container">
                     <button className='register_button button'>Registrarse</button>

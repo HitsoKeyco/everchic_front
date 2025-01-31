@@ -6,26 +6,29 @@ import axios from 'axios';
 import OrderContainer from './OrderContainer';
 
 const Orders = () => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
     const [orders, setOrders] = useState([]);
     const [hiddenStates, setHiddenStates] = useState([]);
     const [iconState, setIconState] = useState(false);
     const [error, setError] = useState(null);
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const userId = useSelector(state => state.user.userData?.user?.id);
+
+    const userId = useSelector(state => state.user.data?.id);
     
     useEffect(() => {
         if (userId) {
-            const fetchOrders = async () => {
+            const fetchOrders = async () => {               
                 try {
-                    const response = await axios.get(`${apiUrl}/orders/${userId}`, getConfigAuth());
+                    const response = await axios.get(`${apiUrl}/orders/${userId}`, getConfigAuth());                                        
                     const ordersData = response.data;
                     setOrders(ordersData);
                     setHiddenStates(ordersData.map(() => false));
                     setError(null);
                 } catch (err) {
                     console.error(err);
-                    setError(err.response?.data?.message || 'Error fetching orders');
+                    setError(err.response?.data?.message || 'Error en la petición de ordenes');
                 }
             };
             fetchOrders();
@@ -52,12 +55,6 @@ const Orders = () => {
     if (error) {
         return <div>Error: {error}</div>;
     }
-
-    console.log(orders);
-
-    //consultamos el estado de la orden
-
-    
 
     return (
         <>

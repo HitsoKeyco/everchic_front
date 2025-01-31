@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Login.css'
 import useAuth from '../hooks/useAuth'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { Backdrop, CircularProgress } from '@mui/material'
 
 
 const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
-    const navigate = useNavigate();
-    const user = useSelector(state => state.user?.userData);
 
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
+    const user = useSelector(state => state.user?.data);
+    
     const [isShowPass, setIsShowPass] = useState(false)
     const [loading, setLoading] = useState(false); // Estado de carga
     
 
-    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
@@ -44,7 +46,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         if (isLoged) {
             handleModalContentClick()
         }
-    }, [isLoged])
+    }, [isLoged, handleModalContentClick])
 
     const [isResendEmail, setIsResendEmail] = useState(false);
 
@@ -64,7 +66,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
         const email = e.target.form.email.value;
 
         try {
-            const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
+            const url = `${apiUrl}/users/resend_email`;
             const res = await axios.post(url, { email });
             if (res.data.message == "Se ha enviado un correo de verificación") {
                 Swal.fire({
@@ -76,9 +78,8 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                 setIsResendEmail(false);
             }
 
-        } catch (err) {
-            console.log(err);
-            if (err.response.data.message = "Usuario no encontrado") {
+        } catch (err) {            
+            if (err.response.data.message === "Usuario no encontrado") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Email invalido',
@@ -93,24 +94,23 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
     //manejador de logOut
     const onLogOut = () => {
         setLoading(true)
-        logOut();
-        navigate('/')
+        logOut();        
         handleModalContentClick();
         setLoading(false)
 
     }
-   
+
 
     return (
         <>
 
             {
-                user?.token ?
+                user?.email ?
                     (
 
                         <form className="login_form_logout" action="" onSubmit={handleSubmit(onLogOut)}>
                             <h3 className='login_form_info_user'> {`Hola`}</h3>
-                            <h3 className='login_form_info_user_firstName'> {`${user.user?.firstName}`}</h3>
+                            <h3 className='login_form_info_user_firstName'> {`${user?.firstName}`}</h3>
                             <button className='login_button_logout button'>Cerrar sesión</button>
                         </form>
                     )
@@ -204,5 +204,21 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
 
     )
 }
+
+import PropTypes from 'prop-types';
+
+Login.propTypes = {
+    setIsModalLogin: PropTypes.func.isRequired,
+    setIsModalRegister: PropTypes.func.isRequired,
+    setIsModalRecover: PropTypes.func.isRequired,
+    handleModalContentClick: PropTypes.func.isRequired,
+};
+
+Login.defaultProps = {
+    setIsModalLogin: () => {},
+    setIsModalRegister: () => {},
+    setIsModalRecover: () => {},
+    handleModalContentClick: () => {},
+};
 
 export default Login

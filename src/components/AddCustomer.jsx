@@ -1,335 +1,241 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import './css/AddCustomer.css';
 import { useSelector } from 'react-redux';
-import { Accordion, AccordionDetails, AccordionSummary, Backdrop, Button, CircularProgress } from '@mui/material';
-import Swal from 'sweetalert2';
-
-import axios from 'axios';
-import getConfigAuth from '../utils/getConfigAuth';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Box } from '@mui/material';
 import RegisterUser from './RegisterUser';
+import TextFieldElement from './TextFieldElement';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const AddCustomer = ({ register, setValue, reset, clearErrors, errors, handleSubmit, watch, onSubmitForm }) => {
-    
+const AddCustomer = (
+    { 
+        register, 
+        setValue, 
+        reset,        
+        clearErrors, 
+        errors, 
+        handleSubmit, 
+        watch, 
+        onSubmitForm, 
+        trigger, 
+        isEditable, 
+        setIsEditable 
+    }) => {
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const user = useSelector(state => state.user?.userData);
+    const user = useSelector(state => state.user.data);
         
-    const [isEditable, setIsEditable] = useState(false);
-    const [loading, setLoading] = useState(false);
-
-    
     const [expanded, setExpanded] = useState(true);
-    
+
     const handleExpandAccordion = () => {
         setExpanded(!expanded);
     }
-    
-    const saveDataUser = () => {
-        if (isEditable) {   
-        const data = {
-            dni: watch('dni'),
-            firstName: watch('firstName'),
-            lastName: watch('lastName'),
-            phone_first: watch('phone_first'),
-            phone_second: watch('phone_second'),
-            city: watch('city'),
-            address: watch('address'),
-        }
-        
-        setLoading(true);
-        axios.put(`${apiUrl}/users/${user.user.id}/update_user`, data, getConfigAuth(user.token))
-        // eslint-disable-next-line no-unused-vars
-            .then(res => {
-                setLoading(false);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Datos actualizados',
-                    text: 'Tus datos han sido actualizados correctamente',
-                });
-                
-            })
-            // eslint-disable-next-line no-unused-vars
-            .catch(err => {                               
-                setLoading(false);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al actualizar',
-                    text: 'Ha ocurrido un error al actualizar tus datos',
-                });
-            });
-        }
-    }
-
-    // const handleResendEmail = async (e) => {
-    //     e.preventDefault()
-    //     setLoading(true)
-    //     const email = e.target.form.email.value;
-
-    //     try {
-    //         const url = `${import.meta.env.VITE_API_URL}/users/resend_email`;
-    //         const res = await axios.post(url, { email });
-    //         if (res.data.message == "Se ha enviado un correo de verificación") {
-    //             Swal.fire({
-    //                 icon: 'success',
-    //                 title: 'Correo electrónico enviado',
-    //                 text: 'Revisa tu correo electrónico para activar tu cuenta',
-    //             });
-    //             setLoading(false)
-    //             setIsResendEmail(false);
-    //         }
-
-    //     } catch (err) {
-    //         console.log(err);
-    //         if (err.response.data.message = "Usuario no encontrado") {
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Email invalido',
-    //                 text: 'Opps.. algo salio mal.. !!',
-    //             });
-    //             setLoading(false)
-    //         }
-    //     }
-
-    // }
-
-
     return (
         <>
-
-            <Accordion expanded={expanded} onChange={handleExpandAccordion}>
-                <AccordionSummary id="panel-header" aria-controls="panel-content">
+            <Accordion expanded={expanded} onChange={handleExpandAccordion} >
+                <AccordionSummary id="panel-header" aria-controls="panel-content" expandIcon={<ExpandMoreIcon />}>
                     <p className='add_customer_title'>Información de usuario - Envío</p>
                 </AccordionSummary>
                 <AccordionDetails  >
                     <div className='add_customer_info_shipping' >
                         {/*------------------------------\\ dni //-----------------------------------*/}
-                        <div className='add_customer_elements_container'>
-                            <label className="add_customer_label" htmlFor="dni">
-                                Cédula ó RUC:
-                            </label>
-                            <input
-                                type="text"
-                                id="dni"
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <TextFieldElement
                                 name="dni"
-                                className={`add_customer_input ${errors.dni ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                autoComplete='on'
-                                disabled={ user?.user?.isVerify ? !isEditable : isEditable}
-                                {...register('dni', {
-                                    required: 'Este campo es obligatorio',
-                                    minLength: { value: 10 },
-                                    maxLength: { value: 13 },
+                                label='Cédula ó RUC:'
+                                errors={errors}
+                                disabled={!isEditable}                                                 
+                                register={register}
+                                validation={{
+                                    required: { value: true, message: 'Este campo es requerido' },
+                                    minLength: { value: 10, message: 'Mínimo 10 caracteres' },
+                                    maxLength: { value: 13, message: 'Máximo 13 caracteres' },
                                     pattern: {
                                         value: /^[0-9]{10,13}$/,
-                                        message: 'La cédula/RUC debe ser un número entre 10 y 13 dígitos',
+                                        message: 'La cédula/RUC solo debe contener números',
                                     }
-                                })}
+                                }}
                             />
-                        </div>
-                        {errors.dni && <p className="error_message">{errors.dni.message}</p>}
 
-                        {/*------------------------------\\ FirstName //-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="firstName">
-                                Nombre:
-                            </label>
-                            <input
-                                type="text"
-                                id="firstName"
+                            <TextFieldElement
                                 name="firstName"
-                                autoComplete="on"
-                                className={`add_customer_input ${errors.firstName ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-
-                                disabled={ user?.user?.isVerify  ? !isEditable : isEditable}
-                                {...register('firstName', {
+                                label='Nombres:'
+                                errors={errors}
+                                disabled={!isEditable}                                
+                                register={register}
+                                validation={{
                                     required: { value: true, message: 'Este campo es requerido' },
-                                    maxLength: 25,
-                                })}
+                                    maxLength: { value: 25, message: 'Máximo 25 caracteres' },
+                                    pattern: {
+                                        value: /^[a-zA-Z\s]+$/,
+                                        message: 'El nombre solo debe contener letras',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.firstName && <p className="error_message">{errors.firstName.message}</p>}
 
-                        {/*------------------------------\\ LastName //-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="lastName">
-                                Apellidos:
-                            </label>
-                            <input
-                                type="text"
-                                id="lastName"
+                            <TextFieldElement
                                 name="lastName"
-                                autoComplete="on"
-                                className={`add_customer_input ${errors.lastName ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
-                                {...register('lastName', {
-                                    required: {
-                                        value: true,
-                                        message: 'Este campo es requerido',
-                                    },
-                                    maxLength: 25,
-                                })}
+                                label='Apellidos:'
+                                errors={errors}                                
+                                disabled={!isEditable}
+                                register={register}
+                                validation={{
+                                    required: { value: true, message: 'Este campo es requerido' },
+                                    maxLength: { value: 25, message: 'Máximo 25 caracteres' },
+                                    pattern: {
+                                        value: /^[a-zA-Z\s]+$/,
+                                        message: 'El apellido solo debe contener letras',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.lastName && <p className="error_message">{errors.lastName.message}</p>}
 
-                        {/*------------------------------\\ Phone 1//-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="phone_first">
-                                Teléfono 1:
-                            </label>
-                            <input
-                                type="text"
-                                id="phone_first"
+                            <TextFieldElement
                                 name="phone_first"
-                                placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_first ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
-                                {...register('phone_first', {
-                                    required: {
-                                        value: true,
-                                        message: 'Este campo es requerido',
-                                    },
+                                label='Teléfono:'
+                                errors={errors}                                
+                                disabled={!isEditable}
+                                register={register}
+                                validation={{
+                                    required: { value: true, message: 'Este campo es requerido' },
+                                    maxLength: { value: 10, message: 'Máximo 10 caracteres' },
                                     pattern: {
-                                        value: /^0\d{9}$/,
-                                    },
-                                    minLength: 10,
-                                    maxLength: 10,
-                                })}
+                                        value: /^[0-9]{10}$/,
+                                        message: 'El teléfono debe ser un número de 10 dígitos',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.phone_first && <p className="error_message">{errors.phone_first.message}</p>}
 
-                        {/*------------------------------\\ Phone 2//-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="phone_second">
-                                Teléfono 2:
-                            </label>
-                            <input
-                                type="text"
-                                id="phone_second"
+                            <TextFieldElement
                                 name="phone_second"
-                                placeholder='09XXXXXXXX'
-                                className={`add_customer_input ${errors.phone_second ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
-                                {...register('phone_second', {
-                                    required: {
-                                        value: false,
-                                    },
+                                label='Teléfono adicional:'
+                                errors={errors}                                
+                                disabled={!isEditable}
+                                register={register}
+                                validation={{
+                                    required: { value: false, message: 'Este campo es opcional' },
+                                    maxLength: { value: 10, message: 'Máximo 10 caracteres' },
                                     pattern: {
-                                        value: /^0\d{9}$/,
-                                    },
-                                    minLength: 10,
-                                    maxLength: 10,
-                                })}
+                                        value: /^[0-9]{10}$/,
+                                        message: 'El teléfono adicional debe ser un número de 10 dígitos',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.phone_second && <p className="error_message">{errors.phone_second.message}</p>}
 
-                        {/*------------------------------\\ City //-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="city">
-                                Ciudad:
-                            </label>
-                            <input
-                                type="text"
-                                id='city'
-                                name='city'
-                                className={`add_customer_input ${errors.city ? 'input-error' : ''} ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
-                                {...register('city', {
-                                    required: {
-                                        value: true,
-                                        message: 'Este campo es requerido'
-                                    },
-                                })}
+
+                            <TextFieldElement
+                                name="city"
+                                label='Ciudad:'
+                                errors={errors}                                
+                                disabled={!isEditable}
+                                register={register}
+                                validation={{
+                                    required: { value: true, message: 'Este campo es requerido' },
+                                    maxLength: { value: 30, message: 'Máximo 30 caracteres' },
+                                    pattern: {
+                                        value: /^[a-zA-Z]+$/,
+                                        message: 'La ciudad solo debe contener letras',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.city && <p className="error_message">{errors.city.message}</p>}
 
-                        {
-                            user?.user?.isVerify &&
-                            <>
-                                <div className="add_customer_elements_container">
-                                    <label className="add_customer_label" htmlFor="email" >E-mail:</label>
-                                    <input
-                                        className={`add_customer_input  ${ !isEditable ? 'input-disabled' : ''}`}
-                                        type="text"
-                                        value={user?.user?.email}
-                                        disabled={true}
+                            {
+                                user?.isVerify &&
+                                <>
+                                    <TextFieldElement
+                                        name="email"
+                                        label='email:'
+                                        errors={errors}
+                                        disabled={true}                                        
+                                        register={register}
+                                        validation={{
+                                            required: { value: true, message: 'Este campo es requerido' },
+                                            maxLength: { value: 30, message: 'Máximo 30 caracteres' },
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                                message: 'Debe ser un email válido',
+                                            }
+                                        }}
                                     />
-                                </div>
-                            </>
-                        }
+                                </>
+                            }
 
-                        {/*------------------------------\\ Address //-----------------------------------*/}
-                        <div className="add_customer_elements_container">
-                            <label className="add_customer_label" htmlFor="address">
-                                Dirección:
-                            </label>
-                            <textarea
-                                id="address"
+                            <TextFieldElement
                                 name="address"
-                                autoComplete='on'
-                                disabled={user?.user?.isVerify ? !isEditable : isEditable}
-                                className={`add_customer_textarea ${errors.address ? 'input-error' : '' } ${ !isEditable && user?.user?.isVerify ? 'input-disabled' : ''}`}
-                                {...register('address', {
-                                    required: {
-                                        value: true,
-                                        message: 'Este campo es requerido'
-                                    },                            
-                                })}
+                                label='Dirección:'
+                                errors={errors}
+                                disabled={!isEditable}                                
+                                multiline={true}
+                                register={register}
+                                validation={{
+                                    required: { value: true, message: 'Este campo es requerido' },
+                                    maxLength: 200,
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9\s]+$/,
+                                        message: 'La dirección solo debe contener letras, números y espacios',
+                                    }
+                                }}
                             />
-                        </div>
-                        {errors.address && <p className="error_message">{errors.address.message}</p>}
+
+                        </Box>
                         {
-                            !user?.user?.isVerify
+                            !user?.isVerify
 
-                            ?
+                                ?
 
-                            ''
-                            :
-                            <div className='profile_buttons_container'>
-                                <Button className="profile_button" type="button"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setIsEditable(prev => !prev);
-                                        saveDataUser();
-                                    }}>
-                                    {isEditable ? 'Guardar' : 'Editar'}
-                                </Button>
+                                ''
+                                :
+                                <div className='profile_buttons_container'>
+                                    <Button className="profile_button" type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsEditable(prev => !prev);
+                                            // saveDataUser();
+                                        }}>
+                                        {isEditable ? 'Bloquear' : 'desbloquear'}
+                                    </Button>
 
-                            </div>
+                                </div>
 
                         }
 
                         {/*------------------------------\\ Usuario Nuevo //-----------------------------------*/}
                         {
-                                !user?.token ?
-                            <>
-                                <RegisterUser 
-                                    register={register} 
-                                    setValue={setValue} 
-                                    reset={reset} 
-                                    clearErrors={clearErrors}                                     
-                                    handleSubmit={handleSubmit}
-                                    watch={watch}
-                                    errors={errors}
-                                    onSubmitForm={onSubmitForm}
-                                />
+                            !user?.isVerify ?
+                                <>
+                                    <RegisterUser
+                                        register={register}
+                                        setValue={setValue}
+                                        reset={reset}
+                                        clearErrors={clearErrors}
+                                        handleSubmit={handleSubmit}
+                                        watch={watch}
+                                        errors={errors}
+                                        onSubmitForm={onSubmitForm}
+                                        trigger={trigger}
+                                    />
 
-                            </>: ''
+                                </> : ''
                         }
                     </div>
                 </AccordionDetails>
-
             </Accordion>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
         </>
     );
+};
+
+
+
+AddCustomer.propTypes = {
+    register: PropTypes.func.isRequired,
+    setValue: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    watch: PropTypes.func.isRequired,
+    onSubmitForm: PropTypes.func.isRequired,
+    trigger: PropTypes.func.isRequired,
+    isEditable: PropTypes.bool.isRequired,
+    setIsEditable: PropTypes.func.isRequired,
 };
 
 

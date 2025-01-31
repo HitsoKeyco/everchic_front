@@ -1,24 +1,22 @@
-.terms-and-conditions-container {
-    
+.terms-and-conditions-container {    
     max-width: 1280px;
     margin: 10px auto;
-    padding: 20px;  
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;      
     border-radius: 8px;
   }
   
   .terms-and-conditions-title {
     margin-top: 60px;
-    font-size: 2rem;
+    font-size: 1.2em;
     text-align: center;
-    color: #333;
+    color: var(--colorText_a);
     margin-bottom: 20px;
   }
   
   .terms-and-conditions-paragraph {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.6;
-    color: #555;
+    color: var(--colorText_a);
     text-align: justify;
     margin-bottom: 20px;
   }
@@ -28,12 +26,35 @@
   }
   
   .terms-and-conditions-list-item {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 15px;
-    color: #444;
+    color: var(--colorText_a);
   }
   
   .terms-and-conditions-list-item strong {
-    color: #333;
+    color: var(--colorText_a);
   }
   
+  @media (min-width: 600px) {
+    .terms-and-conditions-container {
+      padding: 10px;
+      padding-top: 60px;
+    }
+  
+    .terms-and-conditions-title {
+      font-size: 1.2em;
+      padding-top: 50px;
+    }
+  
+    .terms-and-conditions-paragraph {
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+  
+    .terms-and-conditions-list-item {
+      font-size: 0.9rem;
+    }
+    
+
+    
+  }

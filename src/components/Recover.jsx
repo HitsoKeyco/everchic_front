@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Recover.css'
 import axios from 'axios'
@@ -6,17 +6,16 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { Backdrop, CircularProgress } from '@mui/material'
 
-const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick, setIsModalAuth }) => {
+const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, setIsModalAuth }) => {
+  const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+  const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm()
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); // Estado de carga
 
-
-
   const onSubmit = (data) => {
-    setLoading(true)
-    const apiUrl = import.meta.env.VITE_API_URL
+    setLoading(true)    
     axios.post(`${apiUrl}/users/recover_account`, data)
       .then(res => {
         if (res) {
@@ -97,5 +96,15 @@ const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handl
     </>
   )
 }
+
+import PropTypes from 'prop-types';
+
+Recover.propTypes = {
+  setIsModalLogin: PropTypes.func.isRequired,
+  setIsModalRegister: PropTypes.func.isRequired,
+  setIsModalRecover: PropTypes.func.isRequired,
+  handleModalContentClick: PropTypes.func,
+  setIsModalAuth: PropTypes.func.isRequired,
+};
 
 export default Recover

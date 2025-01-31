@@ -460,6 +460,7 @@
         flex-direction: column;
         width: 100%;
         max-width: 1280px;
+        padding: 10px  0 0 5px ;
         
     }
 
@@ -612,7 +613,7 @@
     }
     .home_elements_desktop {
 
-        padding: 0 10px;
+        padding: 10px  0 0 5px ;
     }
 
 

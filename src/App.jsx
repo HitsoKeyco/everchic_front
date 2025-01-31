@@ -22,8 +22,8 @@ import ProductPage from './Pages/ProductPage';
 
 function App() {
   
-  const theme = useSelector(state => state?.user.theme);
-  const token = useSelector(state => state.user.userData?.token)
+  const theme = useSelector(state => state.user?.theme);
+  const token = useSelector(state => state.user?.token)
 
   return (
     <>

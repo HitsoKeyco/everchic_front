@@ -7,9 +7,12 @@ import PropTypes from 'prop-types';
 import './css/OrderContainer.css';
 
 const OrderContainer = ({ order }) => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
-    const apiUrl = import.meta.env.VITE_API_URL;
+    
 
     useEffect(() => {
         if (!apiUrl) {

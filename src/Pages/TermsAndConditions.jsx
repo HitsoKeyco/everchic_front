@@ -6,7 +6,7 @@ const TermsAndConditions = () => {
     <div className="terms-and-conditions-container">
       <h1 className="terms-and-conditions-title">Términos y Condiciones - Everchic</h1>
       <p className="terms-and-conditions-paragraph">
-        Bienvenido a Everchic, la tienda de calcetines con los diseños más cómicos y únicos. Al utilizar nuestros servicios, aceptas los siguientes términos y condiciones:
+        Bienvenido a Everchic, la tienda de calcetines con los diseños más cómicos y únicos, al utilizar nuestros servicios, aceptas los siguientes términos y condiciones:
       </p>
 
       <ol className="terms-and-conditions-list">
@@ -50,7 +50,7 @@ const TermsAndConditions = () => {
           <strong>13. Limitación de Responsabilidad:</strong> No nos hacemos responsables de pérdidas o daños causados por ataques de hackers o vulnerabilidades no previstas.
         </li>
         <li className="terms-and-conditions-list-item">
-          <strong>14. Uso de Contenido:</strong> Todo el contenido de Everchic es propiedad de la empresa y está protegido por derechos de autor.
+          <strong>14. Uso de Contenido:</strong> Todo el contenido creado por Everchic es propiedad de la empresa y está protegido por derechos de autor. Algunos productos y marcas ofrecidos en nuestra plataforma son propiedad de terceros y están protegidos por sus respectivas leyes de propiedad intelectual. Everchic actúa como intermediario, sin reclamar propiedad sobre dichas marcas.
         </li>
         <li className="terms-and-conditions-list-item">
           <strong>15. Cambios en los Términos:</strong> Nos reservamos el derecho de modificar estos términos en cualquier momento.
@@ -74,7 +74,8 @@ const TermsAndConditions = () => {
           <strong>21. Uso Responsable:</strong> El cliente se compromete a usar nuestros servicios de manera ética y legal.
         </li>
         <li className="terms-and-conditions-list-item">
-          <strong>22. Finalización de Servicio:</strong> En caso de una invasión zombi, extraterrestres o apocalipsis nuclear, eliminaremos todos los datos.
+        <strong>22. Finalización de Servicio: </strong>
+        En el caso de una invasión zombi, extraterrestres hostiles o un apocalipsis nuclear, nuestros datos sobrevivirán. Serán almacenados en un baúl sellado, enterrado en algún lugar remoto de Ecuador, esperando ser descubiertos por una nueva generación humana o hibridos.
         </li>
         <li className="terms-and-conditions-list-item">
           <strong>23. Garantías:</strong> No ofrecemos garantías explícitas sobre el funcionamiento ininterrumpido del sitio web.
@@ -86,7 +87,7 @@ const TermsAndConditions = () => {
           <strong>25. Envío de Noticias:</strong> Si lo aceptas, recibirás noticias y actualizaciones periódicas sobre nuestros productos.
         </li>
         <li className="terms-and-conditions-list-item">
-          <strong>26. Jurisdicción:</strong> Estos términos se rigen por las leyes de Ecuador, donde se encuentra nuestra sede principal.
+          <strong>26. Jurisdicción:</strong> Algunos de estos términos se rigen por las leyes de Ecuador, donde se encuentra nuestra sede principal.
         </li>
       </ol>
     </div>

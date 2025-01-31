@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './css/Header.css';
 import Menu from './Menu';
-
+import Logo from '/logo/logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import InfoPromo from './InfoPromo';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import navLinks from './js/header';
 import { setTheme } from '../store/slices/user.slice';
+import { Height } from '@mui/icons-material';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -54,9 +55,9 @@ const Header = () => {
 
   useEffect(() => {
     // Configura el tema inicial basado en la preferencia almacenada
-    const savedTheme = localStorage.getItem('theme') || 'darkTheme';
-    if (savedTheme !== userTheme) {
-      dispatch(setTheme(savedTheme));
+    const getTheme = localStorage.getItem('theme') || 'darkTheme';
+    if (getTheme !== userTheme) {
+      dispatch(setTheme(getTheme));
     }
 
     // Agrega o elimina la clase 'darkTheme' en función del tema del usuario
@@ -73,8 +74,7 @@ const Header = () => {
 
 
   const handleDarkMode = () => {
-    const newTheme = userTheme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
-    localStorage.setItem('theme', newTheme);
+    const newTheme = userTheme === 'lightTheme' ? 'darkTheme' : 'lightTheme';    
     dispatch(setTheme(newTheme));
   };
 
@@ -84,8 +84,8 @@ const Header = () => {
   const cart = useSelector((state) => state.cart.storedCart);
   const quantity = cart.reduce((acc, product) => acc + product.quantity, 0);
 
-  const user = useSelector((state) => state.user.userData?.user);
-  const token = useSelector(state => state.user.userData?.token);
+  const user = useSelector((state) => state.user.data);
+  const token = useSelector(state => state.user?.token);
 
 
   return (
@@ -99,7 +99,7 @@ const Header = () => {
         </div>
         <div className='header_elements_container'>
           <div className="header_info_enterprise">
-            <p className='header_address'>Santo Domingo de los Tsachilas</p>
+            <p className='header_address'>Ecuador - Santo Domingo de los Tsachilas</p>
 
             <div className="header_social_networks_container">
               {
@@ -128,7 +128,7 @@ const Header = () => {
 
             <ul className="nav_items_left">
               <li>
-                <Link to='/' className="logo">Everchic</Link>
+                <Link to='/' className="logo"><img src={Logo} style={{ height: '50px'}}></img></Link>
               </li>
               {
                 routes.map((route, index) => {

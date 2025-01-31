@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/RecoverAccount.css'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,7 +7,11 @@ import Swal from 'sweetalert2'
 import { Backdrop, CircularProgress } from '@mui/material'
 
 
+
 const RecoverAccount = () => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
     const { verificationToken } = useParams(); // Obtener el token de verificación de los parámetros de la URL
     const navigate = useNavigate()
@@ -22,10 +26,10 @@ const RecoverAccount = () => {
 
     const submit = async (data) => {
         setLoading(true)
-        const urlApi = import.meta.env.VITE_API_URL;
+        
         const newData = { token: verificationToken, password: data.password }
         try {
-            await axios.post(`${urlApi}/users/update_password`, newData);
+            await axios.post(`${apiUrl}/users/recover_password`, newData);
             Swal.fire({
                 title: "Éxito",
                 text: "Contraseña actualizada con éxito",

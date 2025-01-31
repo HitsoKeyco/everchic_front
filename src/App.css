@@ -40,7 +40,7 @@
     --bgInput: #fefffc;
 
     /* BannerPromo */
-    --bgPromo: rgb(159, 145, 251);
+    --bgPromo: rgb(58, 58, 59);
     --colorTextPromo: white;
 
     /*Texto*/
@@ -107,12 +107,13 @@
     --bgBarThumb: #2d949628;
 
     /* Footer */
-    --bgColorFooter: #e8e8ea;
+    --bgColorFooter: #313131;
 
-    /*Navidad*/
-    --colorTextNavidad: white;
-    --bgNavidadHeader: linear-gradient(92.41deg, #003d32, #04734b);    
-    --bgNavidadFooter: linear-gradient(92.41deg, #003d32, #04734b);
+    /* Nav */
+    --bgColorNav: #ededed;
+    
+
+
 }
 
 .swal2-popup {
@@ -131,7 +132,8 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-   
+    background-color: var(--bgBodyPage); ;
+
 }
 
 .swal2-shown,
@@ -288,7 +290,7 @@ textarea {
     --bgInput: #1b1b1b;
 
     /* BannerPromo */
-    --bgPromo: rgb(159, 145, 251);
+    --bgPromo: rgb(95, 95, 95);
     --colorTextPromo: white;
 
     /* Slider */
@@ -363,10 +365,6 @@ textarea {
     /*Input*/
     --bgColorInput: #efeff0;
 
-    /* BannerPromo */
-    --bgPromo: rgb(159, 145, 251);
-    --colorTextPromo: white;
-
     /* Slider */
     --bgCollection: #2D9596;
     --colorTextCollection: white;
@@ -385,6 +383,9 @@ textarea {
     /* Scrollbar*/
     --bgBar: rgb(51, 148, 126);
     --bgBarThumb: rgb(0, 0, 0);
+
+    /* Nav */
+    --bgColorNav: #1f1e1e;
 
     /* Footer */
     --bgColorFooter: #151515;

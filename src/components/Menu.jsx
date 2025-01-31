@@ -1,7 +1,8 @@
-import React from 'react'
 import '../components/css/Menu.css'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types';
+
 const Menu = ({ setIsMenu }) => {
 
     const handleMenu = () => {
@@ -9,7 +10,7 @@ const Menu = ({ setIsMenu }) => {
     }
 
 
-    const userVerify = useSelector((state) => state.user?.userData?.user?.isVerify) || false
+    const userVerify = useSelector(state => state.user?.data.isVerify)
 
     return (
         <>
@@ -31,4 +32,9 @@ const Menu = ({ setIsMenu }) => {
     )
 }
 
+
+
+Menu.propTypes = {
+    setIsMenu: PropTypes.func.isRequired
+};
 export default Menu

@@ -4,7 +4,15 @@
     padding: 10px;
     height: max-content;
     padding-top: 80px;
+    margin: 0 auto;
     
+}
+.captcha_container{
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
 }
 .profile_data_customer_container{
     display: flex;

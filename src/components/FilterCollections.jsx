@@ -3,7 +3,8 @@ import { useEffect, useState } from "react"
 
 const FilterCollections = () => {
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
     const [pagination, setPagination] = useState({
         total: 0,

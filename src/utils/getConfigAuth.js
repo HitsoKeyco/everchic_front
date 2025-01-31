@@ -1,10 +1,16 @@
 const getConfigAuth = () => {
-    const tokenLS = JSON.parse(localStorage.getItem("userData"));
-    const token = tokenLS ? tokenLS.token : null;
+    let token = null;
+
+    try {
+        token = JSON.parse(localStorage.getItem("token")); // Intenta obtener y parsear el token
+    } catch (error) {
+        console.error("Error parsing token from localStorage:", error); // Maneja errores de JSON.parse
+    }
+
     return {
         headers: {
-            Authorization: `Bearer ${token}`
-        }
+            ...(token && { Authorization: `Bearer ${token}` }), // Agrega el encabezado si el token es válido
+        },
     };
 };
 

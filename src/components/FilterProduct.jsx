@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './css/FilterProduct.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { filterIdProduct } from '../store/slices/filterProduct.slice'
 import axios from 'axios'
 
 const FilterProduct = () => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
     const dispatch = useDispatch()
     const [isNameCategories, setNameCategories] = useState()
 
-
-    useEffect(() => {
-        const urlApi = import.meta.env.VITE_API_URL;
-        
-        axios.get(`${urlApi}/categories`)
+    useEffect(() => {      
+        axios.get(`${apiUrl}/categories`)
             .then(res => {
                 setNameCategories(res.data)
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [apiUrl])
 
     const handleFilterProduct = (e) => {
         dispatch(filterIdProduct(e))
     }
 
-    const value = useSelector(state => state.filterProduct.idFilterProduct)
-    
 
     return (
         <div className='product_card_element_filter'>

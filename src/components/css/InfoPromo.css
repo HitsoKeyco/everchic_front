@@ -1,5 +1,5 @@
 .info_promo_container{    
-    background-color: #db3737;
+    background-color: var(--bgPromo);
     height: 30px;    
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@
     
 }
 .info_promo_text{    
-    color: var(--colorText_b);
+    color: var(--colorTextPromo);
 }
 
 

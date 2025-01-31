@@ -1,19 +1,22 @@
 // likeService.js
 import axios from "axios";
+import getConfigAuth from "./getConfigAuth";
+import { useSelector } from "react-redux";
 
 
-const likeService = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const userIdString = localStorage.getItem('user');
-    const userId = userIdString ? JSON.parse(userIdString).id : null;
+const useLikeService = () => {
+    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
+    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+    
+    const userId = useSelector(state => state.user.data?.id);
+
     let likes = [];
-
     const updateLikeProducts = async (productId) => {
 
         try {
             if (userId) {                
                 // Usuario logueado
-                const res = await axios.put(`${apiUrl}/users/like_update_product/`, { userId, productId });
+                const res = await axios.put(`${apiUrl}/users/like_update_product/`, { userId, productId }, getConfigAuth());
                 if (res.data.message === 'Like agregado') {
                     likes.push(productId);
                     
@@ -41,7 +44,7 @@ const likeService = () => {
 
     const getLikeProducts = async () => {
         if (userId) {
-            const res = await axios.get(`${apiUrl}/users/like_product/${userId}`);
+            const res = await axios.get(`${apiUrl}/users/like_product/${userId}`, getConfigAuth());
             likes = res.data.map(item => item.productId);
             localStorage.setItem('likes', JSON.stringify(likes));
         } else {
@@ -55,4 +58,4 @@ const likeService = () => {
     return { updateLikeProducts, getLikeProducts };
 
 }
-export default likeService;
+export default useLikeService;
