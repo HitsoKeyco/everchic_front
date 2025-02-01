@@ -12,7 +12,7 @@ const Footer = () => {
                     <ul className='footer_info'>
                         <li className='footer_title_logo'>Everchic</li>
                         <li><a href="mailto:soporte@everchic.ec" className='footer_link footer_link_email'>soporte@everchic.ec</a></li>
-                        <li>Santo Domingo de los Tsachilas - Ecuador</li>
+                        <li>Guayaquil - Ecuador</li>
                     </ul>
                 </div>
                 <div className='footer_section'>

@@ -99,7 +99,7 @@ const Header = () => {
         </div>
         <div className='header_elements_container'>
           <div className="header_info_enterprise">
-            <p className='header_address'>Ecuador - Santo Domingo de los Tsachilas</p>
+            <p className='header_address'>Tienda de calcetines - Guayaquil</p>
 
             <div className="header_social_networks_container">
               {

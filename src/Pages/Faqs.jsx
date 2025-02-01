@@ -15,7 +15,7 @@ const Faqs = () => {
         <span className='faqs_title'>Preguntas frecuentes.</span>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿Quiénes somos?</h3>
-          <p className="faqs_information_answer">Somos una tienda  <b>100% online</b> ubicada en Santo Domingo de los Tsáchilas. Nos especializamos en la venta de calcetines tejidos y sublimados de alta calidad.</p>
+          <p className="faqs_information_answer">Somos una tienda  <b>100% online</b> ubicada en Guayaquil. Nos especializamos en la venta de calcetines tejidos y sublimados de alta calidad.</p>
         </div>
 
         <div className="faqs_information_container">
@@ -32,7 +32,7 @@ const Faqs = () => {
           <p className="faqs_information_answer">- A cualquier ciudad: $6.00.</p>
           <p className="faqs_information_answer">- A Galápagos: $12.50.</p>
           <p className="faqs_information_answer">- Cooperativa de transporte: $5.50.</p>
-          <p className="faqs_information_answer">- Santo Domingo de los Tsáchilas "Previo pago": Delivery $2.50.</p>
+          <p className="faqs_information_answer">- Guayaquil "Previo pago": Delivery $2.50</p>
         </div>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿Tienen puntos de entrega o retiro?</h3>
