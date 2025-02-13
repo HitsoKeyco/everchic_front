@@ -169,8 +169,8 @@ const AddCustomer = (
                                     required: { value: true, message: 'Este campo es requerido' },
                                     maxLength: 200,
                                     pattern: {
-                                        value: /^[a-zA-Z0-9\s]+$/,
-                                        message: 'La dirección solo debe contener letras, números y espacios',
+                                        value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ0-9\s\-,.#/°]+$/,
+                                        message: 'La dirección solo debe contener letras, números, espacios y caracteres como: - , . # / °',
                                     }
                                 }}
                             />
