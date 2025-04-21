@@ -11,6 +11,10 @@
     font-size: 16px;
 }
 
+/* Establecemos un color de fondo neutro por defecto */
+html, body {
+    background-color: #ffffff;
+}
 
 .swal2-popup {
     /* background-color: #0d1117; */
@@ -76,7 +80,7 @@
 
 
     /*Background Body*/
-    --bgBodyPage: #f3bdbd;
+    --bgBodyPage: #ffffff;
     --bgBodyPageBlur: #f3f3f3;
 
     /* CardProduct */
@@ -132,8 +136,8 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: var(--bgBodyPage); ;
-
+    background-color: var(--bgBodyPage);
+    transition: background-color 0.3s ease;
 }
 
 .swal2-shown,
