@@ -391,3 +391,26 @@ textarea {
     --bgColorFooter: #151515;
 
 }
+
+/* Estilos para focus visible */
+:focus-visible {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Skip to main content - Accesibilidad */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1em;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    left: 50%;
+    transform: translateX(-50%);
+}
+

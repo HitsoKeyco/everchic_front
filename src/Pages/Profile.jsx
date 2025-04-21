@@ -16,11 +16,11 @@ const Profile = () => {
     const {
         VITE_MODE, VITE_API_URL_DEV,
         VITE_API_URL_PROD,        
-        VITE_RECAPTCHA_KEY_SITE_PROD
+        //VITE_RECAPTCHA_KEY_SITE_PROD
     } = import.meta.env;
 
     const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
-    const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD
+    //const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const Profile = () => {
     const { register, setValue, handleSubmit, formState: { errors } } = useForm();
 
     const user = useSelector(state => state.user.data);
-    const theme = useSelector(state => state.user.theme);
+    //const theme = useSelector(state => state.user.theme);
 
 
     useEffect(() => {
@@ -46,24 +46,6 @@ const Profile = () => {
     }, [user, setValue]);
 
     
-    useEffect(() => {
-        
-        if (isEditable) {
-            const recaptchaContainer = document.getElementById('recaptcha-container');
-            if (recaptchaContainer) {
-                if (window.grecaptcha) {
-                    window.grecaptcha.ready(() => {
-                        window.grecaptcha.render('recaptcha-container', {
-                            sitekey: reCaptchaKey, // Tu clave del sitio
-                            callback: onSubmitCaptcha, // Función que se ejecutará con el token generado
-                        });
-                    });
-                } else {
-                    console.error("reCAPTCHA script not loaded");
-                }
-            }
-        }
-    }, [isEditable, reCaptchaKey]);
 
     const submit = async (data) => {
 
@@ -110,9 +92,6 @@ const Profile = () => {
         }
     };
 
-    const onSubmitCaptcha = (token) => {
-        setCaptchaToken(token);
-    };
 
     return (
         <motion.div
@@ -274,20 +253,20 @@ const Profile = () => {
 
                         </Box>
 
-                        {isEditable && (
-                            <div className="captcha_container">
-                                <div
-                                    id="recaptcha-container"
-                                    className="g-recaptcha"
-                                    data-sitekey={reCaptchaKey}
-                                    data-callback={onSubmitCaptcha}
-                                    data-theme={theme === 'darkTheme' ? 'dark' : 'light'}
-                                    data-action='submit'
-                                    size='compact'
-                                    data-expired-callback
-                                ></div>
-                            </div>
-                        )}
+                        {/* {isEditable && (
+                            
+                            <div
+                                id="recaptcha-container"
+                                className="g-recaptcha"
+                                data-sitekey={reCaptchaKey}
+                                data-callback={onSubmitCaptcha}
+                                data-theme={theme === 'darkTheme' ? 'dark' : 'light'}
+                                data-action='submit'                                
+                                size='compact'                                
+                                data-expired-callback
+                            ></div>
+                            
+                        )} */}
 
                         <div className='profile_buttons_container'>
                             {isEditable ? (

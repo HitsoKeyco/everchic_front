@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /carrito
+Disallow: /perfil
+Disallow: /verify/*
+Disallow: /recover_account/*
+
+# Allow search engines to crawl images
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+
+# Crawl-delay directive
+Crawl-delay: 10
+
+Sitemap: https://www.everchic.ec/sitemap.xml 

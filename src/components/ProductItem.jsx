@@ -1,10 +1,9 @@
-
 import './css/ProductItem.css'
 import { useDispatch } from 'react-redux'
 import { deleteProduct, deleteProductFree, minusProduct, plusProduct } from '../store/slices/cart.slice'
 import PropTypes from 'prop-types';
 
-const ProductItem = ({ product, infoFree}) => {
+const ProductItem = ({ product, infoFree = false }) => {
     const dispatch = useDispatch();
 
     const handlePlusQuantity = () => {
@@ -63,11 +62,12 @@ const ProductItem = ({ product, infoFree}) => {
     )
 }
 
-
-
 ProductItem.propTypes = {
     product: PropTypes.shape({
-        productId: PropTypes.string.isRequired,
+        productId: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]).isRequired,
         productName: PropTypes.string.isRequired,
         image: PropTypes.shape({
             url: PropTypes.string
@@ -78,10 +78,6 @@ ProductItem.propTypes = {
         size: PropTypes.string.isRequired
     }).isRequired,
     infoFree: PropTypes.bool
-};
-
-ProductItem.defaultProps = {
-    infoFree: false
 };
 
 export default ProductItem;

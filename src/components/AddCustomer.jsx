@@ -6,6 +6,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Box } from '@mui
 import RegisterUser from './RegisterUser';
 import TextFieldElement from './TextFieldElement';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SEOHelmet from './SEOHelmet';
 
 const AddCustomer = (
     { 
@@ -22,18 +23,27 @@ const AddCustomer = (
         setIsEditable 
     }) => {
 
-    const user = useSelector(state => state.user.data);
-        
+    const user = useSelector(state => state.user.data);        
     const [expanded, setExpanded] = useState(true);
 
     const handleExpandAccordion = () => {
         setExpanded(!expanded);
     }
+
     return (
         <>
+            <SEOHelmet 
+                title="Registro de Cliente | Mi Tienda"
+                description="Formulario de registro de cliente con información de envío y datos personales para completar tu compra"
+            />
             <Accordion expanded={expanded} onChange={handleExpandAccordion} >
-                <AccordionSummary id="panel-header" aria-controls="panel-content" expandIcon={<ExpandMoreIcon />}>
-                    <p className='add_customer_title'>Información de usuario - Envío</p>
+                <AccordionSummary 
+                    id="panel-header" 
+                    aria-controls="panel-content" 
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-label="Formulario de información de usuario y envío"
+                >
+                    <h2 className='add_customer_title'>Información de usuario - Envío</h2>
                 </AccordionSummary>
                 <AccordionDetails  >
                     <div className='add_customer_info_shipping' >

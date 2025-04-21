@@ -8,6 +8,47 @@
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--borderContainer);
+    position: relative;
+    
+}
+
+.login_captcha_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    padding-top: 25px;
+
+}
+
+.register_show_hidden_pass_icon{
+    position: relative;
+    top: -2px
+}
+
+.add_customer_buttons_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth_modal_login {
+    width: 100%;
+    height: 100%;
+    
+}
+
+.login_close_modal{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 25px;
+    color: var(--colorText_a);
 }
 
 .login_items_container {    
@@ -28,11 +69,21 @@
     padding-top: 25px;
 }
 
+
+
 .login_show_hidden_pass{
     position: absolute;
-    right: 7px;
-    top: 35px;
+    right: 15px;
+    top: 30px;
+    cursor: pointer;    
+    color: var(--colorText_a);
 }
+
+.bx-show, .bx-hide{
+    font-size: 25px;
+    color: var(--colorText_a);
+}
+
 .login_input_pass{
     padding-right: 40px;
 }
@@ -114,6 +165,7 @@
     width: 100%;
     max-width: 350px;
     margin: 10px;
+    position: relative;
     
 }
 .login_form_info_user{

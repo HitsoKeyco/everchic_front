@@ -38,7 +38,7 @@ const AuthModal = ({ setIsModalAuth }) => {
 
     return (
 
-        <div className="auth_modal_container"  onClick={handleModalContentClick}>
+        <div className="auth_modal_container"  >
             <div className={`auth_modal_login ${isModalLogin ? '' : 'hidden'}`} onClick={handleContainerClick}>
                 {isModalLogin && (
                     <Login

@@ -8,7 +8,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import navLinks from './js/header';
 import { setTheme } from '../store/slices/user.slice';
-import { Height } from '@mui/icons-material';
+
 
 const Header = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Header = () => {
 
   const handleCart = () => {
 
-    navigate("/cart");
+    navigate("/carrito");
   };
 
   const handleResize = () => {
@@ -114,9 +114,11 @@ const Header = () => {
                 <i className='bx bxl-instagram icon_header_social_network' ></i>
               </a>
               <span className='separate'>|</span>
-              <i className='bx bxl-facebook-square icon_header_social_network'></i>
+              <a href="https://www.facebook.com/profile.php?id=1000889198919891989" target="_blank" rel="noopener noreferrer">
+                <i className='bx bxl-facebook-square icon_header_social_network'></i>
+              </a>
               <span className='separate'>|</span>
-              <a href="http://wa.link/uibwp1" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.link/uibwp1" target="_blank" rel="noopener noreferrer">
                 <i className='bx bxl-whatsapp icon_header_social_network'></i>
               </a>
             </div>
@@ -127,9 +129,13 @@ const Header = () => {
           <div className='nav'>
 
             <ul className="nav_items_left">
-              <li>
-                <Link to='/' className="logo"><img src={Logo} style={{ height: '50px'}}></img></Link>
+              
+              <li className="logo_container">
+                <Link to='/' className="logo">
+                  <img src={Logo} style={{ height: '50px', display: 'block', margin: '0 auto' }}></img>
+                </Link>
               </li>
+              
               {
                 routes.map((route, index) => {
                   if (route.private && !token) return null

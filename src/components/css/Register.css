@@ -9,7 +9,9 @@
     margin: 10px;
     border-radius: 10px;    
     background-color: var(--bgCardContainer);
+    position: relative;
 }
+
 
 .register_items_container {
     width: 100%;
@@ -45,9 +47,18 @@
 .register_show_hidden_pass_icon{
     position: relative;    
     font-size: 20px;
+    top: 7px;
+    right: 0px;
     color: var(--colorText_a);
     
 }
+
+.bx-show, .bx-hide{
+    font-size: 25px;
+    color: var(--colorText_a);
+    cursor: pointer;
+}
+
 
 .register_title {    
     font-size: 1.5em;    

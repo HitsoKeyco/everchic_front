@@ -88,6 +88,7 @@ const Register = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, hand
     return (
         <>
             <form method='POST' className='register_form' onSubmit={handleSubmit(submit)}>
+                <i className='bx bx-x register_close_modal' onClick={handleModalContentClick}></i>
                 <h1 className='register_title'>Registro</h1>
                 <div className="register_items_container">
                     <label className="register_label" htmlFor="firstName" >Nombres:</label>

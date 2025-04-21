@@ -7,7 +7,7 @@ const navLinks = () => {
     });
 
     routes.push({
-        to: '/products',
+        to: '/productos',
         text: 'Productos',
         private: false
     });
@@ -19,7 +19,7 @@ const navLinks = () => {
     // });
     
     routes.push({
-        to: '/faqs',
+        to: '/preguntas-frecuentes',
         text: 'FAQs',
         private: false
     });

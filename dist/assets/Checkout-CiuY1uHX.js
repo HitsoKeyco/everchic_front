@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Checkout-BK1MgQZi.css"])))=>i.map(i=>d[i]);
+import{_ as r}from"./index-BxeSiO34.js";import{j as e}from"./vendor-Dv1Rd94t.js";import{A as o}from"./AddCustomer-CTrq6VW3.js";import"./ui-C9JqUebO.js";import"jquery";import"./TextFieldElement-DDRUCHg0.js";r((()=>Promise.resolve({})),__vite__mapDeps([0]));const s=()=>e.jsx(e.Fragment,{children:e.jsx("div",{className:"checkout_container",children:e.jsx(o,{})})});export{s as default};

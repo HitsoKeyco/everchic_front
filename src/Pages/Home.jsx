@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../Pages/css/Home.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -10,6 +10,8 @@ import BannerHome from '../components/BannerHome';
 import ProductCarousel from '../components/ProductCarousel';
 import { useDispatch } from 'react-redux';
 import { addProductStore } from '../store/slices/cart.slice';
+import OptimizedImage from '../components/OptimizedImage';
+import SEOHelmet from '../components/SEOHelmet';
 
 const Home = () => {
   const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
@@ -20,7 +22,7 @@ const Home = () => {
     navigate('/products');
   }
 
-  const [products, setIsNewProducts] = useState([]);  
+  const [products, setIsNewProducts] = useState([]);
 
   useEffect(() => {
     axios.get(`${apiUrl}/products/new_product`)
@@ -30,26 +32,33 @@ const Home = () => {
       .catch(err => {
         console.log(err);
       })
-      //Trae todos los productos con cantidad, id, stock
+    // //Trae todos los productos con cantidad, id, stock
       fetchAllQuantityProducts();
-  }, [])
+  }, [apiUrl])
 
-  
+
   const fetchAllQuantityProducts = () => {
     axios.get(`${apiUrl}/products/getAllQuantityProducts`)
-        .then(res => {
-            
-            localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
-            dispatch(addProductStore(res.data));
-        })
-        .catch(err => {
-            console.log(err);
-        })
-};
+      .then(res => {
 
-
+        localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
+        dispatch(addProductStore(res.data));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  };
   return (
     <>
+      <SEOHelmet 
+        title="EverChic - Inicio | Moda y Estilo"
+        description="Bienvenido a EverChic, tu destino de moda online. Descubre las últimas tendencias en ropa y accesorios."
+        keywords="moda online, tienda de ropa, accesorios de moda, compras online, tendencias de moda"
+        ogTitle="EverChic - Tu Tienda de Moda Online"
+        ogDescription="Descubre las últimas tendencias en moda y accesorios en EverChic"
+        ogImage="https://everchic.com/images/home-og.jpg"
+        ogUrl="https://everchic.com"
+      />
       <motion.div
         className="product_filter_elements_container"
         initial={{ opacity: 0 }}
@@ -111,9 +120,7 @@ const Home = () => {
               </div>
             </div>
             <div className='home_banner_container'>
-              {
-                <BannerHome />
-              }
+
             </div>
 
             <div className='home_products_new_container'>
@@ -130,12 +137,13 @@ const Home = () => {
                     <h4 className='home_process_buy_element_title'>{img.title}</h4>
                   </div>
                   <div className='home_process_buy_img_container'>
-                    <img className='home_process_buy_img' src={img.src} alt="" />
+                    <OptimizedImage className='home_process_buy_img' src={img.src} alt="medias everchic" />
                   </div>
                 </div>
+
               ))}
             </div>
-            <div>            
+            <div>
             </div>
           </main>
         </div>

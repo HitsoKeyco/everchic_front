@@ -17,6 +17,10 @@
     -o-transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
     
+.bxl-instagram{
+    color: var(--colorText_b);
+}
+
 
 
 .header_elements_container {    
@@ -36,20 +40,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 1em;    
+    padding: 0.5em 1em;    
     width: 100%;
-    max-width: 1280px;
-    border-bottom: 1px solid var(--borderCardproduct);
-
-}
-
-.nav {
-    max-width: 1280px;
+    max-width: 1280px;   
     border-bottom: none;
+
 }
 
-.linkActive {
-    
+
+.linkActive {    
     padding: 0 10px;
     border-radius: 3px;
     
@@ -59,11 +58,22 @@
     
 }
 
+.logo {
+    height: max-content;
+    width: max-content;
+}
+
+.logo_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .nav_items_left,
 .nav_items_right {
     display: flex;
     align-items: center;
-    
+    justify-content: center;
 
 }
 
@@ -108,20 +118,8 @@
 
 }
 
-
-
-
-.logo {
-    font-weight: 500;
-    font-size: 1.5em;
-    user-select: none;
-    touch-action: none;
-    margin: 0;
-
-}
-
 .bx-menu {
-    font-size: 1.8em;
+    font-size: 1.5em;
     user-select: none;
     touch-action: none;
     cursor: pointer;
@@ -130,7 +128,7 @@
 }
 
 .bx-user {
-    font-size: 1.8em;
+    font-size: 1.5em;
     user-select: none;
     touch-action: none;
     cursor: pointer;
@@ -141,7 +139,7 @@
 .bx-moon,
 .bx-cart-alt,
 .bx-brightness {
-    font-size: 1.8em;
+    font-size: 1.5em;
     user-select: none;
     touch-action: none;
     cursor: pointer;

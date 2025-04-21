@@ -261,6 +261,12 @@
 
 }
 
+#recaptcha-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 /*-------------- options ----------------- */
 
 .cart_detail_method_shipping_container {
@@ -321,7 +327,7 @@
 
 @media (min-width: 600px) {
     .cart_container {
-        padding-top: 150px;
+        padding-top: 180px;
     }
 
     .cart_product_container {

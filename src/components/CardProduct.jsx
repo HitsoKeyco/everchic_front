@@ -9,7 +9,7 @@ import 'react-medium-image-zoom/dist/styles.css'
 import LazyLoad from 'react-lazyload';
 import likeService from '../utils/likeService';
 
-const CardProduct = ({ product, isSlider, key }) => {
+const CardProduct = ({ product, isSlider }) => {
 
 
     const [isModal, setIsModal] = useState(false);
@@ -95,7 +95,7 @@ const CardProduct = ({ product, isSlider, key }) => {
                 }));
 
                 if (freeProducts - unitCartFree == 1) {
-                    navigate("/cart");
+                    navigate("/carrito");
                 }
             }
         }
@@ -175,8 +175,7 @@ const CardProduct = ({ product, isSlider, key }) => {
                 className={`card_product_container ${isFree ? 'gold' : ''} ${isSlider && 'is_slider'}`}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
-                onClick={handdleModal}
-                key={key}>
+                onClick={handdleModal}>
 
 
                 <div className="card_container_img">
@@ -250,7 +249,6 @@ CardProduct.propTypes = {
             url_small: PropTypes.string
         }))
     }).isRequired,
-    isSlider: PropTypes.bool,
-    key: PropTypes.number
+    isSlider: PropTypes.bool
 };
 export default CardProduct;

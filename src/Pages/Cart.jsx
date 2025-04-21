@@ -12,13 +12,14 @@ import axios from 'axios';
 
 import Decimal from 'decimal.js';
 import { setUser } from '../store/slices/user.slice';
-import ReCaptchaComponent from '../components/ReCaptchaComponent';
+
 
 const Cart = () => {
+    
+
     const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD, VITE_RECAPTCHA_KEY_SITE_PROD } = import.meta.env;
     const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
-
-
+    
     const {
         control,
         register,
@@ -32,32 +33,57 @@ const Cart = () => {
     } = useForm({ mode: 'onBlur' });
 
 
-    const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD;
+    //const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD;
     const user = useSelector(state => state.user?.data);
     const token = useSelector(state => state.user?.token);
-    const theme = useSelector(state => state.user?.theme);
+    const theme = useSelector(state => state.theme == 'lightTheme' ? 'light' : 'dark');
+    
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     // Estado del token de Hcaptcha    
-    const [captchaToken, setCaptchaToken] = useState(null);
+    //const [captchaToken, setCaptchaToken] = useState(null);
     const [isEditable, setIsEditable] = useState(() => !user?.isVerify);
 
 
-    const onSubmitCaptcha = useCallback((token) => {
-        setCaptchaToken(token);
-    }, [setCaptchaToken]);
+
 
     // Estado de carga
     const [loading, setLoading] = useState(false);
     // Estado de la opción de envío seleccionada
     const [isShippingOptionSelected, setShippingOptionSelected] = useState();
 
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isCaptchaRendered, setIsCaptchaRendered] = useState(false);
+
     // Estado de las opciones de envío
     const [shippingOptions, setShippingOptions] = useState([]);
-
-
+    
+    useEffect(() => {
+        if (!isCaptchaRendered) {
+            try {
+                window.grecaptcha.render('g-recaptcha', {
+                    sitekey: VITE_RECAPTCHA_KEY_SITE_PROD,
+                    callback: (token) => {
+                        setCaptchaToken(token);
+                    },
+                    theme: theme,
+                    'expired-callback': () => {
+                        setCaptchaToken(null);
+                    },
+                    'error-callback': () => {
+                        setCaptchaToken(null);
+                    },
+                    tabindex: 0
+                });
+                setIsCaptchaRendered(true);
+            } catch (error) {
+                console.log('Error al renderizar reCAPTCHA:', error);
+            }
+        }
+    }, [theme, isCaptchaRendered]);
 
     // Obtener el carrito de la tienda
     const cart = useSelector(state => state.cart.storedCart);
@@ -108,7 +134,7 @@ const Cart = () => {
     const handleFreeButton = () => {
         if (freeProducts > 0 && quantityProductCartFree < freeProducts) {
             dispatch(accessFreeProduct(true));
-            navigate('/products')
+            navigate('/productos')
         } else {
             dispatch(accessFreeProduct(false));
         }
@@ -240,10 +266,20 @@ const Cart = () => {
     const onSubmit = async (data) => {
 
         setLoading(true);        
-        const dataCart = { cart, cartFree, captchaToken, token, userCartData: data, total: total, shippingId: isShippingOptionSelected, weight: weightTotal, userId: user.id };
+        const dataCart = { 
+            cart, 
+            cartFree, 
+            captchaToken, 
+            token, 
+            userCartData: data, 
+            total: total, 
+            shippingId: isShippingOptionSelected, 
+            weight: weightTotal, 
+            userId: 
+            user.id 
+        };
 
         try {
-
             // Validar que el usuario haya completado la información
             if (Object.keys(errors).length > 0) {
                 Swal.fire({
@@ -253,12 +289,14 @@ const Cart = () => {
                     showConfirmButton: true,
                 }).then(() => {
                     setLoading(false);
-
+                    resetCaptcha();
                 });
                 return;
             }
 
-            await axios.post(`${apiUrl}/orders/create_order`, dataCart);
+            await axios.post(`${apiUrl}/orders/create_order`, dataCart)
+
+
 
             // Mostrar mensaje de éxito
             Swal.fire({
@@ -280,6 +318,8 @@ const Cart = () => {
             });
 
         } catch (err) {
+            
+            resetCaptcha();
 
             let message
 
@@ -293,7 +333,6 @@ const Cart = () => {
                     text: info,
                     showConfirmButton: true,
                     confirmButtonText: info.includes("debes verificar tu cuenta al correo") ? "Reenviar correo" : "Aceptar",
-
                     showCancelButton: info.includes("debes verificar tu cuenta al correo"),
                     cancelButtonText: "Cancelar",
                 }).then((result) => {
@@ -304,10 +343,8 @@ const Cart = () => {
                         dispatch(setUser({ token: null, user: {} }));
                         localStorage.removeItem('user');
                         reset({ password: '', repeat_password: '' });
-
                     }
                 });
-
                 return;
             }
 
@@ -386,19 +423,11 @@ const Cart = () => {
         }
     }
 
-    const handleCaptchaSubmit = (token) => {
-        setCaptchaToken(token);
-    };
-
+    // Función para resetear el reCAPTCHA
     const resetCaptcha = () => {
-        try {
-            if (window.grecaptcha && typeof window.grecaptcha.reset === 'function') {
-                window.grecaptcha.reset();
-            } else {
-                console.warn("reCAPTCHA no está disponible o no se ha cargado correctamente.");
-            }
-        } catch (error) {
-            console.error("Error al intentar restablecer el reCAPTCHA:", error);
+        if (window.grecaptcha) {
+            window.grecaptcha.reset();
+            setCaptchaToken(null);
         }
     };
 
@@ -407,7 +436,7 @@ const Cart = () => {
             <div className='cart_container'>
                 <div className="cart_promo_container">
                     <h4 className='cart_product_title'>Mi carrito</h4>
-                    <p className='cart_product_offer'>[3 Pares $13] - [6 Pares $20] - [12 Pares $36] - [60 Pares $165]</p>
+                    <p className='cart_product_offer'>[3 Pares $13] - [6 Pares $20] - [12 Pares $38] - [60 Pares $180]</p>
                 </div>
 
                 <div className='cart_product_container' >
@@ -494,12 +523,13 @@ const Cart = () => {
                                     watch={watch}
                                     errors={errors}
                                     trigger={trigger}
+                                    handleSubmit={handleSubmit}
+                                    onSubmitForm={onSubmit}
                                 />
                             </div>
 
                             <div
-                                className="cart_detail_shipping_form"
-                                action=""
+                                className="cart_detail_shipping_form"                                
                                 method="post"
                                 id="shipping_form"
                             >
@@ -570,27 +600,24 @@ const Cart = () => {
                                         <li className='cart_info_total_text'>Total a pagar: $ {totalToPay.toFixed(2)}</li>
                                     </ul>
                                 </div>
-                                <div className="captcha_container">
-                                    {/* <div
-                                        id="recaptcha-container"
-                                        className="g-recaptcha"
-                                        data-sitekey={reCaptchaKey}
-                                        data-callback={onSubmitCaptcha}
-                                        data-theme={theme === 'darkTheme' ? 'dark' : 'light'}
-                                        data-action='submit'
-                                        size='compact'
-                                        data-expired-callback={resetCaptcha}
-                                    ></div> */}
-                                <ReCaptchaComponent
-                                    reCaptchaKey={reCaptchaKey}
-                                    theme={theme}
-                                    onSubmitCaptcha={handleCaptchaSubmit}
-                                />
-                                </div>
-
 
                                 {/*------------------------------\\ Buttons accions //-----------------------------------*/}
                                 <div className="add_customer_buttons_container">
+                                    
+
+                                <div
+                                    id="g-recaptcha"
+                                    className="g-recaptcha"
+                                    style={{
+                                        padding: ' 20px  0px',
+
+                                    }}
+                                    data-sitekey={VITE_RECAPTCHA_KEY_SITE_PROD}
+                                    data-theme={theme}
+                                    role="compra"
+                                    aria-label="Verificación de seguridad reCAPTCHA"
+                                >
+                                </div>
 
 
                                     <button

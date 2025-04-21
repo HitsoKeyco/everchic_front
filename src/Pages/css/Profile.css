@@ -108,7 +108,13 @@
 .disabled-input {    
     color: #a0a0a0;
     cursor: not-allowed;
-  }
+}
+
+#recaptcha-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 @media (min-width: 600px) {
 
@@ -126,7 +132,7 @@
         flex: 0.7;
     }
     .profile_container{        
-        padding-top: 150px;
+        padding-top: 160px;
         
     }
 }

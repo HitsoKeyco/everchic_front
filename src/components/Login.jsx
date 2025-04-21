@@ -1,25 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import './css/Login.css'
 import useAuth from '../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { Backdrop, CircularProgress } from '@mui/material'
+import PropTypes from 'prop-types';
 
 
 const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleModalContentClick }) => {
-
-    const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
-    const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
+    const { VITE_RECAPTCHA_KEY_SITE_PROD } = import.meta.env;
+    
+    const reCaptchaKey = VITE_RECAPTCHA_KEY_SITE_PROD;
 
     const user = useSelector(state => state.user?.data);
-    
-    const [isShowPass, setIsShowPass] = useState(false)
-    const [loading, setLoading] = useState(false); // Estado de carga
-    
+    const theme = useSelector(state => state.theme == 'lightTheme' ? 'light' : 'dark');
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [isShowPass, setIsShowPass] = useState(false)
+    
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const resetCaptcha = () => {
+        if (window.grecaptcha) {
+            window.grecaptcha.reset();
+            setCaptchaToken(null);
+        }
+    };
 
     //Funcion que controla la visualizacion de la contraseña
     const handleShowHiddenPass = () => {
@@ -39,7 +48,7 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
     }
 
     //Funciones para Auth
-    const { isLoged, loginUser, logOut } = useAuth()
+    const { isLoged, loginUser, logOut, loading } = useAuth()
 
     // espera la aprobacion del usuario logeado para cerrar el modal porq onSubmit es asincrono
     useEffect(() => {
@@ -51,73 +60,105 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
     const [isResendEmail, setIsResendEmail] = useState(false);
 
     const onSubmit = async (data) => {
-        setLoading(true)
-        try {
-            await loginUser(data);
-            setLoading(false)
-        } catch (err) {
-            setLoading(false)
-        }
-    }
+        //capturamos el email del usuario
+        const email = data.email;
 
-    const handleResendEmail = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        const email = e.target.form.email.value;
-
-        try {
-            const url = `${apiUrl}/users/resend_email`;
-            const res = await axios.post(url, { email });
-            if (res.data.message == "Se ha enviado un correo de verificación") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Correo electrónico enviado',
-                    text: 'Revisa tu correo electrónico para activar tu cuenta',
-                });
-                setLoading(false)
-                setIsResendEmail(false);
-            }
-
-        } catch (err) {            
-            if (err.response.data.message === "Usuario no encontrado") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Email invalido',
-                    text: 'Opps.. algo salio mal.. !!',
-                });
-                setLoading(false)
-            }
+        //verificamos si el captcha esta completo
+        if (!captchaToken) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, completa el reCAPTCHA',
+            });
+            return;
         }
 
-    }
-    
+        try {
+            const result = await loginUser({
+                ...data,
+                recaptchaToken: captchaToken,
+                email: email
+            });
+
+            if (!result.success) {
+                resetCaptcha();
+                reset({ password: '' });
+            }
+        } catch (error) {
+            resetCaptcha();
+            reset({ password: '' });
+        }
+    };
+
     //manejador de logOut
-    const onLogOut = () => {
-        setLoading(true)
-        logOut();        
-        handleModalContentClick();
-        setLoading(false)
-
+    const onLogOut = () => {        
+        logOut();
+        handleModalContentClick();        
     }
 
+    useEffect(() => {
+        // Cuando el modal se abre
+        setIsModalVisible(true);
+
+        // Pequeño retraso para asegurar que el DOM esté listo
+        const timer = setTimeout(() => {
+            try {
+                window.grecaptcha.render('g-recaptcha', {
+                    sitekey: reCaptchaKey,
+                    callback: (token) => {
+                        setCaptchaToken(token);
+                    },
+                    theme: theme,
+                    'expired-callback': () => {
+                        setCaptchaToken(null);
+                    },
+                    'error-callback': () => {
+                        setCaptchaToken(null);
+                    },
+                    tabindex: 0
+                });
+            } catch (error) {
+                console.log('reCAPTCHA ya renderizado o error de renderizado:', error);
+            }
+        }, 100);
+
+        return () => {
+            setIsModalVisible(false);
+            clearTimeout(timer);
+        };
+    }, [reCaptchaKey, theme]);
 
     return (
         <>
-
             {
                 user?.email ?
                     (
-
-                        <form className="login_form_logout" action="" onSubmit={handleSubmit(onLogOut)}>
-                            <h3 className='login_form_info_user'> {`Hola`}</h3>
+                        <form
+                            className="login_form_logout"
+                            action=""
+                            onSubmit={handleSubmit(onLogOut)}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="login-title"
+                        >
+                            <i className='bx bx-x login_close_modal' onClick={handleModalContentClick} role="button" aria-label="Cerrar"></i>
+                            <h3 className='login_form_info_user' id="login-title"> {`Hola`}</h3>
                             <h3 className='login_form_info_user_firstName'> {`${user?.firstName}`}</h3>
                             <button className='login_button_logout button'>Cerrar sesión</button>
                         </form>
                     )
                     :
                     (
-                        <form method='POST' className='login_form' onSubmit={handleSubmit(onSubmit)}>
-                            <h1 className='login_title'>Iniciar sesión</h1>
+                        <form
+                            method='POST'
+                            className='login_form'
+                            onSubmit={handleSubmit(onSubmit)}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="login-title"
+                        >
+                            <i className='bx bx-x login_close_modal' onClick={handleModalContentClick} role="button" aria-label="Cerrar"></i>
+                            <h1 className='login_title' id="login-title">Iniciar sesión</h1>
                             <div className="login_items_container">
                                 <label className="login_label" htmlFor="email" >E-mail:</label>
                                 <input
@@ -164,19 +205,33 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                                     }
                                 </div>
                             </div>
-                            <div className="login_items_button_container">
-                                <button
-                                    className="login_button button"
-                                >
-                                    Acceder
-                                </button>
 
-                            </div>
+                            {isModalVisible && (
+                                <div className='login_captcha_container'>
+                                    <div
+                                        id="g-recaptcha"
+                                        className="g-recaptcha"
+                                        data-sitekey={reCaptchaKey}
+                                        data-theme={theme}
+                                        role="presentation"
+                                        aria-label="Verificación de seguridad reCAPTCHA"
+                                    >
+                                    </div>
+                                </div>
+                            )}
+
+                            <button
+                                className="login_button button"
+                                type="submit"
+                            >
+                                Entrar
+                            </button>
+
                             {
                                 isResendEmail && (
                                     <button
                                         className="login_button button"
-                                        onClick={handleResendEmail}
+                                        type="submit"
                                     >
                                         Reenviar email
                                     </button>
@@ -186,8 +241,6 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                                 <span className="login_register_link" onClick={handleModalRegister}>Registrarse</span>
                                 <span className="login_recover_pass_link" onClick={handleModalRecover}>¿Recuperar contraseña?</span>
                             </div>
-
-
                         </form>
                     )
             }
@@ -201,11 +254,11 @@ const Login = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, handleM
                 <CircularProgress color="inherit" />
             </Backdrop>
         </>
-
     )
 }
 
-import PropTypes from 'prop-types';
+
+
 
 Login.propTypes = {
     setIsModalLogin: PropTypes.func.isRequired,
@@ -214,11 +267,6 @@ Login.propTypes = {
     handleModalContentClick: PropTypes.func.isRequired,
 };
 
-Login.defaultProps = {
-    setIsModalLogin: () => {},
-    setIsModalRegister: () => {},
-    setIsModalRecover: () => {},
-    handleModalContentClick: () => {},
-};
+
 
 export default Login

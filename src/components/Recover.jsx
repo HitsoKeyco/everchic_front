@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { Backdrop, CircularProgress } from '@mui/material'
 
-const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, setIsModalAuth }) => {
+const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, setIsModalAuth, handleModalContentClick }) => {
   const { VITE_MODE, VITE_API_URL_DEV, VITE_API_URL_PROD } = import.meta.env;
   const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
@@ -56,6 +56,7 @@ const Recover = ({ setIsModalLogin, setIsModalRegister, setIsModalRecover, setIs
   return (
     <>
       <form method='POST' className='recover_form' onSubmit={handleSubmit(onSubmit)}>
+        <i className='bx bx-x recover_close_modal' onClick={handleModalContentClick}></i>
         <h1 className='recover_title'>Recuperar contraseña</h1>
         <div className="recover_items_container">
           <label className="recover_label" htmlFor="email" >E-mail:</label>

@@ -110,7 +110,6 @@ p {
 @media (min-width:600px) {
     .product_element_container {
         
-
     }
 
     .product_filter_mobile_container {
@@ -136,8 +135,7 @@ p {
         grid-template-rows: repeat(auto-fill, max-content);
         gap: 10px;
     }
-    .product_pagination_container{
-        
+    .product_pagination_container{        
         margin-top: auto;
     }
 

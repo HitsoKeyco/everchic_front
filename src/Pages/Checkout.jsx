@@ -1,4 +1,4 @@
-import React from 'react'
+
 import AddCustomer from '../components/AddCustomer'
 import ('./css/Checkout.css')
 

@@ -1,4 +1,3 @@
-
 import "../components/css/ModalProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, addProductFree } from "../store/slices/cart.slice";
@@ -64,8 +63,24 @@ const ModalProduct = ({ product, setIsModal }) => {
                         }
                     }));
 
-                    navigate("/cart");
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Producto gratis agregado!',
+                        text: 'Tu producto gratis ha sido agregado al carrito',
+                        confirmButtonText: 'Aceptar',
+                    });
 
+                    // Esperar un momento antes de navegar para asegurar que el estado se actualice
+                    setTimeout(() => {
+                        navigate("/carrito");
+                    }, 500);
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Límite alcanzado',
+                        text: 'Ya has alcanzado el límite de productos gratis permitidos',
+                        confirmButtonText: 'Aceptar',
+                    });
                 }
             }
         } else {

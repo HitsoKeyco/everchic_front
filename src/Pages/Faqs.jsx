@@ -1,4 +1,4 @@
-import React from 'react'
+
 import './css/Faqs.css'
 import { motion } from 'framer-motion';
 
@@ -32,7 +32,7 @@ const Faqs = () => {
           <p className="faqs_information_answer">- A cualquier ciudad: $6.00.</p>
           <p className="faqs_information_answer">- A Galápagos: $12.50.</p>
           <p className="faqs_information_answer">- Cooperativa de transporte: $5.50.</p>
-          <p className="faqs_information_answer">- Guayaquil "Previo pago": Delivery $2.50</p>
+          <p className="faqs_information_answer">- Guayaquil &quot;Previo pago&quot;: Delivery $2.50</p>
         </div>
         <div className="faqs_information_container">
           <h3 className='faqs_information_question'>¿Tienen puntos de entrega o retiro?</h3>

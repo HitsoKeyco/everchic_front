@@ -521,14 +521,16 @@ const calculatePriceUnit = (units) => {
     } else if (units >= 6 && units < 12) {
         price = new Decimal(20).div(6);
     } else if (units >= 12 && units < 60) {
-        price = new Decimal(36).div(12);
+        price = new Decimal(38).div(12);
     } else if (units >= 60) {
-        price = new Decimal(165).div(60);
+        price = new Decimal(180).div(60);
     }
 
     // Redondear a dos decimales y convertir a número
     return price.toNumber(); // Cambia aquí
 };
+
+
 
 
 

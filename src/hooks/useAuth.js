@@ -12,17 +12,18 @@ const useAuth = () => {
     const apiUrl = VITE_MODE === 'development' ? VITE_API_URL_DEV : VITE_API_URL_PROD;
 
     const [isLoged, setIsloged] = useState(false)
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    
 
     function capitalizeFirstLetter(string) {
         return string.replace(/^\w/, (c) => c.toUpperCase());
     }
 
     const createUser = async (data) => {
+        setLoading(true)
         try {
-            const res = await axios.post(`${apiUrl}/users`, data);            
+            const res = await axios.post(`${apiUrl}/users`, data);
             const name = capitalizeFirstLetter(res.data?.firstName)
             if (res.data.email) {
                 Swal.fire({
@@ -33,7 +34,7 @@ const useAuth = () => {
                 return res.data.email
             }
 
-            
+
 
         } catch (err) {
             console.log(err);
@@ -48,13 +49,16 @@ const useAuth = () => {
                     text: err.response.data.message,
                 });
             }
+        } finally {
+            setLoading(false)
         }
     };
 
     const loginUser = async (data) => {
+        setLoading(true)
         await axios.post(`${apiUrl}/users/login`, data)
             .then(res => {
-                
+
                 if (res.data) {
                     Swal.fire({
                         icon: 'success',
@@ -62,10 +66,10 @@ const useAuth = () => {
                         text: `Bienvenido ${res.data.user?.firstName}`,
                     })
                 }
-                localStorage.removeItem('likes');   
+                localStorage.removeItem('likes');
                 dispatch(setUser(res.data))
                 setIsloged(true)
-            })           
+            })
 
             .catch(err => {
                 Swal.fire({
@@ -74,25 +78,57 @@ const useAuth = () => {
                     text: err.response.data.message,
                 })
             })
+            .finally(() => {
+                setLoading(false)
+            })
 
     };
 
 
-    const logOut = () => {        
-        localStorage.clear();        
-        dispatch(setUser({ token: null , user: {}}))
+    const logOut = () => {
+        setLoading(true)
+        localStorage.clear();
+        dispatch(setUser({ token: null, user: {} }))
         dispatch(deleteAllProducts())
         setIsloged(false)
         navigate('/')
+        setLoading(false)
     }
 
     const logOutTime = () => {
-        localStorage.clear();      
+        setLoading(true)
+        localStorage.clear();
         dispatch(setUser({ token: null, user: {} }))
         setIsloged(false)
+        setLoading(false)
     }
 
-    return { isLoged, createUser, loginUser, logOut, logOutTime }
+    return { loading, isLoged, createUser, loginUser, logOut, logOutTime }
 }
 
 export default useAuth
+
+
+const resendEmail = async (email) => {
+    try {
+        const url = `${apiUrl}/users/resend_email`;
+        const res = await axios.post(url, { email });
+        if (res.data.message == "Se ha enviado un correo de verificación") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Correo electrónico enviado',
+                text: 'Revisa tu correo electrónico para activar tu cuenta',
+            });
+            
+        }
+
+    } catch (err) {
+        if (err.response.data.message === "Usuario no encontrado") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Email invalido',
+                text: 'Opps.. algo salio mal.. !!',
+            });            
+        }
+    }
+}
